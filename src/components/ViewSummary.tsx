@@ -1,5 +1,4 @@
-import { useState, useEffect, FC } from "react";
-import useSWR, { Fetcher } from "swr";
+import useSWR from "swr";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 

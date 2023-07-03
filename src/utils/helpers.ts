@@ -1,9 +1,11 @@
+import React from "react";
+
 export const sortIndexes = (
   data: Index[],
   startUTC: number,
   endUTC: number,
   noOfPost: number,
-  order: String
+  order: string
 ) => {
 
 
@@ -28,14 +30,14 @@ export const sortIndexes = (
 
   const sliced = sorted.slice(0, noOfPost);
 
-  let indexes = [];
+  const indexes = [];
   indexes.push(...sliced);
 
   return indexes;
 };
 
 export const makeHTMLFromString = (str: string) => {
-  let text = str;
+  const text = str;
   let parsed = "<p>" + text + "</p>";
   parsed = parsed.replace(/\r\n\r\n/g, "</p><p>").replace(/\n\n/g, "</p><p>");
   parsed = parsed.replace(/\r\n/g, "<br />").replace(/\n/g, "<br />");
@@ -44,7 +46,7 @@ export const makeHTMLFromString = (str: string) => {
 
 export const convertDate = (dateInUTC: number) => {
   const event = new Date(dateInUTC * 1000);
-  let displayTime = event.toDateString() + " " + event.toTimeString();
+  const displayTime = event.toDateString() + " " + event.toTimeString();
   return displayTime;
 };
 

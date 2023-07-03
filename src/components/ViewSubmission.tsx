@@ -3,6 +3,10 @@ import { Chart } from "react-google-charts";
 import { TagCloud } from "react-tagcloud";
 import useSWR from "swr";
 import { convertDate, makeHTMLFromString } from "../utils/helpers";
+import ShowAlert from "./ShowAlert";
+import { useSearchParams } from "react-router-dom";
+import { useLocation } from 'react-router-dom';
+
 
 interface Entry {
   value: string;
@@ -58,10 +62,15 @@ function useSubmission(id: number) {
 }
 
 export default function ViewSubmission({ id }: Index) {
-  const { submission, isLoading, isError } = useSubmission(id);
+
+  const location = useLocation()
+
+  const submissionId = Number(location["pathname"].split("/")[2]) || id;
+
+  const { submission, isLoading, isError } = useSubmission(submissionId);
 
   const { summary, wordFrequency, isSummaryLoading, isSummaryError } =
-    useSummary(id);
+    useSummary(submissionId);
 
   if (isLoading)
     return (
@@ -69,6 +78,10 @@ export default function ViewSubmission({ id }: Index) {
         <span className="loading loading-dots loading-lg"></span>
       </div>
     );
+
+  if (isError || isSummaryError) {
+    return <ShowAlert />;
+  }
 
   if (isSummaryLoading)
     return (
@@ -107,7 +120,7 @@ export default function ViewSubmission({ id }: Index) {
 
     const options = {
       legend: { position: "bottom" },
-      is3D: false,
+      is3D: true,
       colors: [
         "green",
         "red",
@@ -188,10 +201,8 @@ export default function ViewSubmission({ id }: Index) {
     <div key={submission?.id}>
       <div className="card mb-2 bg-base-100 shadow-xl p-2">
         <div className="card-body">
-          <h2>{submission?.title}</h2>
-          <small>
-            <strong>{convertDate(submission?.created_utc)}</strong>
-          </small>
+          <h2 className="card-title">{submission?.title}</h2>
+          <small>{convertDate(submission?.created_utc)}</small>
           <div className="">{parse(selfText)}</div>
           <p>
             View original post{" "}
