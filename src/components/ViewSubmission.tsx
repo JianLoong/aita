@@ -1,6 +1,6 @@
 import parse from "html-react-parser";
 import { Chart } from "react-google-charts";
-import { useLocation } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { TagCloud } from "react-tagcloud";
 import useSWR from "swr";
 import { convertDate, makeHTMLFromString } from "../utils/helpers";
@@ -143,10 +143,10 @@ export default function ViewSubmission({ id }: Index) {
 
   const EmotionTable = (summary: any) => {
     return (
-      <table className="table table-zebra">
+      <table className="table table-zebra text-center">
         <thead>
           <tr>
-            <th>Emotion</th>
+            <th className="text-center">Emotion</th>
             <th className="text-center">Raw Emotion Score</th>
           </tr>
         </thead>
@@ -198,8 +198,8 @@ export default function ViewSubmission({ id }: Index) {
 
   return (
     <div key={submission?.id}>
-      <section id={"#" + submission?.id} className="hidden"></section>
-      <div className="card mb-2 bg-base-100 shadow-xl p-2">
+      <div id={"section" + submission?.id} className=""></div>
+      <div className="card mb-2 bg-base-100 shadow-xl p-3">
         <div className="card-body">
           <h2 className="card-title"><strong>{submission?.title}</strong></h2>
           <small>{convertDate(submission?.created_utc)}</small>
@@ -216,22 +216,26 @@ export default function ViewSubmission({ id }: Index) {
 
           <div className="grid grid-cols-1 md:grid-cols-3">
             <div>
-              <h3 className="text-center">Generated Word Cloud</h3>
+              <h3 className="text-center"><strong>Generated Word Cloud</strong></h3>
               {<SimpleCloud />}
             </div>
             <div className="">
               <h3 className="text-center">
+                <strong>
                 Results of NRC Emotion Lexicon Analysis
+                </strong>
               </h3>
               <EmotionTable {...summary} />
             </div>
 
             <div className="">
-              <h3 className="text-center">Breakdown of Replies</h3>
+              <h3 className="text-center"><strong>Breakdown of Replies</strong></h3>
               <PieChart {...summary} />
             </div>
           </div>
-          <div></div>
+          <NavLink className="link" to={"/submission/" + submission?.id}>
+          View in detail
+          </NavLink>
         </div>
       </div>
     </div>

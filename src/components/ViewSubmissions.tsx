@@ -1,10 +1,11 @@
+import queryString from "query-string";
 import { useState } from "react";
 import DatePicker from "react-datepicker";
+import { useSearchParams, useLocation } from "react-router-dom";
 import useSWR from "swr";
 import { sortIndexes } from "../utils/helpers";
 import ViewSubmission from "./ViewSubmission";
-import queryString from "query-string";
-import { useSearchParams } from "react-router-dom";
+
 
 import "react-datepicker/dist/react-datepicker.css";
 import Introduction from "./Introduction";
@@ -22,6 +23,10 @@ function useIndexes() {
     isLoading,
     isError: error,
   };
+}
+
+function moveToSection() {
+  
 }
 
 function useSubmission(
@@ -50,10 +55,26 @@ function useSubmission(
   };
 }
 
+// https://stackoverflow.com/questions/76400197/react-update-url-anchor-when-scrolling-to-a-section-with-this-anchor
 export default function ViewSubmissions() {
   // Search params to be used for input
 
   const [searchParams, setSearchParams] = useSearchParams();
+
+  // Scroll into view
+  
+  const location = useLocation();
+  
+  if (location["hash"] !== undefined) {
+
+    const scrollTo = location["hash"].toString().slice(1);
+
+    const element = document.getElementById(scrollTo);
+
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
 
   const noOfPost = searchParams.get("noOfPost") || 5;
   const sortOrder = searchParams.get("sortOrder") || "hot";
@@ -84,7 +105,7 @@ export default function ViewSubmissions() {
 
   if (isLoading)
     return (
-      <div>
+      <div className="p-2">
         <span className="loading loading-dots loading-lg"></span>
       </div>
     );
