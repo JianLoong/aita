@@ -1,11 +1,10 @@
 import parse from "html-react-parser";
 import { Chart } from "react-google-charts";
+import { useLocation } from 'react-router-dom';
 import { TagCloud } from "react-tagcloud";
 import useSWR from "swr";
 import { convertDate, makeHTMLFromString } from "../utils/helpers";
 import ShowAlert from "./ShowAlert";
-import { useSearchParams } from "react-router-dom";
-import { useLocation } from 'react-router-dom';
 
 
 interface Entry {
@@ -201,9 +200,10 @@ export default function ViewSubmission({ id }: Index) {
     <div key={submission?.id}>
       <div className="card mb-2 bg-base-100 shadow-xl p-2">
         <div className="card-body">
-          <h2 className="card-title">{submission?.title}</h2>
+          <h2 className="card-title"><strong>{submission?.title}</strong></h2>
           <small>{convertDate(submission?.created_utc)}</small>
-          <div className="">{parse(selfText)}</div>
+        
+          <div className="prose-lg">{parse(selfText)}</div>
           <p>
             View original post{" "}
             <a href={"https://reddit.com" + submission?.permalink}>here</a>
