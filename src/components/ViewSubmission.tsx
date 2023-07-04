@@ -245,7 +245,7 @@ export default function ViewSubmission({ id }: Index) {
             </NavLink>
           ) : (
             <div>
-              {submission?.replies.map((e) => {
+              {submission?.replies.map((e : string) => {
                 return <li>{e}</li>;
               })}
             </div>
