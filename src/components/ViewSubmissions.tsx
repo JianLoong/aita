@@ -57,17 +57,19 @@ export default function ViewSubmissions() {
 
   const noOfPost = searchParams.get("noOfPost") || 5;
   const sortOrder = searchParams.get("sortOrder") || "hot";
-  const queryDate = new Date(Number(searchParams.get("date")));
-  
-  console.log(queryDate);
 
+
+  const queryDate =  searchParams.get("date") || new Date().getTime().toString();
+
+  // console.log(new Date(queryDate || new Date().getTime()));
+  console.log(queryDate);
   
-  
+
   const { indexes, isLoading, isError } = useIndexes();
 
   const [selectedNoOfPost, setNoOfPost] = useState<number>(Number(noOfPost));
   const [selectedSortOrder, setSortOrder] = useState<string>(sortOrder);
-  const [selectedDate, setDate] = useState<Date>(queryDate);
+  const [selectedDate, setDate] = useState<Date>(new Date(Number (queryDate)));
 
   const startOfDay = new Date(selectedDate);
   const endOfDay = new Date(selectedDate);
