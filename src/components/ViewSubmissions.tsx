@@ -57,11 +57,8 @@ export default function ViewSubmissions() {
 
   const noOfPost = searchParams.get("noOfPost") || 5;
   const sortOrder = searchParams.get("sortOrder") || "hot";
-
   const queryDate = searchParams.get("date") || new Date().getTime().toString();
 
-  // console.log(new Date(queryDate || new Date().getTime()));
-  console.log(queryDate);
 
   const { indexes, isLoading, isError } = useIndexes();
 
@@ -107,6 +104,7 @@ export default function ViewSubmissions() {
               className="input input-bordered input-primary w-full max-w-xs"
               aria-label="Number of post"
               name="noOfPost"
+              value={selectedNoOfPost}
               onChange={(e) => {
                 e.preventDefault();
 
@@ -137,6 +135,7 @@ export default function ViewSubmissions() {
               <span className="label-text">Sort</span>
             </label>
             <select
+              value={selectedSortOrder}
               className="input input-bordered input-primary w-full max-w-xs"
               aria-label="Number of post"
               id="sortOrder"
