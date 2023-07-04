@@ -16,9 +16,7 @@ export default function ViewSummary({ id }: Index) {
   }
 
   const { summary, isLoading, isError } = useSummary(id);
-
-  console.log(summary);
-
+  
   return (
     <div className="" key={summary?.id}>
       <p>{summary?.id}</p>

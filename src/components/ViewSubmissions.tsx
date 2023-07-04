@@ -91,17 +91,17 @@ export default function ViewSubmissions() {
 
   return (
     <div className="pt-6 p-2" key={1}>
-      <article className="prose lg:prose-xl mx-auto">
+      <article className="mx-auto">
         <Introduction />
       </article>
       <form method="GET">
         <div className="pb-6 grid grid-cols-1 md:grid-cols-3">
-          <div className="">
+          <div className="p-2">
             <label className="label">
               <span className="label-text">No of post</span>
             </label>
             <select
-              className="input input-bordered input-primary w-full max-w-xs"
+              className="input input-bordered input-primary w-full"
               aria-label="Number of post"
               name="noOfPost"
               value={selectedNoOfPost}
@@ -118,7 +118,6 @@ export default function ViewSubmissions() {
                 };
 
                 const stringified = queryString.stringify(currentQuery);
-                console.log(stringified);
                 setSearchParams(stringified);
                 e.stopPropagation();
               }}
@@ -130,13 +129,13 @@ export default function ViewSubmissions() {
             </select>
           </div>
 
-          <div className="">
+          <div className="p-2">
             <label className="label">
               <span className="label-text">Sort</span>
             </label>
             <select
               value={selectedSortOrder}
-              className="input input-bordered input-primary w-full max-w-xs"
+              className="input input-bordered input-primary w-full"
               aria-label="Number of post"
               id="sortOrder"
               onChange={(e) => {
@@ -149,7 +148,6 @@ export default function ViewSubmissions() {
                 };
 
                 const stringified = queryString.stringify(currentQuery);
-                console.log(stringified);
                 setSearchParams(stringified);
                 e.stopPropagation();
               }}
@@ -159,14 +157,14 @@ export default function ViewSubmissions() {
             </select>
           </div>
 
-          <div className="">
+          <div className="p-2">
             <label className="label">
               <span className="label-text">Date</span>
             </label>
             <div className="">
               <DatePicker
                 wrapperClassName="w-full"
-                className="input input-bordered input-primary w-full max-w-xs"
+                className="input input-bordered input-primary w-full"
                 selected={selectedDate}
                 onFocus={(e) => e.target.blur()}
                 onChange={(date: Date) => {
@@ -178,10 +176,10 @@ export default function ViewSubmissions() {
                   };
 
                   const stringified = queryString.stringify(currentQuery);
-                  console.log(stringified);
                   setSearchParams(stringified);
                   //e.stopPropagation();
                 }}
+                minDate={new Date(1667216880000)}
                 maxDate={new Date()}
               />
             </div>
