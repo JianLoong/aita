@@ -79,7 +79,7 @@ function createResultTable(results: Result[]) {
               <tr key={result.id}>
                 {/* <td>{result.id}</td> */}
                 <td className="">
-                  <NavLink className="link" to={"/aita/submission/" + result.id}>
+                  <NavLink className="link" to={"/submission/" + result.id}>
                     {result.title}
                   </NavLink>
                 </td>

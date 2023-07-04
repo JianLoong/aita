@@ -1,4 +1,4 @@
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes, HashRouter  } from "react-router-dom";
 import "./App.css";
 import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
@@ -11,19 +11,19 @@ function App() {
   return (
     <div>
       <div className="">
-        <BrowserRouter>
+        <HashRouter>
           <Navbar />
           <div className="container h-screen mx-auto">
             <Routes>
-              <Route path="/aita/" element={<ViewSubmissions />} />
-              <Route path="/aita/search" element={<SearchSubmission />} />
-              <Route path="/aita/about" element={<About />} />
-              <Route path="/aita/submission/:id" element={<ViewSubmission id={0} created_utc={0} score={0} />} />
-              <Route path="/aita/*" element={<Navigate to="/aita/" />} />
+              <Route path="/" element={<ViewSubmissions />} />
+              <Route path="/search" element={<SearchSubmission />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/submission/:id" element={<ViewSubmission id={0} created_utc={0} score={0} />} />
+              <Route path="/*" element={<Navigate to="/" />} />
             </Routes>
           </div>
           <Footer />
-        </BrowserRouter>
+        </HashRouter>
       </div>
     </div>
   );

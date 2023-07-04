@@ -26,22 +26,22 @@ export default function Navbar() {
             className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
           >
             <li>
-              <NavLink to="/aita/search">Search</NavLink>
+              <NavLink to="/search">Search</NavLink>
             </li>
             <li>
-              <NavLink to="/aita/about">About</NavLink>
+              <NavLink to="/about">About</NavLink>
             </li>
           </ul>
         </div>
-        <a className="btn btn-ghost normal-case text-xl" href="/aita/">Reddit Visualisation</a>
+        <a className="btn btn-ghost normal-case text-xl" href="/">Reddit Visualisation</a>
       </div>
       <div className="navbar-start hidden lg:flex">
         <ul className="menu menu-horizontal px-1">
           <li>
-            <NavLink to="/aita/search">Search</NavLink>
+            <NavLink to="/search">Search</NavLink>
           </li>
           <li>
-            <NavLink to="/aita/about">About</NavLink>
+            <NavLink to="/about">About</NavLink>
           </li>
         </ul>
       </div>
