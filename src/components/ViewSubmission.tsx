@@ -65,7 +65,7 @@ export default function ViewSubmission({ id }: Index) {
 
   const location = useLocation()
 
-  const submissionId = Number(location["pathname"].split("/")[2]) || id;
+  const submissionId = Number(location["pathname"].split("/")[3]) || id;
 
   const { submission, isLoading, isError } = useSubmission(submissionId);
 
