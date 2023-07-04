@@ -1,11 +1,10 @@
 import parse from "html-react-parser";
 import { Chart } from "react-google-charts";
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation } from "react-router-dom";
 import { TagCloud } from "react-tagcloud";
 import useSWR from "swr";
 import { convertDate, makeHTMLFromString } from "../utils/helpers";
 import ShowAlert from "./ShowAlert";
-
 
 interface Entry {
   value: string;
@@ -61,8 +60,7 @@ function useSubmission(id: number) {
 }
 
 export default function ViewSubmission({ id }: Index) {
-
-  const location = useLocation()
+  const location = useLocation();
 
   const submissionId = Number(location["pathname"].split("/")[2]) || id;
 
@@ -196,14 +194,20 @@ export default function ViewSubmission({ id }: Index) {
     );
   };
 
+  window.scrollTo(0, 0);
+
+  const isMainPage = location["pathname"].startsWith("/submission");
+
   return (
     <div key={submission?.id}>
       <div id={"section" + submission?.id} className=""></div>
       <div className="card mb-2 bg-base-100 shadow-xl p-3">
         <div className="card-body">
-          <h2 className="card-title"><strong>{submission?.title}</strong></h2>
+          <h2 className="card-title">
+            <strong>{submission?.title}</strong>
+          </h2>
           <small>{convertDate(submission?.created_utc)}</small>
-        
+
           <article className="prose max-w-none">{parse(selfText)}</article>
           <p>
             View original post{" "}
@@ -216,26 +220,36 @@ export default function ViewSubmission({ id }: Index) {
 
           <div className="grid grid-cols-1 md:grid-cols-3">
             <div>
-              <h3 className="text-center"><strong>Generated Word Cloud</strong></h3>
+              <h3 className="text-center">
+                <strong>Generated Word Cloud</strong>
+              </h3>
               {<SimpleCloud />}
             </div>
             <div className="">
               <h3 className="text-center">
-                <strong>
-                Results of NRC Emotion Lexicon Analysis
-                </strong>
+                <strong>Results of NRC Emotion Lexicon Analysis</strong>
               </h3>
               <EmotionTable {...summary} />
             </div>
 
             <div className="">
-              <h3 className="text-center"><strong>Breakdown of Replies</strong></h3>
+              <h3 className="text-center">
+                <strong>Breakdown of Replies</strong>
+              </h3>
               <PieChart {...summary} />
             </div>
           </div>
-          <NavLink className="link" to={"/submission/" + submission?.id}>
-          View in detail
-          </NavLink>
+          {!isMainPage ? (
+            <NavLink className="link" to={"/submission/" + submission?.id}>
+              View in detail
+            </NavLink>
+          ) : (
+            <div>
+              {submission?.replies.map((e) => {
+                return <li>{e}</li>;
+              })}
+            </div>
+          )}
         </div>
       </div>
     </div>
