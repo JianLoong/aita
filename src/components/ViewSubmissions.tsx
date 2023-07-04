@@ -4,6 +4,7 @@ import useSWR from "swr";
 import { sortIndexes } from "../utils/helpers";
 import ViewSubmission from "./ViewSubmission";
 import queryString from "query-string";
+import { useSearchParams } from "react-router-dom";
 
 import "react-datepicker/dist/react-datepicker.css";
 import Introduction from "./Introduction";
@@ -50,11 +51,23 @@ function useSubmission(
 }
 
 export default function ViewSubmissions() {
+  // Search params to be used for input
+
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const noOfPost = searchParams.get("noOfPost") || 5;
+  const sortOrder = searchParams.get("sortOrder") || "hot";
+  const queryDate = new Date(Number(searchParams.get("date")));
+  
+  console.log(queryDate);
+
+  
+  
   const { indexes, isLoading, isError } = useIndexes();
 
-  const [selectedNoOfPost, setNoOfPost] = useState<number>(5);
-  const [selectedSortOrder, setSortOrder] = useState<string>("hot");
-  const [selectedDate, setDate] = useState<Date>(new Date());
+  const [selectedNoOfPost, setNoOfPost] = useState<number>(Number(noOfPost));
+  const [selectedSortOrder, setSortOrder] = useState<string>(sortOrder);
+  const [selectedDate, setDate] = useState<Date>(queryDate);
 
   const startOfDay = new Date(selectedDate);
   const endOfDay = new Date(selectedDate);
@@ -84,55 +97,94 @@ export default function ViewSubmissions() {
       <article className="prose lg:prose-xl mx-auto">
         <Introduction />
       </article>
-      <div className="pb-6 grid grid-cols-1 md:grid-cols-3">
-        <div className="">
-          <label className="label">
-            <span className="label-text">No of post</span>
-          </label>
-          <select
-            className="input input-bordered input-primary w-full max-w-xs"
-            aria-label="Number of post"
-            onChange={(e) => {
-              const noOfPost: number = parseInt(e.target.value);
-              setNoOfPost(noOfPost);
-            }}
-          >
-            <option value="5">5</option>
-            <option value="10">10</option>
-            <option value="20">20</option>
-            <option value="100">100</option>
-          </select>
-        </div>
+      <form method="GET">
+        <div className="pb-6 grid grid-cols-1 md:grid-cols-3">
+          <div className="">
+            <label className="label">
+              <span className="label-text">No of post</span>
+            </label>
+            <select
+              className="input input-bordered input-primary w-full max-w-xs"
+              aria-label="Number of post"
+              name="noOfPost"
+              onChange={(e) => {
+                e.preventDefault();
 
-        <div className="">
-          <label className="label">
-            <span className="label-text">Sort</span>
-          </label>
-          <select
-            className="input input-bordered input-primary w-full max-w-xs"
-            aria-label="Number of post"
-            id="sortOrder"
-            onChange={(e) => {
-              setSortOrder(e.target.value);
-            }}
-          >
-            <option value="hot">hot</option>
-            <option value="newest">newest</option>
-          </select>
-        </div>
+                const noOfPost: number = parseInt(e.target.value);
+                setNoOfPost(noOfPost);
 
-        <div className="">
-          <label className="label">
-            <span className="label-text">Date</span>
-          </label>
-          <DatePicker
-            className="input input-bordered input-primary w-full max-w-xs"
-            selected={selectedDate}
-            onChange={(date: Date) => setDate(date)}
-            maxDate={new Date()}
-          />
+                const currentQuery = {
+                  noOfPost: noOfPost,
+                  sortOrder: selectedSortOrder,
+                  date: selectedDate.getTime(),
+                };
+
+                const stringified = queryString.stringify(currentQuery);
+                console.log(stringified);
+                setSearchParams(stringified);
+                e.stopPropagation();
+              }}
+            >
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="20">20</option>
+              <option value="100">100</option>
+            </select>
+          </div>
+
+          <div className="">
+            <label className="label">
+              <span className="label-text">Sort</span>
+            </label>
+            <select
+              className="input input-bordered input-primary w-full max-w-xs"
+              aria-label="Number of post"
+              id="sortOrder"
+              onChange={(e) => {
+                setSortOrder(e.target.value);
+
+                const currentQuery = {
+                  noOfPost: selectedNoOfPost,
+                  sortOrder: e.target.value,
+                  date: selectedDate.getTime(),
+                };
+
+                const stringified = queryString.stringify(currentQuery);
+                console.log(stringified);
+                setSearchParams(stringified);
+                e.stopPropagation();
+              }}
+            >
+              <option value="hot">hot</option>
+              <option value="newest">newest</option>
+            </select>
+          </div>
+
+          <div className="">
+            <label className="label">
+              <span className="label-text">Date</span>
+            </label>
+            <DatePicker
+              className="input input-bordered input-primary w-full max-w-xs"
+              selected={selectedDate}
+              onChange={(date: Date) => {
+                setDate(date);
+                const currentQuery = {
+                  "noOfPost": selectedNoOfPost,
+                  "sortOrder": selectedSortOrder,
+                  "date": date.getTime()
+                }
+              
+                const stringified = queryString.stringify(currentQuery);
+                console.log(stringified);
+                setSearchParams(stringified);
+                //e.stopPropagation();
+              }}
+              maxDate={new Date()}
+            />
+          </div>
         </div>
-      </div>
+      </form>
       {submissions}
     </div>
   );
