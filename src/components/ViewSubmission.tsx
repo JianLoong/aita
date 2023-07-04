@@ -198,12 +198,13 @@ export default function ViewSubmission({ id }: Index) {
 
   return (
     <div key={submission?.id}>
+      <section id={"#" + submission?.id} className="hidden"></section>
       <div className="card mb-2 bg-base-100 shadow-xl p-2">
         <div className="card-body">
           <h2 className="card-title"><strong>{submission?.title}</strong></h2>
           <small>{convertDate(submission?.created_utc)}</small>
         
-          <div className="prose-lg">{parse(selfText)}</div>
+          <article className="prose max-w-none">{parse(selfText)}</article>
           <p>
             View original post{" "}
             <a href={"https://reddit.com" + submission?.permalink}>here</a>

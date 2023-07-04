@@ -23,7 +23,7 @@ export default function Navbar() {
           </label>
           <ul
             tabIndex={0}
-            className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
+            className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box"
           >
             <li>
               <NavLink to="/search">Search</NavLink>
@@ -35,7 +35,7 @@ export default function Navbar() {
         </div>
         <a className="btn btn-ghost normal-case text-xl" href="/aita/">Reddit Visualisation</a>
       </div>
-      <div className="navbar-start hidden lg:flex">
+      <div className="navbar-end hidden lg:flex">
         <ul className="menu menu-horizontal px-1">
           <li>
             <NavLink to="/search">Search</NavLink>
