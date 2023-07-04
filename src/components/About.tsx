@@ -2,7 +2,7 @@
 
 export default function About() {
   return (
-    <div className="prose mx-auto">
+    <div className="p-2 prose mx-auto">
       <div className="">
         <h1></h1>
         <p>Technologies used for this project</p>

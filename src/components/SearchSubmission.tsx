@@ -64,7 +64,7 @@ function createResultTable(results: Result[]) {
   }
 
   return (
-    <div>
+    <div className="p-2">
       <h3>Results</h3>
       <table className="table table-zebra table-x">
         <thead>
@@ -115,7 +115,7 @@ export default function SearchSubmission() {
 
   return (
     <div>
-      <div className="">
+      <div className="p-2">
         <article className="pb-2 prose lg:prose-xl">
           <h5>Search</h5>
         </article>
@@ -124,7 +124,7 @@ export default function SearchSubmission() {
           <input
             type="text"
             name="query"
-            className="input input-bordered input-primary w-full max-w-xs"
+            className="input input-bordered input-primary w-full "
             id="search"
             placeholder="Type anything and hit enter to begin search..."
             aria-label="search"

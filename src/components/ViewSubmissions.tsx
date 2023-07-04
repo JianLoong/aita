@@ -58,18 +58,16 @@ export default function ViewSubmissions() {
   const noOfPost = searchParams.get("noOfPost") || 5;
   const sortOrder = searchParams.get("sortOrder") || "hot";
 
-
-  const queryDate =  searchParams.get("date") || new Date().getTime().toString();
+  const queryDate = searchParams.get("date") || new Date().getTime().toString();
 
   // console.log(new Date(queryDate || new Date().getTime()));
   console.log(queryDate);
-  
 
   const { indexes, isLoading, isError } = useIndexes();
 
   const [selectedNoOfPost, setNoOfPost] = useState<number>(Number(noOfPost));
   const [selectedSortOrder, setSortOrder] = useState<string>(sortOrder);
-  const [selectedDate, setDate] = useState<Date>(new Date(Number (queryDate)));
+  const [selectedDate, setDate] = useState<Date>(new Date(Number(queryDate)));
 
   const startOfDay = new Date(selectedDate);
   const endOfDay = new Date(selectedDate);
@@ -166,24 +164,28 @@ export default function ViewSubmissions() {
             <label className="label">
               <span className="label-text">Date</span>
             </label>
-            <DatePicker
-              className="input input-bordered input-primary w-full max-w-xs"
-              selected={selectedDate}
-              onChange={(date: Date) => {
-                setDate(date);
-                const currentQuery = {
-                  "noOfPost": selectedNoOfPost,
-                  "sortOrder": selectedSortOrder,
-                  "date": date.getTime()
-                }
-              
-                const stringified = queryString.stringify(currentQuery);
-                console.log(stringified);
-                setSearchParams(stringified);
-                //e.stopPropagation();
-              }}
-              maxDate={new Date()}
-            />
+            <div className="">
+              <DatePicker
+                wrapperClassName="w-full"
+                className="input input-bordered input-primary w-full max-w-xs"
+                selected={selectedDate}
+                onFocus={(e) => e.target.blur()}
+                onChange={(date: Date) => {
+                  setDate(date);
+                  const currentQuery = {
+                    noOfPost: selectedNoOfPost,
+                    sortOrder: selectedSortOrder,
+                    date: date.getTime(),
+                  };
+
+                  const stringified = queryString.stringify(currentQuery);
+                  console.log(stringified);
+                  setSearchParams(stringified);
+                  //e.stopPropagation();
+                }}
+                maxDate={new Date()}
+              />
+            </div>
           </div>
         </div>
       </form>
