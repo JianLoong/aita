@@ -33,7 +33,7 @@ export default function Navbar() {
             </li>
           </ul>
         </div>
-        <a className="btn btn-ghost normal-case text-xl" href="/">Reddit Visualisation</a>
+        <a className="btn btn-ghost normal-case text-xl" href="/aita/">Reddit Visualisation</a>
       </div>
       <div className="navbar-start hidden lg:flex">
         <ul className="menu menu-horizontal px-1">
