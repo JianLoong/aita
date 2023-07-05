@@ -84,6 +84,8 @@ export default function ViewSubmissions() {
   const [selectedSortOrder, setSortOrder] = useState<string>(sortOrder);
   const [selectedDate, setDate] = useState<Date>(new Date(Number(queryDate)));
 
+  const [formDisabled, setFormDisabled] = useState<boolean>(false);
+
   const startOfDay = new Date(selectedDate);
   const endOfDay = new Date(selectedDate);
   startOfDay.setHours(0, 0, 0, 0);
@@ -91,6 +93,8 @@ export default function ViewSubmissions() {
 
   const startUTC = startOfDay.getTime() / 1000;
   const endUTC = endOfDay.getTime() / 1000;
+
+
 
   const { submissions } = useSubmission(
     indexes,
@@ -111,7 +115,7 @@ export default function ViewSubmissions() {
     <div className="pt-6 p-2" key={1}>
       <article className="mx-auto">
         <Introduction />
-      </article>
+      </article>       
       <form method="GET">
         <div className="pb-6 grid grid-cols-1 md:grid-cols-3">
           <div className="p-2">
@@ -203,7 +207,7 @@ export default function ViewSubmissions() {
             </div>
           </div>
         </div>
-      </form>
+      </form>      
       {
         submissions.length === 0? <ShowAlert payload={"There are no submissions for this criteria."} type={"warning"} /> : submissions
       }

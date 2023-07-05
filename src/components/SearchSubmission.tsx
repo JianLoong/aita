@@ -1,5 +1,5 @@
 import Fuse from "fuse.js";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import useSWR from "swr";
 import { NavLink } from "react-router-dom";
 import { useSearchParams } from "react-router-dom";
@@ -29,6 +29,7 @@ function useSearch() {
 function useSearchResult(searchIndexes: Result[], searchQuery: string) {
   const results: Result[] = [];
 
+  
   if (searchIndexes === undefined || searchQuery === undefined)
     return {
       results: [],
@@ -37,6 +38,8 @@ function useSearchResult(searchIndexes: Result[], searchQuery: string) {
     includeScore: true,
     keys: ["id", "title"],
   };
+
+  // setDisabled(true);
 
   const fuse = new Fuse(searchIndexes, options);
 
@@ -53,6 +56,7 @@ function useSearchResult(searchIndexes: Result[], searchQuery: string) {
 
     results.push(result);
   });
+
 
   return {
     results: results,
@@ -71,6 +75,7 @@ function createResultTable(results: Result[]) {
         <thead>
           <tr>
             {/* <th>Id</th> */}
+            <th className="">Score</th>
             <th className="">Post Title</th>
           </tr>
         </thead>
@@ -78,7 +83,7 @@ function createResultTable(results: Result[]) {
           {results.map((result) => {
             return (
               <tr key={result.id}>
-                {/* <td>{result.id}</td> */}
+                <td>{result.score}</td>
                 <td className="">
                   <NavLink className="link" to={"/submission/" + result.id}>
                     {result.title}
@@ -103,9 +108,12 @@ export default function SearchSubmission() {
 
   const [selectedSearchQuery, setSearchQuery] = useState<string>(queryString);
 
+  const [disabled, setDisabled] = useState<boolean>(false);
+
   const { results } = useSearchResult(searchIndexes, selectedSearchQuery);
 
-  const [disabled, setDisabled] = useState(false);
+  // setDisabled(true);
+  
 
   if (isLoading)
     return (
@@ -124,9 +132,10 @@ export default function SearchSubmission() {
         <form method="GET">
           <input
             type="text"
-            disabled={disabled}
             name="query"
+            disabled={disabled}
             className="input input-bordered input-primary w-full "
+            // className={!disabled? "input input-bordered input-primary w-full ": "hidden"}
             id="search"
             placeholder="Type anything and hit enter to begin search..."
             aria-label="search"
@@ -135,6 +144,7 @@ export default function SearchSubmission() {
                 e.preventDefault();
                 setSearchQuery(e.target.value);
                 setSearchParams("query=" + e.target.value);
+                // setDisabled(true);
               }
             }}
             aria-describedby="search"
