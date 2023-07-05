@@ -3,7 +3,7 @@ import { useState } from "react";
 import useSWR from "swr";
 import { NavLink } from "react-router-dom";
 import { useSearchParams } from "react-router-dom";
-import { useLocation } from 'react-router-dom';
+import { useLocation } from "react-router-dom";
 import ShowAlert from "./ShowAlert";
 
 interface Result {
@@ -27,7 +27,6 @@ function useSearch() {
 }
 
 function useSearchResult(searchIndexes: Result[], searchQuery: string) {
-
   const results: Result[] = [];
 
   if (searchIndexes === undefined || searchQuery === undefined)
@@ -95,8 +94,6 @@ function createResultTable(results: Result[]) {
 }
 
 export default function SearchSubmission() {
-
-
   // Search params to be used for input
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -143,11 +140,23 @@ export default function SearchSubmission() {
             aria-describedby="search"
           />
         </form>
+        <div className="pt-2">
+          {results.length != 0 ? (
+            <ShowAlert
+              payload={"Search results are as follows"}
+              type={"success"}
+            />
+          ) : selectedSearchQuery !== "" ? (
+            <ShowAlert
+              payload={"There are no results for this search"}
+              type={"warning"}
+            />
+          ) : (
+            ""
+          )}
+        </div>
       </div>
-      {
-        results.length != 0? <ShowAlert payload={"Result of search are as follows"} type={"success"} /> : 
-          selectedSearchQuery !== "" ? <ShowAlert payload={"There are no results for this search"} type={"warning"} /> : ""
-      }
+
       <div className="pt-5">{createResultTable(results)}</div>
     </div>
   );

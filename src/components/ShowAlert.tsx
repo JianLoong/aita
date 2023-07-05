@@ -2,7 +2,7 @@
 
 export default function ShowAlert({ type, payload }: Message) {
   const info = (
-    <div className="m-2 alert alert-info">
+    <div className="alert alert-info">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
@@ -40,7 +40,7 @@ export default function ShowAlert({ type, payload }: Message) {
   );
 
   const success = (
-    <div className="m-2 alert alert-success">
+    <div className="alert alert-success">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         className="stroke-current shrink-0 h-6 w-6"
@@ -59,7 +59,7 @@ export default function ShowAlert({ type, payload }: Message) {
   );
 
   const error = (
-    <div className="m-2 alert alert-error">
+    <div className="alert alert-error">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         className="stroke-current shrink-0 h-6 w-6"
