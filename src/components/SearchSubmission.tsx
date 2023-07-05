@@ -4,6 +4,7 @@ import useSWR from "swr";
 import { NavLink } from "react-router-dom";
 import { useSearchParams } from "react-router-dom";
 import { useLocation } from 'react-router-dom';
+import ShowAlert from "./ShowAlert";
 
 interface Result {
   id: string;
@@ -26,6 +27,7 @@ function useSearch() {
 }
 
 function useSearchResult(searchIndexes: Result[], searchQuery: string) {
+
   const results: Result[] = [];
 
   if (searchIndexes === undefined || searchQuery === undefined)
@@ -40,7 +42,7 @@ function useSearchResult(searchIndexes: Result[], searchQuery: string) {
   const fuse = new Fuse(searchIndexes, options);
 
   const fuseResults = fuse.search(searchQuery, {
-    limit: 50,
+    limit: 20,
   });
 
   fuseResults.forEach((e) => {
@@ -106,6 +108,8 @@ export default function SearchSubmission() {
 
   const { results } = useSearchResult(searchIndexes, selectedSearchQuery);
 
+  const [disabled, setDisabled] = useState(false);
+
   if (isLoading)
     return (
       <div>
@@ -123,6 +127,7 @@ export default function SearchSubmission() {
         <form method="GET">
           <input
             type="text"
+            disabled={disabled}
             name="query"
             className="input input-bordered input-primary w-full "
             id="search"
@@ -139,6 +144,10 @@ export default function SearchSubmission() {
           />
         </form>
       </div>
+      {
+        results.length != 0? <ShowAlert payload={"Result of search are as follows"} type={"success"} /> : 
+          selectedSearchQuery !== "" ? <ShowAlert payload={"There are no results for this search"} type={"warning"} /> : ""
+      }
       <div className="pt-5">{createResultTable(results)}</div>
     </div>
   );

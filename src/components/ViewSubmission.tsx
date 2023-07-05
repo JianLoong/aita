@@ -77,7 +77,7 @@ export default function ViewSubmission({ id }: Index) {
     );
 
   if (isError || isSummaryError) {
-    return <ShowAlert />;
+    return <ShowAlert payload={"Please try again later, there has been an error"} type={"error"} />
   }
 
   if (isSummaryLoading)

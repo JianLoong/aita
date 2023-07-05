@@ -25,10 +25,6 @@ function useIndexes() {
   };
 }
 
-function moveToSection() {
-  
-}
-
 function useSubmission(
   indexes: Index[],
   startUTC: number,
