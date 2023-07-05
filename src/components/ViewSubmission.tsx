@@ -83,7 +83,7 @@ export default function ViewSubmission({ id }: Index) {
   if (isSummaryLoading)
     return (
       <div>
-        <span className="loading loading-dots loading-lg"></span>
+        <span className="loading loading-dots loading-lg">Loading submission</span>
       </div>
     );
 
@@ -115,9 +115,14 @@ export default function ViewSubmission({ id }: Index) {
       ["No assholes here", summary?.counts?.nah_count],
     ];
 
+    // const darkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    // console.log(darkMode);
+
     const options = {
       legend: { position: "bottom" },
       is3D: true,
+      // backgroundColor: darkMode? "rgb(166, 173, 186)" : '',
       colors: [
         "green",
         "red",
@@ -236,17 +241,17 @@ export default function ViewSubmission({ id }: Index) {
               <h3 className="text-center">
                 <strong>Breakdown of Replies</strong>
               </h3>
-              <PieChart {...summary} />
+              <PieChart className="p-2" {...summary} />
             </div>
           </div>
           {!isMainPage ? (
-            <NavLink className="link" to={"/submission/" + submission?.id}>
+            <NavLink className="link" to={"/submission/" + submission?.id} key={submission?.id}>
               View in detail
             </NavLink>
           ) : (
             <div>
               {submission?.replies.map((e : string) => {
-                return <li>{e}</li>;
+                return <li key={Math.random()}>{e}</li>;
               })}
             </div>
           )}

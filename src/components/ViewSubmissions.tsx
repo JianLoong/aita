@@ -102,7 +102,7 @@ export default function ViewSubmissions() {
   if (isLoading)
     return (
       <div className="p-2">
-        <span className="loading loading-dots loading-lg"></span>
+         <span className="loading loading-dots loading-lg"></span>
       </div>
     );
 
