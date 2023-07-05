@@ -9,6 +9,7 @@ import ViewSubmission from "./ViewSubmission";
 
 import "react-datepicker/dist/react-datepicker.css";
 import Introduction from "./Introduction";
+import ShowAlert from "./ShowAlert";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -203,7 +204,10 @@ export default function ViewSubmissions() {
           </div>
         </div>
       </form>
-      {submissions}
+      {
+        submissions.length === 0? <ShowAlert payload={"There are no submissions for this criteria."} type={"warning"} /> : submissions
+      }
+     
     </div>
   );
 }
