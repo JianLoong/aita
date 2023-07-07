@@ -5,13 +5,14 @@
   "type": "module",
   "homepage": "https://github.com/jianloong/iata",
   "scripts": {
-    "dev": "vite --host --port 3000",
+    "dev": "vite",
     "build": "tsc && vite build",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
   "dependencies": {
     "clsx": "^1.2.1",
+    "esbuild": "^0.17.19",
     "fuse.js": "^6.6.2",
     "html-react-parser": "^4.0.0",
     "query-string": "^8.1.0",
