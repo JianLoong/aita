@@ -58,3 +58,11 @@ export const getCurrentDateInput = () => {
 
   return defaultValue;
 };
+
+export const normaliseDate = (creation_time: number) => {
+
+  const date = new Date(creation_time * 1000);
+  const weekday = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+  return [date.getFullYear(), date.getMonth(), weekday[date.getDay()]];
+}
