@@ -1,4 +1,5 @@
 import React from "react";
+import { Index } from "../types/index";
 
 export const sortIndexes = (
   data: Index[],

@@ -3,5 +3,10 @@ export interface Top {
     created_utc: number,
     score: number,
     year: number,
-    month: number
+    month: number,
+    nta: number,
+    yta: number,
+    info: number,
+    esh: number,
+    nah: number
 }

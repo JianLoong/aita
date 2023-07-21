@@ -5,17 +5,51 @@ import useSWR from "swr";
 import { normaliseDate } from "../utils/helpers";
 import ViewSubmission from "./ViewSubmission";
 import { Top } from "../types/top";
-import { Submission } from "../types/submission";
+import { Index } from "../types/index";
 
-import "react-datepicker/dist/react-datepicker.css";
 import Introduction from "./Introduction";
 import ShowAlert from "./ShowAlert";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
+function processSubmissions(tops: Top[]): Index[] {
+  let maxNTA = tops[0]?.nta;
+  let maxYTA = tops[0]?.yta;
+
+  let maxNTAId = tops[0]?.id;
+  let maxYTAId = tops[0]?.id;
+
+  const sorted: Index[] = [];
+
+  for (const top of tops) {
+    if (top.nta > maxNTA) {
+      maxNTA = top.nta;
+      maxNTAId = top.id;
+    }
+
+    if (top.yta > maxYTA) {
+      maxYTA = top.yta;
+      maxYTAId = top.id;
+    }
+  }
+
+  sorted.push({
+    id: maxYTAId,
+    created_utc: 0,
+    score: 0,
+  });
+
+  sorted.push({
+    id: maxNTAId,
+    created_utc: 0,
+    score: 0,
+  });
+
+  return sorted;
+}
+
 function useIndexes() {
-  const indexesEndPoint =
-    "https://jianliew.me/reddit-store/api/top/top.json";
+  const indexesEndPoint = "https://jianliew.me/reddit-store/api/top/top.json";
 
   const { data, error, isLoading } = useSWR(indexesEndPoint, fetcher);
 
@@ -31,20 +65,14 @@ function useSubmission(
   selectedMonth: number,
   selectedYear: number
 ) {
-
   if (tops === undefined)
     return {
       submissions: [],
     };
 
-
   const selectedSubmissions = [];
 
-  console.log(selectedMonth);
-  console.log(selectedYear);
-
   for (const top of tops) {
-
     const normalisedDate = normaliseDate(top?.created_utc);
     top["year"] = Number(normalisedDate[0]);
     top["month"] = Number(normalisedDate[1]);
@@ -53,12 +81,23 @@ function useSubmission(
       selectedSubmissions.push(top);
   }
 
-  console.log(selectedSubmissions);
-
   // Get top post here
+  if (selectedSubmissions.length == 0) {
+    return {
+      submissions: [],
+    };
+  }
+
+  const results = processSubmissions(selectedSubmissions);
+
+  const submissions = [];
+
+  for (const index of results) {
+    submissions.push(<ViewSubmission {...index} key={index?.id} />);
+  }
 
   return {
-    submissions: [],
+    submissions: submissions,
   };
 }
 
@@ -68,18 +107,15 @@ export default function ViewTop() {
 
   const [searchParams, setSearchParams] = useSearchParams();
 
-  // Scroll into view
-
   const location = useLocation();
 
   if (location["hash"] !== undefined) {
-
     const scrollTo = location["hash"].toString().slice(1);
 
     const element = document.getElementById(scrollTo);
 
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+      element.scrollIntoView({ behavior: "smooth" });
     }
   }
 
@@ -91,11 +127,7 @@ export default function ViewTop() {
   const [selectedMonth, setMonth] = useState<number>(Number(month));
   const [selectedYear, setYear] = useState<number>(Number(year));
 
-  const { submissions } = useSubmission(
-    tops,
-    selectedMonth,
-    selectedYear
-  );
+  const { submissions } = useSubmission(tops, selectedMonth, selectedYear);
 
   if (isLoading)
     return (
@@ -107,7 +139,7 @@ export default function ViewTop() {
   return (
     <div className="pt-6 p-2" key={1}>
       <article className="mx-auto">
-        <Introduction />
+          The following are the highest rated submission for each month.
       </article>
       <form method="GET">
         <div className="pb-6 grid grid-cols-1 md:grid-cols-2">
@@ -141,7 +173,13 @@ export default function ViewTop() {
               <option value="2">March</option>
               <option value="3">April</option>
               <option value="4">May</option>
-              <option value="3">April</option>
+              <option value="5">Jun</option>
+              <option value="6">July</option>
+              <option value="7">August</option>
+              <option value="8">Sep</option>
+              <option value="9">October</option>
+              <option value="10">November</option>
+              <option value="11">December</option>
             </select>
           </div>
 
@@ -171,13 +209,16 @@ export default function ViewTop() {
               <option value="2023">2023</option>
             </select>
           </div>
-
         </div>
       </form>
-      {
-        submissions.length === 0 ? <ShowAlert payload={"There are no submissions for this criteria."} type={"warning"} /> : submissions
-      }
-
+      {submissions.length === 0 ? (
+        <ShowAlert
+          payload={"The data collection start date was November 2022"}
+          type={"warning"}
+        />
+      ) : (
+        submissions
+      )}
     </div>
   );
 }

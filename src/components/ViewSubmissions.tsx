@@ -10,6 +10,7 @@ import ViewSubmission from "./ViewSubmission";
 import "react-datepicker/dist/react-datepicker.css";
 import Introduction from "./Introduction";
 import ShowAlert from "./ShowAlert";
+import { Index } from "../types";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
