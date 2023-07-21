@@ -6,7 +6,7 @@ import SearchSubmission from "./components/SearchSubmission";
 import ViewSubmissions from "./components/ViewSubmissions";
 import About from "./components/About";
 import ViewSubmission from "./components/ViewSubmission";
-import ViewTop from "./components/Top";
+import ViewTop from "./components/ViewTop";
 
 function App() {
   return (

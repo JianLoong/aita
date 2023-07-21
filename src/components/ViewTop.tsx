@@ -7,7 +7,6 @@ import ViewSubmission from "./ViewSubmission";
 import { Top } from "../types/top";
 import { Index } from "../types/index";
 
-import Introduction from "./Introduction";
 import ShowAlert from "./ShowAlert";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
@@ -16,8 +15,14 @@ function processSubmissions(tops: Top[]): Index[] {
   let maxNTA = tops[0]?.nta;
   let maxYTA = tops[0]?.yta;
 
+  let maxINFO = tops[0]?.info;
+  let maxNAH = tops[0]?.nah;
+
   let maxNTAId = tops[0]?.id;
   let maxYTAId = tops[0]?.id;
+
+  let maxINFOId = tops[0]?.info;
+  let maxNAHId = tops[0]?.nah;
 
   const sorted: Index[] = [];
 
@@ -31,6 +36,16 @@ function processSubmissions(tops: Top[]): Index[] {
       maxYTA = top.yta;
       maxYTAId = top.id;
     }
+
+    if (top.nah > maxNAH) {
+      maxNAH = top.nah;
+      maxNAHId = top.id;
+    }
+
+    if (top.info > maxINFO) {
+      maxINFO = top.info;
+      maxINFOId = top.id;
+    }
   }
 
   sorted.push({
@@ -41,6 +56,18 @@ function processSubmissions(tops: Top[]): Index[] {
 
   sorted.push({
     id: maxNTAId,
+    created_utc: 0,
+    score: 0,
+  });
+
+  sorted.push({
+    id: maxNAHId,
+    created_utc: 0,
+    score: 0,
+  });
+
+  sorted.push({
+    id: maxINFOId,
     created_utc: 0,
     score: 0,
   });
@@ -92,9 +119,29 @@ function useSubmission(
 
   const submissions = [];
 
-  for (const index of results) {
-    submissions.push(<ViewSubmission {...index} key={index?.id} />);
-  }
+
+  submissions.push(
+    <strong key={Math.random()}><ShowAlert payload={"Highest number of YTA"} type={"error"} ></ShowAlert></strong>
+  );
+  submissions.push(<ViewSubmission {...results[0]} key={results[0]?.id} />);
+
+
+  submissions.push(
+    <strong key={Math.random()}><ShowAlert payload={"Highest number of NTA"} type={"success"} ></ShowAlert></strong>
+  );
+  submissions.push(<ViewSubmission {...results[1]} key={results[1]?.id} />);
+
+
+  submissions.push(
+    <strong key={Math.random()}><ShowAlert payload={"Highest number of NAH"} type={"warning"} ></ShowAlert></strong>
+  );
+  submissions.push(<ViewSubmission {...results[2]} key={results[2]?.id} />);
+
+
+  submissions.push(
+    <strong key={Math.random()}><ShowAlert payload={"Highest number of INFO"} type={"info"} ></ShowAlert></strong>
+  );
+  submissions.push(<ViewSubmission {...results[3]} key={results[3]?.id} />);
 
   return {
     submissions: submissions,
@@ -105,7 +152,7 @@ function useSubmission(
 export default function ViewTop() {
   // Search params to be used for input
 
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams("");
 
   const location = useLocation();
 
@@ -137,9 +184,9 @@ export default function ViewTop() {
     );
 
   return (
-    <div className="pt-6 p-2" key={1}>
+    <div className="pt-6 p-2" key={Math.random()}>
       <article className="mx-auto">
-          The following are the highest rated submission for each month.
+        The following are the highest rated submission for each month.
       </article>
       <form method="GET">
         <div className="pb-6 grid grid-cols-1 md:grid-cols-2">
