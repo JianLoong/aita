@@ -5,6 +5,7 @@ import { TagCloud } from "react-tagcloud";
 import useSWR from "swr";
 import { convertDate, makeHTMLFromString } from "../utils/helpers";
 import ShowAlert from "./ShowAlert";
+import { Index } from "../types/index";
 
 interface Entry {
   value: string;
