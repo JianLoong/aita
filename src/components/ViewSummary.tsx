@@ -1,4 +1,5 @@
 import useSWR from "swr";
+import { Index } from "../types";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
