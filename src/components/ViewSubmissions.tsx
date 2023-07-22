@@ -85,8 +85,6 @@ export default function ViewSubmissions() {
   const [selectedSortOrder, setSortOrder] = useState<string>(sortOrder);
   const [selectedDate, setDate] = useState<Date>(new Date(Number(queryDate)));
 
-  const [formDisabled, setFormDisabled] = useState<boolean>(false);
-
   const startOfDay = new Date(selectedDate);
   const endOfDay = new Date(selectedDate);
   startOfDay.setHours(0, 0, 0, 0);
@@ -104,6 +102,10 @@ export default function ViewSubmissions() {
     selectedNoOfPost,
     selectedSortOrder
   );
+
+  if (isError) {
+    return <ShowAlert payload={"Please try again later, there has been an error"} type={"error"} />
+  }
 
   if (isLoading)
     return (

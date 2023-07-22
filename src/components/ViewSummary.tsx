@@ -1,5 +1,6 @@
 import useSWR from "swr";
 import { Index } from "../types/index";
+import ShowAlert from "./ShowAlert";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -17,7 +18,23 @@ export default function ViewSummary({ id }: Index) {
   }
 
   const { summary, isLoading, isError } = useSummary(id);
-  
+
+  if (isError) {
+    return (
+      <ShowAlert
+        payload={"Please try again later, there has been an error"}
+        type={"error"}
+      />
+    );
+  }
+
+  if (isLoading)
+    return (
+      <div>
+        <span className="loading loading-dots loading-lg"></span>
+      </div>
+    );
+
   return (
     <div className="" key={summary?.id}>
       <p>{summary?.id}</p>

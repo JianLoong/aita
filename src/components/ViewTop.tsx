@@ -183,6 +183,11 @@ export default function ViewTop() {
       </div>
     );
 
+
+  if (isError) {
+    return <ShowAlert payload={"Please try again later, there has been an error"} type={"error"} />
+  }
+
   return (
     <div className="pt-6 p-2" key={Math.random()}>
       <article className="mx-auto">

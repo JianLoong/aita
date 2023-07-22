@@ -1,9 +1,8 @@
 import Fuse from "fuse.js";
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState } from "react";
 import useSWR from "swr";
 import { NavLink } from "react-router-dom";
 import { useSearchParams } from "react-router-dom";
-import { useLocation } from "react-router-dom";
 import ShowAlert from "./ShowAlert";
 
 interface Result {
@@ -108,12 +107,7 @@ export default function SearchSubmission() {
 
   const [selectedSearchQuery, setSearchQuery] = useState<string>(queryString);
 
-  const [disabled, setDisabled] = useState<boolean>(false);
-
   const { results } = useSearchResult(searchIndexes, selectedSearchQuery);
-
-  // setDisabled(true);
-  
 
   if (isLoading)
     return (
@@ -133,7 +127,6 @@ export default function SearchSubmission() {
           <input
             type="text"
             name="query"
-            disabled={disabled}
             className="input input-bordered input-primary w-full "
             // className={!disabled? "input input-bordered input-primary w-full ": "hidden"}
             id="search"
@@ -144,7 +137,6 @@ export default function SearchSubmission() {
                 e.preventDefault();
                 setSearchQuery(e.target.value);
                 setSearchParams("query=" + e.target.value);
-                // setDisabled(true);
               }
             }}
             aria-describedby="search"
