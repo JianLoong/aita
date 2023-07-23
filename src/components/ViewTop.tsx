@@ -18,11 +18,14 @@ function processSubmissions(tops: Top[]): Index[] {
   let maxINFO = tops[0]?.info;
   let maxNAH = tops[0]?.nah;
 
+  let maxESH = tops[0]?.esh;
+
   let maxNTAId = tops[0]?.id;
   let maxYTAId = tops[0]?.id;
 
-  let maxINFOId = tops[0]?.info;
-  let maxNAHId = tops[0]?.nah;
+  let maxINFOId = tops[0]?.id;
+  let maxNAHId = tops[0]?.id;
+  let maxESHId = tops[0]?.id;
 
   const sorted: Index[] = [];
 
@@ -46,6 +49,11 @@ function processSubmissions(tops: Top[]): Index[] {
       maxINFO = top.info;
       maxINFOId = top.id;
     }
+
+    if (top.esh > maxESH) {
+      maxESH = top.esh;
+      maxESHId = top.id;
+    }
   }
 
   sorted.push({
@@ -68,6 +76,12 @@ function processSubmissions(tops: Top[]): Index[] {
 
   sorted.push({
     id: maxINFOId,
+    created_utc: 0,
+    score: 0,
+  });
+
+  sorted.push({
+    id: maxESHId,
     created_utc: 0,
     score: 0,
   });
@@ -106,6 +120,10 @@ function useSubmission(
 
     if (selectedMonth == top["month"] && selectedYear == top["year"])
       selectedSubmissions.push(top);
+
+    if (selectedMonth == 12) {
+      selectedSubmissions.push(top);
+    }
   }
 
   // Get top post here
@@ -119,29 +137,41 @@ function useSubmission(
 
   const submissions = [];
 
-
   submissions.push(
-    <strong key={Math.random()}><ShowAlert payload={"Highest number of YTA"} type={"error"} ></ShowAlert></strong>
+    <strong key={Math.random()}>
+      <ShowAlert payload={"Highest number of YTA"} type={"error"}></ShowAlert>
+    </strong>
   );
   submissions.push(<ViewSubmission {...results[0]} key={results[0]?.id} />);
 
-
   submissions.push(
-    <strong key={Math.random()}><ShowAlert payload={"Highest number of NTA"} type={"success"} ></ShowAlert></strong>
+    <strong key={Math.random()}>
+      <ShowAlert payload={"Highest number of NTA"} type={"success"}></ShowAlert>
+    </strong>
   );
   submissions.push(<ViewSubmission {...results[1]} key={results[1]?.id} />);
 
-
   submissions.push(
-    <strong key={Math.random()}><ShowAlert payload={"Highest number of NAH"} type={"warning"} ></ShowAlert></strong>
+    <strong key={Math.random()}>
+      <ShowAlert payload={"Highest number of NAH"} type={"warning"}></ShowAlert>
+    </strong>
   );
   submissions.push(<ViewSubmission {...results[2]} key={results[2]?.id} />);
 
-
   submissions.push(
-    <strong key={Math.random()}><ShowAlert payload={"Highest number of INFO"} type={"info"} ></ShowAlert></strong>
+    <strong key={Math.random()}>
+      <ShowAlert payload={"Highest number of INFO"} type={"info"}></ShowAlert>
+    </strong>
   );
   submissions.push(<ViewSubmission {...results[3]} key={results[3]?.id} />);
+
+  submissions.push(
+    <strong key={Math.random()}>
+      <ShowAlert payload={"Highest Number of ESH"} type={"base"}></ShowAlert>
+    </strong>
+  );
+
+  submissions.push(<ViewSubmission {...results[4]} key={results[4]?.id} />);
 
   return {
     submissions: submissions,
@@ -183,9 +213,13 @@ export default function ViewTop() {
       </div>
     );
 
-
   if (isError) {
-    return <ShowAlert payload={"Please try again later, there has been an error"} type={"error"} />
+    return (
+      <ShowAlert
+        payload={"Please try again later, there has been an error"}
+        type={"error"}
+      />
+    );
   }
 
   return (
@@ -232,6 +266,7 @@ export default function ViewTop() {
               <option value="9">October</option>
               <option value="10">November</option>
               <option value="11">December</option>
+              <option value="12">All time</option>
             </select>
           </div>
 
