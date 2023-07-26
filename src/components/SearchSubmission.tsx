@@ -74,7 +74,7 @@ function createResultTable(results: Result[]) {
         <thead>
           <tr>
             {/* <th>Id</th> */}
-            <th className="">Score</th>
+            <th className="">ID</th>
             <th className="">Post Title</th>
           </tr>
         </thead>
@@ -82,7 +82,7 @@ function createResultTable(results: Result[]) {
           {results.map((result) => {
             return (
               <tr key={result.id}>
-                <td>{result.score}</td>
+                <td>{result.id}</td>
                 <td className="">
                   <NavLink className="link" to={"/submission/" + result.id}>
                     {result.title}
