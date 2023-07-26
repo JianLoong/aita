@@ -2,6 +2,7 @@ import useSWR from "swr";
 import ViewSubmission from "./ViewSubmission";
 
 import ShowAlert from "./ShowAlert";
+import { useLocation } from "react-router-dom";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -11,47 +12,78 @@ function useIndexes() {
 
   const { data, error, isLoading } = useSWR(indexesEndPoint, fetcher);
 
-  if (data === undefined) {
+  return {
+    indexes: data,
+    isLoading: isLoading,
+    isError: error,
+  };
+
+  // const submissions = [];
+
+  // const randomSubmission = data[Math.floor(Math.random() * data.length)];
+
+  // submissions.push(<ViewSubmission {...randomSubmission} key={randomSubmission?.id} />);
+
+  // return {
+  //   submissions: submissions,
+  //   isLoading,
+  //   isError: error,
+  // };
+}
+
+function useSubmissions(indexes: any) {
+  const submissions: any = [];
+
+  if (indexes === undefined)
     return {
-        submissions: [],
-        isLoading,
-        isError: error,
-      };
-  }
+      submissions: submissions,
+    };
 
-  const submissions = [];
-  
-  const randomSubmission = data[Math.floor(Math.random() * data.length)];
+  const randomSubmission = indexes[Math.floor(Math.random() * indexes.length)];
 
-  submissions.push(<ViewSubmission {...randomSubmission} key={randomSubmission?.id} />);
+  submissions.push(
+    <ViewSubmission {...randomSubmission} key={randomSubmission?.id} />
+  );
 
   return {
     submissions: submissions,
-    isLoading,
-    isError: error,
   };
 }
 
 export default function Random() {
+  const { indexes, isLoading, isError } = useIndexes();
 
-  const { submissions, isLoading, isError } = useIndexes();
+  const { submissions } = useSubmissions(indexes);
+
+  const location = useLocation();
 
   if (isError) {
-    return <ShowAlert payload={"Please try again later, there has been an error"} type={"error"} />
+    return (
+      <ShowAlert
+        payload={"Please try again later, there has been an error"}
+        type={"error"}
+      />
+    );
   }
 
   if (isLoading)
     return (
       <div className="p-2">
-         <span className="loading loading-dots loading-lg"></span>
+        <span className="loading loading-dots loading-lg"></span>
       </div>
     );
 
+  //https://github.com/remix-run/react-router/issues/7416
   return (
-    <div className="pt-6 p-2" key={1}>
-      {
-        submissions.length === 0? <ShowAlert payload={"There are no submissions for this criteria."} type={"warning"} /> : submissions
-      }
+    <div className="pt-6 p-2" key={location.key}>
+      {submissions.length === 0 ? (
+        <ShowAlert
+          payload={"There are no submissions for this criteria."}
+          type={"warning"}
+        />
+      ) : (
+        submissions
+      )}
     </div>
   );
 }

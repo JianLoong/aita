@@ -9,8 +9,8 @@ export default function Introduction() {
       </p>
       <br />
       <p>
-        It currently has over 20,000 submissions and over 4 million top level
-        comments.
+        It currently has over 23,000 submissions and over 6.9 million top level
+        comments with a total size of 2.7 GB in SQLite format.
       </p>
       <br />
       <p>
