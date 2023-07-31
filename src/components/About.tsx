@@ -1,5 +1,3 @@
-"use client";
-
 export default function About() {
   return (
     <div className="p-2 prose max-w-none">

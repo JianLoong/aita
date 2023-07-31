@@ -1,5 +1,5 @@
 import Fuse from "fuse.js";
-import { useState } from "react";
+import { useState, KeyboardEvent } from "react";
 import useSWR from "swr";
 import { NavLink } from "react-router-dom";
 import { useSearchParams } from "react-router-dom";
@@ -132,11 +132,11 @@ export default function SearchSubmission() {
             id="search"
             placeholder="Type anything and hit enter to begin search..."
             aria-label="search"
-            onKeyDown={(e: any) => {
+            onKeyDown={(e : KeyboardEvent<HTMLInputElement>) => {
               if (e.key === "Enter") {
-                e.preventDefault();
-                setSearchQuery(e.target.value);
-                setSearchParams("query=" + e.target.value);
+                e.preventDefault();                
+                setSearchQuery(e.currentTarget.value);
+                setSearchParams("query=" + e.currentTarget.value);
               }
             }}
             aria-describedby="search"
