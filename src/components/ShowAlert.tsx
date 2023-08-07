@@ -1,4 +1,4 @@
-"use client";
+import { Message } from "../types/message";
 
 export default function ShowAlert({ type, payload }: Message) {
   const info = (

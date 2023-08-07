@@ -202,7 +202,6 @@ export default function ViewSubmissions() {
 
                   const stringified = queryString.stringify(currentQuery);
                   setSearchParams(stringified);
-                  //e.stopPropagation();
                 }}
                 minDate={new Date(1667216880000)}
                 maxDate={new Date()}

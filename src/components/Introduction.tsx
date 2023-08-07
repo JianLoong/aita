@@ -1,5 +1,3 @@
-"use client";
-
 export default function Introduction() {
   return (
     <div className="p-2">
