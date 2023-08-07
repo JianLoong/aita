@@ -20,7 +20,8 @@ export default function About() {
           </li>
           <li>
             <strong>End Points</strong> - The Python scripts will also create
-            summary end points will be consumed by the front end.
+            summary end points will be consumed by the front end. Basically, these scripts
+            creates static files which serves as an end points and these files will be hosted as static files on GH-Pages
           </li>
           <li>
             <strong>Bash</strong> - Bash Scripts and cron jobs are used to
