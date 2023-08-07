@@ -1,13 +1,7 @@
-import { useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 import toxicityAnalysis from "../utils/toxicity_analysis";
 
-export default function ToxicityAnalysis() {
-  const [searchParams, setSearchParams] = useSearchParams();
-
-  const queryString = searchParams.get("query") || "";
-
-  const [selectedSearchQuery, setSearchQuery] = useState<string>(queryString);
+export default function ViewToxicity({sentences}) {
 
   const [results, setResult] = useState<
     Array<{
@@ -19,43 +13,27 @@ export default function ToxicityAnalysis() {
     }>
   >([]);
 
-  const process = async (query) => {
-    const sentences = [query];
+  useEffect(() => {
+    const process = async (query) => {
 
-    const predictions = await toxicityAnalysis(sentences);
+        const sentences = [query];
+        // const sentences = ["We're dudes on computers, moron. You are quite astonishingly stupid."];
+        const predictions = await toxicityAnalysis(sentences);
+    
+        setResult(predictions);
+      };
 
-    console.log(predictions);
+    process(sentences);
+  }, [sentences]);
 
-    setResult(predictions);
-  };
 
-  process(selectedSearchQuery);
 
   return (
     <div>
-      <input
-        type="text"
-        name="query"
-        className="input input-bordered input-primary w-full "
-        // className={!disabled? "input input-bordered input-primary w-full ": "hidden"}
-        id="search"
-        placeholder="Toxicity Analysis"
-        aria-label="search"
-        onKeyDown={(e: any) => {
-          if (e.key === "Enter") {
-            e.preventDefault();
-            setSearchParams(e.target.value);
-            setSearchQuery(e.target.value);
-            const query = e.target.value;
-            process(query);
-          }
-        }}
-        aria-describedby="search"
-      />
+    <h3><strong>Toxicity Analysis</strong></h3>
       <table className="table table-zebra table-lg">
         <thead>
           <tr>
-            {/* <th>Id</th> */}
             <th className="">Identity Attack</th>
             <th className="">Insult</th>
             <th className="">Obscene</th>
@@ -67,7 +45,7 @@ export default function ToxicityAnalysis() {
         </thead>
         <tbody>
           {results.length != 0 && (
-            <tr key={Math.random()}>
+            <tr key={JSON.stringify(results[0])}>
               <td className="">
                 {JSON.stringify(results[0].results[0].match)}{" "}
               </td>

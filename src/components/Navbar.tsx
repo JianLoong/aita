@@ -122,7 +122,7 @@ export default function Navbar() {
               About
             </NavLink>
           </li>
-          <li className="pr-2">
+          {/* <li className="pr-2">
             <NavLink to="/toxic">
               {" "}
               <svg
@@ -141,7 +141,7 @@ export default function Navbar() {
               </svg>{" "}
               Toxicity Analysis
             </NavLink>
-          </li>
+          </li> */}
         </ul>
       </div>
     </div>

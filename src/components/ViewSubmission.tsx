@@ -6,6 +6,7 @@ import useSWR from "swr";
 import { convertDate, makeHTMLFromString } from "../utils/helpers";
 import ShowAlert from "./ShowAlert";
 import { Index } from "../types/index";
+import ViewToxicity from "./ViewToxicity";
 
 interface Entry {
   value: string;
@@ -245,12 +246,16 @@ export default function ViewSubmission({ id }: Index) {
               <PieChart className="p-2" {...summary} />
             </div>
           </div>
+
+      
           {!isMainPage ? (
             <NavLink className="link" to={"/submission/" + submission?.id} key={submission?.id}>
               View in detail
             </NavLink>
           ) : (
             <div>
+              <ViewToxicity sentences={submission?.selftext} />
+              <br />
               {submission?.replies.map((e : string) => {
                 return <li key={Math.random()}>{e}</li>;
               })}
