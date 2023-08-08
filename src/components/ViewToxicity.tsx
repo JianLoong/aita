@@ -14,12 +14,12 @@ export default function ViewToxicity({ sentences }) {
 
   const pool = workerpool.pool("/workers/toxicity.js");
 
-  console.log(pool);
+  // console.log(pool);
 
   pool
     .exec("toxicityAnalysis", [sentences])
     .then(function (result) {
-      console.log("result", result); // outputs 7
+      // console.log("result", result); 
       setResult(result);
     })
     .catch(function (err) {
