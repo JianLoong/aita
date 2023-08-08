@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, KeyboardEvent } from "react";
 import { useSearchParams } from "react-router-dom";
 import toxicityAnalysis from "../utils/toxicity_analysis";
 
@@ -38,12 +38,12 @@ export default function ToxicityAnalysis() {
         id="search"
         placeholder="Toxicity Analysis"
         aria-label="search"
-        onKeyDown={(e: any) => {
+        onKeyDown={(e : KeyboardEvent<HTMLInputElement>) => {
           if (e.key === "Enter") {
             e.preventDefault();
-            setSearchParams(e.target.value);
-            setSearchQuery(e.target.value);
-            const query = e.target.value;
+            setSearchParams(e.currentTarget.value);
+            setSearchQuery(e.currentTarget.value);
+            const query = e.currentTarget.value;
             process(query);
           }
         }}
