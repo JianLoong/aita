@@ -215,7 +215,7 @@ export default function ViewSubmission({ id }: Index) {
           </h2>
           <small>{convertDate(submission?.created_utc)}</small>
 
-          <article className="prose max-w-none">{parse(selfText)}</article>
+          <article className="prose max-w-none break-all">{parse(selfText)}</article>
           <p>
             View original post{" "}
             <a href={"https://reddit.com" + submission?.permalink}>here</a>
@@ -253,7 +253,7 @@ export default function ViewSubmission({ id }: Index) {
               View in detail
             </NavLink>
           ) : (
-            <div>
+            <div className="break-all">
               <ViewToxicity sentences={submission?.selftext} />
               <br />
               {submission?.replies.map((e : string) => {
