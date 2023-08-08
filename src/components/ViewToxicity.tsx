@@ -12,7 +12,7 @@ export default function ViewToxicity({ sentences }) {
     }>
   >([]);
 
-  const pool = workerpool.pool("/workers/toxicity.js");
+  const pool = workerpool.pool("./workers/toxicity.js");
 
   // console.log(pool);
 
