@@ -19,12 +19,9 @@ export default function ToxicityAnalysis() {
     }>
   >([]);
 
-  const process = async (query) => {
-    const sentences = [query];
-
-    const predictions = await toxicityAnalysis(sentences);
-
-    console.log(predictions);
+  const process = async (query: string) => {
+   
+    const predictions = await toxicityAnalysis(query);
 
     setResult(predictions);
   };

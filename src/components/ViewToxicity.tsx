@@ -1,8 +1,7 @@
-import { useEffect, useState } from "react";
-import toxicityAnalysis from "../utils/toxicity_analysis";
+import { useState } from "react";
+import workerpool from "workerpool";
 
-export default function ViewToxicity({sentences}) {
-
+export default function ViewToxicity({ sentences }) {
   const [results, setResult] = useState<
     Array<{
       label: string;
@@ -13,64 +12,137 @@ export default function ViewToxicity({sentences}) {
     }>
   >([]);
 
-  useEffect(() => {
-    const process = async (query) => {
+  const pool = workerpool.pool("/workers/toxicity.js");
 
-        const sentences = [query];
-        // const sentences = ["We're dudes on computers, moron. You are quite astonishingly stupid."];
-        const predictions = await toxicityAnalysis(sentences);
-    
-        setResult(predictions);
-      };
+  console.log(pool);
 
-    process(sentences);
-  }, [sentences]);
+  pool
+    .exec("toxicityAnalysis", [sentences])
+    .then(function (result) {
+      console.log("result", result); // outputs 7
+      setResult(result);
+    })
+    .catch(function (err) {
+      console.error(err);
+    })
+    .then(function () {
+      pool.terminate(); // terminate all workers when done
+    });
 
-
+  const isLoading = () => (
+    <strong className="loading loading-dots loading-lg"></strong>
+  );
 
   return (
     <div>
-    <h3><strong>Toxicity Analysis</strong></h3>
-      <table className="table table-zebra table-lg">
-        <thead>
-          <tr>
-            <th className="">Identity Attack</th>
-            <th className="">Insult</th>
-            <th className="">Obscene</th>
-            <th className="">Severe Toxicity</th>
-            <th className="">Sexual Explicit</th>
-            <th className="">Threat</th>
-            <th className="">Toxicity</th>
-          </tr>
-        </thead>
-        <tbody>
-          {results.length != 0 && (
+      <h3>
+        <strong>Toxicity Analysis</strong>
+      </h3>
+      {results.length != 0 ? (
+        <table className="table table-zebra table-lg">
+          <thead>
+            <tr>
+              <th className="">Identity Attack</th>
+              <th className="">Insult</th>
+              <th className="">Obscene</th>
+              <th className="">Severe Toxicity</th>
+              <th className="">Sexual Explicit</th>
+              <th className="">Threat</th>
+              <th className="">Toxicity</th>
+            </tr>
+          </thead>
+
+          <tbody>
             <tr key={JSON.stringify(results[0])}>
               <td className="">
-                {JSON.stringify(results[0].results[0].match)}{" "}
+                {!results[0].results[0].match ? (
+                  <i className="">
+                    {JSON.stringify(results[0].results[0].match)}
+                  </i>
+                ) : (
+                  <strong className="text-error">
+                    {JSON.stringify(results[0].results[0].match)}
+                  </strong>
+                )}
               </td>
+
               <td className="">
-                {JSON.stringify(results[1].results[0].match)}
+                {!results[1].results[0].match ? (
+                  <i className="">
+                    {JSON.stringify(results[1].results[0].match)}
+                  </i>
+                ) : (
+                  <strong className="text-error">
+                    {JSON.stringify(results[1].results[0].match)}
+                  </strong>
+                )}
               </td>
+
               <td className="">
-                {JSON.stringify(results[2].results[0].match)}
+                {!results[2].results[0].match ? (
+                  <i className="">
+                    {JSON.stringify(results[2].results[0].match)}
+                  </i>
+                ) : (
+                  <strong className="text-error">
+                    {JSON.stringify(results[2].results[0].match)}
+                  </strong>
+                )}
               </td>
+
               <td className="">
-                {JSON.stringify(results[3].results[0].match)}
+                {!results[3].results[0].match ? (
+                  <i className="">
+                    {JSON.stringify(results[3].results[0].match)}
+                  </i>
+                ) : (
+                  <strong className="text-error">
+                    {JSON.stringify(results[3].results[0].match)}
+                  </strong>
+                )}
               </td>
+
               <td className="">
-                {JSON.stringify(results[4].results[0].match)}
+                {!results[4].results[0].match ? (
+                  <i className="">
+                    {JSON.stringify(results[4].results[0].match)}
+                  </i>
+                ) : (
+                  <strong className="text-error">
+                    {JSON.stringify(results[4].results[0].match)}
+                  </strong>
+                )}
               </td>
+
               <td className="">
-                {JSON.stringify(results[5].results[0].match)}
+                {!results[5].results[0].match ? (
+                  <i className="">
+                    {JSON.stringify(results[5].results[0].match)}
+                  </i>
+                ) : (
+                  <strong className="text-error">
+                    {JSON.stringify(results[5].results[0].match)}
+                  </strong>
+                )}
               </td>
+
               <td className="">
-                {JSON.stringify(results[6].results[0].match)}
+                {!results[6].results[0].match ? (
+                  <i className="">
+                    {JSON.stringify(results[6].results[0].match)}
+                  </i>
+                ) : (
+                  <strong className="text-error">
+                    {JSON.stringify(results[6].results[0].match)}
+                  </strong>
+                )}
               </td>
             </tr>
-          )}
-        </tbody>
-      </table>
+          </tbody>
+        </table>
+      ) : (
+        isLoading()
+      )}
     </div>
   );
 }
