@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import workerpool from "workerpool";
 
 export default function ViewToxicity({ sentences }) {
@@ -12,22 +12,28 @@ export default function ViewToxicity({ sentences }) {
     }>
   >([]);
 
-  const pool = workerpool.pool("./workers/toxicity.js");
+ 
 
   // console.log(pool);
 
-  pool
-    .exec("toxicityAnalysis", [sentences])
-    .then(function (result) {
-      // console.log("result", result); 
-      setResult(result);
-    })
-    .catch(function (err) {
-      console.error(err);
-    })
-    .then(function () {
-      pool.terminate(); // terminate all workers when done
-    });
+  useEffect(() => {
+
+    const pool = workerpool.pool("./workers/toxicity.js");
+
+    pool
+      .exec("toxicityAnalysis", [sentences])
+      .then(function (result) {
+        // console.log("result", result);
+        setResult(result);
+      })
+      .catch(function (err) {
+        console.error(err);
+      })
+      .then(function () {
+        pool.terminate(); // terminate all workers when done
+      });
+      
+  }, [sentences]);
 
   const isLoading = () => (
     <strong className="loading loading-dots loading-lg"></strong>
