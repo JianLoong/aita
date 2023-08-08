@@ -42,7 +42,7 @@ export default function Navbar() {
       </div>
       <div className="navbar-end hidden lg:flex">
         <ul className="menu menu-horizontal px-1">
-          <li className="pr-2">
+          <li className="pr-1">
             <NavLink to="/search">
               {" "}
               <svg
@@ -62,7 +62,7 @@ export default function Navbar() {
               Search
             </NavLink>
           </li>
-          <li className="pr-2">
+          <li className="pr-1">
             <NavLink to="/top">
               {" "}
               <svg
@@ -82,7 +82,7 @@ export default function Navbar() {
               Top
             </NavLink>
           </li>
-          <li className="pr-2">
+          <li className="pr-1">
             <NavLink to="/random">
               {" "}
               <svg
@@ -102,7 +102,7 @@ export default function Navbar() {
               Random
             </NavLink>
           </li>
-          <li className="pr-2">
+          <li className="pr-1">
             <NavLink to="/about">
               {" "}
               <svg
@@ -122,7 +122,7 @@ export default function Navbar() {
               About
             </NavLink>
           </li>
-          {/* <li className="pr-2">
+          <li className="pr-1">
             <NavLink to="/toxic">
               {" "}
               <svg
@@ -136,12 +136,12 @@ export default function Navbar() {
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"
+                  d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5m.75-9l3-3 2.148 2.148A12.061 12.061 0 0116.5 7.605"
                 />
               </svg>{" "}
               Toxicity Analysis
             </NavLink>
-          </li> */}
+          </li>
         </ul>
       </div>
     </div>

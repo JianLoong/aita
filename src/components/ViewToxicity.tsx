@@ -12,8 +12,6 @@ export default function ViewToxicity({ sentences }) {
     }>
   >([]);
 
-  // console.log(pool);
-
   useEffect(() => {
     const pool = workerpool.pool("./workers/toxicity.js");
 
