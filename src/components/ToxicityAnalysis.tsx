@@ -40,7 +40,6 @@ export default function ToxicityAnalysis() {
   }
 
   useEffect(() => {
-    setDisabled(false);
     loadModel();
   }, []);
 
@@ -50,17 +49,10 @@ export default function ToxicityAnalysis() {
       return;
     }
 
-    setDisabled(true);
-
-    setResult([]);
-
     const response = toxicityAnalysis(selectedSearchQuery, model);
-
-    console.log(response);
 
     response.then((response) => {
       setResult(response);
-      setDisabled(false);
     });
 
 
@@ -110,9 +102,9 @@ export default function ToxicityAnalysis() {
         onKeyDown={(e: KeyboardEvent<HTMLInputElement>) => {
           if (e.key === "Enter") {
             e.preventDefault();
-            // setResult([]);
+            setResult([]);
             // const query = e.currentTarget.value;
-            setDisabled(true);
+            // setDisabled(true);
             setSearchParams("query=" + e.currentTarget.value);
             setSearchQuery(e.currentTarget.value);
           }
