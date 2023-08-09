@@ -5,8 +5,6 @@ import { useSearchParams } from "react-router-dom";
 export default function ToxicityAnalysis() {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const [disabled, setDisabled] = useState<boolean>(false);
-
   const queryString = searchParams.get("query") || "";
 
   const [selectedSearchQuery, setSearchQuery] = useState<string>(queryString);
@@ -98,13 +96,9 @@ export default function ToxicityAnalysis() {
         placeholder="Please enter text here and hit enter"
         aria-label="search"
         maxLength={200}
-        disabled={disabled}
         onKeyDown={(e: KeyboardEvent<HTMLInputElement>) => {
           if (e.key === "Enter") {
             e.preventDefault();
-            setResult([]);
-            // const query = e.currentTarget.value;
-            // setDisabled(true);
             setSearchParams("query=" + e.currentTarget.value);
             setSearchQuery(e.currentTarget.value);
           }
