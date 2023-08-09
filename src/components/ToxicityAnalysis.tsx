@@ -23,10 +23,10 @@ export default function ToxicityAnalysis() {
 
   const [model, setModel] = useState<any>();
 
-  async function toxicityAnalysis(sentences: string, model) {
+  function toxicityAnalysis(sentences: string, model) {
     if (model === undefined) return [];
 
-    const data = await model.classify(sentences);
+    const data = model.classify(sentences);
 
     return data;
   }
@@ -103,8 +103,9 @@ export default function ToxicityAnalysis() {
         className="input input-bordered input-primary w-full "
         // className={!disabled? "input input-bordered input-primary w-full ": "hidden"}
         id="search"
-        placeholder="Toxicity Analysis"
+        placeholder="Please enter text here and hit enter"
         aria-label="search"
+        maxLength={200}
         disabled={disabled}
         onKeyDown={(e: KeyboardEvent<HTMLInputElement>) => {
           if (e.key === "Enter") {
