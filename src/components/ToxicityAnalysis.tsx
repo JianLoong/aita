@@ -76,9 +76,9 @@ export default function ToxicityAnalysis() {
         onKeyDown={(e: KeyboardEvent<HTMLInputElement>) => {
           if (e.key === "Enter") {
             e.preventDefault();
-            setResult([]);
+            // setResult([]);
             // const query = e.currentTarget.value;
-            setDisabled(true);
+            // setDisabled(true);
             setSearchParams("query=" + e.currentTarget.value);
             setSearchQuery(e.currentTarget.value);
           }
