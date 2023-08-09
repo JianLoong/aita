@@ -1,11 +1,11 @@
-import * as toxicity from "@tensorflow-models/toxicity";
+// import * as toxicity from "@tensorflow-models/toxicity";
 
-const threshold = 0.9;
+// const threshold = 0.9;
 
-export default async function toxicityAnalysis(sentences: string) {
-  const results = await toxicity.load(threshold, []);
+export default async function toxicityAnalysis(sentences: string, models) {
+  // const results = await toxicity.load(threshold, []);
 
-  const data = await results.classify(sentences);
+  const data = await models.classify(sentences);
 
   return data;
 }

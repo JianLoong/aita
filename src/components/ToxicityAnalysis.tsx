@@ -1,6 +1,6 @@
-import { useEffect, useState, KeyboardEvent } from "react";
+import * as toxicity from "@tensorflow-models/toxicity";
+import { KeyboardEvent, useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-import workerpool from "workerpool";
 
 export default function ToxicityAnalysis() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -21,30 +21,50 @@ export default function ToxicityAnalysis() {
     }>
   >([]);
 
-  useEffect(() => {
-    const pool = workerpool.pool("./workers/toxicity.js");
+  const [model, setModel] = useState<any>();
 
-    if (selectedSearchQuery === undefined || selectedSearchQuery.length == 0) {
+  async function toxicityAnalysis(sentences: string, model) {
+    if (model === undefined) return [];
+
+    const data = await model.classify(sentences);
+
+    return data;
+  }
+
+  async function loadModel() {
+    const threshold = 0.9;
+
+    const results = await toxicity.load(threshold, []);
+
+    setModel(results);
+  }
+
+  useEffect(() => {
+    setDisabled(false);
+    loadModel();
+  }, []);
+
+  useEffect(() => {
+    if (selectedSearchQuery === undefined || selectedSearchQuery.length == 0 || model === undefined) {
       setResult([]);
       return;
     }
 
     setDisabled(true);
 
-    pool
-      .exec("toxicityAnalysis", [selectedSearchQuery])
-      .then(function (result) {
-        // console.log("result", result);
-        setResult(result);
-        setDisabled(false);
-      })
-      .catch(function (err) {
-        console.error(err);
-      })
-      .then(function () {
-        pool.terminate(); // terminate all workers when done
-      });
-  }, [selectedSearchQuery]);
+    setResult([]);
+
+    const response = toxicityAnalysis(selectedSearchQuery, model);
+
+    console.log(response);
+
+    response.then((response) => {
+      setResult(response);
+      setDisabled(false);
+    });
+
+
+  }, [selectedSearchQuery, model]);
 
   const isLoading = () => (
     <strong className="loading loading-dots loading-lg"></strong>
@@ -53,12 +73,25 @@ export default function ToxicityAnalysis() {
   return (
     <div>
       <div className="prose max-w-none break-all">
-        <p>This tool is based on Tensorflow.js to allow the determination if a text is of toxic nature.</p>
-        <p>This is based on a demo <a href="https://github.com/tensorflow/tfjs-models/tree/master/toxicity">here</a></p>
+        <p>
+          This tool is based on Tensorflow.js to allow the determination if a
+          text is of toxic nature.
+        </p>
+        <p>
+          This is based on a demo{" "}
+          <a href="https://github.com/tensorflow/tfjs-models/tree/master/toxicity">
+            here
+          </a>
+        </p>
         <p>Examples</p>
         <ol>
-          <li>We're dudes on computers, moron. You are quite astonishingly stupid.</li>
-          <li>Please stop. If you continue to vandalize Wikipedia, as you did to Kmart, you will be blocked from editing.</li>
+          <li>
+            We're dudes on computers, moron. You are quite astonishingly stupid.
+          </li>
+          <li>
+            Please stop. If you continue to vandalize Wikipedia, as you did to
+            Kmart, you will be blocked from editing.
+          </li>
           <li>Wow, you are bad at this.</li>
         </ol>
         <br />
@@ -78,7 +111,7 @@ export default function ToxicityAnalysis() {
             e.preventDefault();
             // setResult([]);
             // const query = e.currentTarget.value;
-            // setDisabled(true);
+            setDisabled(true);
             setSearchParams("query=" + e.currentTarget.value);
             setSearchQuery(e.currentTarget.value);
           }
@@ -105,7 +138,7 @@ export default function ToxicityAnalysis() {
             </thead>
 
             <tbody>
-              <tr key={JSON.stringify(results[0])}>
+              <tr key={1}>
                 <td className="">
                   {!results[0].results[0].match ? (
                     <i className="">
