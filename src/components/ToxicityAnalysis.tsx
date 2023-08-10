@@ -1,6 +1,7 @@
 import * as toxicity from "@tensorflow-models/toxicity";
-import { KeyboardEvent, useState, useEffect } from "react";
+import { KeyboardEvent, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import useSWR from "swr";
 
 export default function ToxicityAnalysis() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -9,7 +10,37 @@ export default function ToxicityAnalysis() {
 
   const [selectedSearchQuery, setSearchQuery] = useState<string>(queryString);
 
-  const [results, setResult] = useState<
+  const modelFetcher = () =>
+    toxicity.load(0.08, []).then((res) => {
+      return res;
+    });
+
+  const useModel = () => {
+    const { data, error, isLoading } = useSWR("1", modelFetcher);
+
+    return {
+      model: data,
+      isLoading: isLoading,
+      isError: error,
+    };
+  };
+
+  const { model, isLoading } = useModel();
+
+  const toxicityFetcher = (sentences: string) =>
+    model.classify(sentences).then((results) => results);
+
+  const useToxicity = (sentence: string) => {
+    const { data, error, isLoading } = useSWR(sentence, toxicityFetcher);
+
+    return {
+      data: data,
+      isResultError: error,
+      isResultLoading: isLoading,
+    };
+  };
+
+  const [results, setResults] = useState<
     Array<{
       label: string;
       results: Array<{
@@ -19,45 +50,24 @@ export default function ToxicityAnalysis() {
     }>
   >([]);
 
-  const [model, setModel] = useState<toxicity.ToxicityClassifier>();
-
-  function toxicityAnalysis(sentences: string, model) {
-    if (model === undefined) return [];
-
-    const data = model.classify(sentences);
-
-    return data;
-  }
-
-  async function loadModel() {
-    const threshold = 0.9;
-
-    const results = await toxicity.load(threshold, []);
-
-    setModel(results);
-  }
+  // TODO add result loading implementation
+  const { data } = useToxicity(selectedSearchQuery);
 
   useEffect(() => {
-    loadModel();
-  }, []);
-
-  useEffect(() => {
-    if (selectedSearchQuery === undefined || selectedSearchQuery.length == 0 || model === undefined) {
-      setResult([]);
+    if (
+      selectedSearchQuery === undefined ||
+      selectedSearchQuery.length == 0 ||
+      model === undefined ||
+      data == undefined
+    ) {
+      setResults([]);
       return;
     }
 
-    const response = toxicityAnalysis(selectedSearchQuery, model);
+    console.log(model);
 
-    response.then((response) => {
-      setResult(response);
-    });
-
-  }, [selectedSearchQuery, model]);
-
-  const isLoading = () => (
-    <strong className="loading loading-dots loading-lg"></strong>
-  );
+    setResults(data);
+  }, [selectedSearchQuery, data, model]);
 
   return (
     <div>
@@ -96,6 +106,7 @@ export default function ToxicityAnalysis() {
         aria-label="search"
         maxLength={200}
         onChange={(e) => {
+          setResults([]);
           setSearchQuery("");
           setSearchParams("query=" + e.currentTarget.value);
         }}
@@ -111,6 +122,7 @@ export default function ToxicityAnalysis() {
       />
       <br />
       <br />
+
       {results.length != 0 ? (
         <div className="overflow-x-auto">
           <h3>Toxicity Analysis</h3>
@@ -217,7 +229,11 @@ export default function ToxicityAnalysis() {
           </table>
         </div>
       ) : (
-        selectedSearchQuery !== "" && isLoading()
+        isLoading && (
+          <div className="p-2">
+            <span className="loading loading-dots loading-lg"></span>
+          </div>
+        )
       )}
     </div>
   );
