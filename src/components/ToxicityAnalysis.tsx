@@ -11,7 +11,7 @@ export default function ToxicityAnalysis() {
     });
 
   const useModel = () => {
-    const { data, error, isLoading } = useSWR("1", modelFetcher);
+    const { data, error, isLoading } = useSWR("model", modelFetcher);
 
     return {
       model: data,
@@ -23,7 +23,9 @@ export default function ToxicityAnalysis() {
   const { model, isModelLoading } = useModel();
 
   const toxicityFetcher = (sentences: string) =>
-    model.classify(sentences).then((results) => results);
+    model.classify(sentences).then((results) => {
+      return results;
+    });
 
   const useToxicity = (sentence: string) => {
     const { data, error, isLoading } = useSWR(sentence, toxicityFetcher);
@@ -60,6 +62,7 @@ export default function ToxicityAnalysis() {
     }
 
     setResults(data);
+
   }, [selectedSearchQuery, data, model]);
 
   return (
@@ -86,18 +89,16 @@ export default function ToxicityAnalysis() {
           </li>
           <li>Wow, you are bad at this.</li>
         </ol>
-        
+
         <br />
       </div>
       {isModelLoading && (
         <div className="p-2">
           <p>Loading model</p>
-          <span className="loading loading-dots loading-lg">
-            {" "}
-            
-          </span>
+          <span className="loading loading-dots loading-lg"> </span>
         </div>
       )}
+
       {!isModelLoading && (
         <input
           type="text"
@@ -113,6 +114,7 @@ export default function ToxicityAnalysis() {
           }}
           onKeyDown={(e: KeyboardEvent<HTMLInputElement>) => {
             if (e.key === "Enter") {
+              setResults([]);
               e.preventDefault();
               setSearchQuery(e.currentTarget.value);
             }
@@ -123,116 +125,46 @@ export default function ToxicityAnalysis() {
       )}
       <br />
       <br />
-      {results.length != 0 && (
+
+      {isResultLoading && (
+        <div className="p-2">
+          <p>Loading model</p>
+          <span className="loading loading-dots loading-lg"> </span>
+        </div>
+      )}
+
+      {results.length != 0  && (
         <div className="overflow-x-auto">
           <h3>Toxicity Analysis</h3>
           <table className="table table-zebra table-lg">
             <thead>
               <tr>
-                <th className="">Identity Attack</th>
-                <th className="">Insult</th>
-                <th className="">Obscene</th>
-                <th className="">Severe Toxicity</th>
-                <th className="">Sexual Explicit</th>
-                <th className="">Threat</th>
-                <th className="">Toxicity</th>
+                <th>Identity Attack</th>
+                <th>Insult</th>
+                <th>Obscene</th>
+                <th>Severe Toxicity</th>
+                <th>Sexual Explicit</th>
+                <th>Threat</th>
+                <th>Toxicity</th>
               </tr>
             </thead>
 
             <tbody>
-              <tr key={1}>
-                <td className="">
-                  {!results[0].results[0].match ? (
-                    <i className="">
-                      {JSON.stringify(results[0].results[0].match)}
-                    </i>
-                  ) : (
-                    <strong className="text-error">
-                      {JSON.stringify(results[0].results[0].match)}
-                    </strong>
-                  )}
-                </td>
-
-                <td className="">
-                  {!results[1].results[0].match ? (
-                    <i className="">
-                      {JSON.stringify(results[1].results[0].match)}
-                    </i>
-                  ) : (
-                    <strong className="text-error">
-                      {JSON.stringify(results[1].results[0].match)}
-                    </strong>
-                  )}
-                </td>
-
-                <td className="">
-                  {!results[2].results[0].match ? (
-                    <i className="">
-                      {JSON.stringify(results[2].results[0].match)}
-                    </i>
-                  ) : (
-                    <strong className="text-error">
-                      {JSON.stringify(results[2].results[0].match)}
-                    </strong>
-                  )}
-                </td>
-
-                <td className="">
-                  {!results[3].results[0].match ? (
-                    <i className="">
-                      {JSON.stringify(results[3].results[0].match)}
-                    </i>
-                  ) : (
-                    <strong className="text-error">
-                      {JSON.stringify(results[3].results[0].match)}
-                    </strong>
-                  )}
-                </td>
-
-                <td className="">
-                  {!results[4].results[0].match ? (
-                    <i className="">
-                      {JSON.stringify(results[4].results[0].match)}
-                    </i>
-                  ) : (
-                    <strong className="text-error">
-                      {JSON.stringify(results[4].results[0].match)}
-                    </strong>
-                  )}
-                </td>
-
-                <td className="">
-                  {!results[5].results[0].match ? (
-                    <i className="">
-                      {JSON.stringify(results[5].results[0].match)}
-                    </i>
-                  ) : (
-                    <strong className="text-error">
-                      {JSON.stringify(results[5].results[0].match)}
-                    </strong>
-                  )}
-                </td>
-
-                <td className="">
-                  {!results[6].results[0].match ? (
-                    <i className="">
-                      {JSON.stringify(results[6].results[0].match)}
-                    </i>
-                  ) : (
-                    <strong className="text-error">
-                      {JSON.stringify(results[6].results[0].match)}
-                    </strong>
-                  )}
-                </td>
+              <tr key={Math.random()}>
+                  {results.map((result) => {
+                    return !result.results[0].match ? (
+                      <td key={Math.random()} className="">
+                        {JSON.stringify(result.results[0].match)}
+                      </td>
+                    ) : (
+                      <td key={Math.random()} className="text-error">
+                        <strong>{JSON.stringify(result.results[0].match)}</strong>
+                      </td>
+                    );
+                  })}
               </tr>
             </tbody>
           </table>
-        </div>
-      )}
-
-      {isResultLoading && (
-        <div className="p-2">
-          <span className="loading loading-dots loading-lg"></span>
         </div>
       )}
     </div>
