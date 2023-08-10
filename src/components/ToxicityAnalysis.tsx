@@ -20,17 +20,19 @@ export default function ToxicityAnalysis() {
 
     return {
       model: data,
-      isLoading: isLoading,
+      isModelLoading: isLoading,
       isError: error,
     };
   };
 
-  const { model, isLoading } = useModel();
+  const { model, isModelLoading } = useModel();
 
   const toxicityFetcher = (sentences: string) =>
     model.classify(sentences).then((results) => results);
 
   const useToxicity = (sentence: string) => {
+
+
     const { data, error, isLoading } = useSWR(sentence, toxicityFetcher);
 
     return {
@@ -51,7 +53,7 @@ export default function ToxicityAnalysis() {
   >([]);
 
   // TODO add result loading implementation
-  const { data } = useToxicity(selectedSearchQuery);
+  const { data, isResultLoading } = useToxicity(selectedSearchQuery);
 
   useEffect(() => {
     if (
@@ -63,8 +65,6 @@ export default function ToxicityAnalysis() {
       setResults([]);
       return;
     }
-
-    console.log(model);
 
     setResults(data);
   }, [selectedSearchQuery, data, model]);
@@ -107,8 +107,6 @@ export default function ToxicityAnalysis() {
         maxLength={200}
         onChange={(e) => {
           setResults([]);
-          setSearchQuery("");
-          setSearchParams("query=" + e.currentTarget.value);
         }}
         onKeyDown={(e: KeyboardEvent<HTMLInputElement>) => {
           if (e.key === "Enter") {
@@ -122,8 +120,7 @@ export default function ToxicityAnalysis() {
       />
       <br />
       <br />
-
-      {results.length != 0 ? (
+      {results.length != 0 && (
         <div className="overflow-x-auto">
           <h3>Toxicity Analysis</h3>
           <table className="table table-zebra table-lg">
@@ -228,12 +225,16 @@ export default function ToxicityAnalysis() {
             </tbody>
           </table>
         </div>
-      ) : (
-        isLoading && (
-          <div className="p-2">
-            <span className="loading loading-dots loading-lg"></span>
-          </div>
-        )
+      )}
+      {isModelLoading && (
+        <div className="p-2">
+          <span className="loading loading-dots loading-lg"></span>
+        </div>
+      )}
+      {isResultLoading && (
+        <div className="p-2">
+          <span className="loading loading-dots loading-lg"></span>
+        </div>
       )}
     </div>
   );
