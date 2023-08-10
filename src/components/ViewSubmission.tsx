@@ -107,7 +107,7 @@ export default function ViewSubmission({ id }: Index) {
     );
   };
 
-  const PieChart = (summary: any) => {
+  const PieChart = (summary) => {
     const data = [
       ["Category", "Counts"],
       ["Not the asshole", summary?.counts?.nta_count],
@@ -146,7 +146,7 @@ export default function ViewSubmission({ id }: Index) {
     );
   };
 
-  const EmotionTable = (summary: any) => {
+  const EmotionTable = (summary) => {
     return (
       <table className="table table-zebra text-center">
         <thead>
