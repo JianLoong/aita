@@ -19,7 +19,7 @@ export default function ToxicityAnalysis() {
     }>
   >([]);
 
-  const [model, setModel] = useState<any>();
+  const [model, setModel] = useState<toxicity.ToxicityClassifier>();
 
   function toxicityAnalysis(sentences: string, model) {
     if (model === undefined) return [];
@@ -52,7 +52,6 @@ export default function ToxicityAnalysis() {
     response.then((response) => {
       setResult(response);
     });
-
 
   }, [selectedSearchQuery, model]);
 
@@ -96,6 +95,10 @@ export default function ToxicityAnalysis() {
         placeholder="Please enter text here and hit enter"
         aria-label="search"
         maxLength={200}
+        onChange={(e) => {
+          setSearchQuery("");
+          setSearchParams("query=" + e.currentTarget.value);
+        }}
         onKeyDown={(e: KeyboardEvent<HTMLInputElement>) => {
           if (e.key === "Enter") {
             e.preventDefault();
