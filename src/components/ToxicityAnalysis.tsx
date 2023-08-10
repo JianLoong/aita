@@ -105,7 +105,7 @@ export default function ToxicityAnalysis() {
         placeholder="Please enter text here and hit enter"
         aria-label="search"
         maxLength={200}
-        onChange={(e) => {
+        onChange={() => {
           setResults([]);
         }}
         onKeyDown={(e: KeyboardEvent<HTMLInputElement>) => {
