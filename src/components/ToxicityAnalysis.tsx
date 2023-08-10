@@ -1,14 +1,9 @@
 import * as toxicity from "@tensorflow-models/toxicity";
 import { KeyboardEvent, useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
 import useSWR from "swr";
 
 export default function ToxicityAnalysis() {
-  const [searchParams, setSearchParams] = useSearchParams();
-
-  const queryString = searchParams.get("query") || "";
-
-  const [selectedSearchQuery, setSearchQuery] = useState<string>(queryString);
+  const [selectedSearchQuery, setSearchQuery] = useState<string>("");
 
   const modelFetcher = () =>
     toxicity.load(0.08, []).then((res) => {
@@ -31,8 +26,6 @@ export default function ToxicityAnalysis() {
     model.classify(sentences).then((results) => results);
 
   const useToxicity = (sentence: string) => {
-
-
     const { data, error, isLoading } = useSWR(sentence, toxicityFetcher);
 
     return {
@@ -93,31 +86,41 @@ export default function ToxicityAnalysis() {
           </li>
           <li>Wow, you are bad at this.</li>
         </ol>
-        <br />
+        
         <br />
       </div>
-      <input
-        type="text"
-        name="query"
-        className="input input-bordered input-primary w-full "
-        // className={!disabled? "input input-bordered input-primary w-full ": "hidden"}
-        id="search"
-        placeholder="Please enter text here and hit enter"
-        aria-label="search"
-        maxLength={200}
-        onChange={() => {
-          setResults([]);
-        }}
-        onKeyDown={(e: KeyboardEvent<HTMLInputElement>) => {
-          if (e.key === "Enter") {
-            e.preventDefault();
-            setSearchParams("query=" + e.currentTarget.value);
-            setSearchQuery(e.currentTarget.value);
-          }
-        }}
-        defaultValue={selectedSearchQuery}
-        aria-describedby="search"
-      />
+      {isModelLoading && (
+        <div className="p-2">
+          <p>Loading model</p>
+          <span className="loading loading-dots loading-lg">
+            {" "}
+            
+          </span>
+        </div>
+      )}
+      {!isModelLoading && (
+        <input
+          type="text"
+          name="query"
+          className="input input-bordered input-primary w-full "
+          // className={!disabled? "input input-bordered input-primary w-full ": "hidden"}
+          id="search"
+          placeholder="Please enter text here and hit enter"
+          aria-label="search"
+          maxLength={200}
+          onChange={() => {
+            setResults([]);
+          }}
+          onKeyDown={(e: KeyboardEvent<HTMLInputElement>) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              setSearchQuery(e.currentTarget.value);
+            }
+          }}
+          defaultValue={selectedSearchQuery}
+          aria-describedby="search"
+        />
+      )}
       <br />
       <br />
       {results.length != 0 && (
@@ -226,11 +229,7 @@ export default function ToxicityAnalysis() {
           </table>
         </div>
       )}
-      {isModelLoading && (
-        <div className="p-2">
-          <span className="loading loading-dots loading-lg"></span>
-        </div>
-      )}
+
       {isResultLoading && (
         <div className="p-2">
           <span className="loading loading-dots loading-lg"></span>
