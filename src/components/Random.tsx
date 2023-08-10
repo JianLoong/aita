@@ -31,8 +31,8 @@ function useIndexes() {
   // };
 }
 
-function useSubmissions(indexes: any) {
-  const submissions: any = [];
+function useSubmissions(indexes) {
+  const submissions = [];
 
   if (indexes === undefined)
     return {
