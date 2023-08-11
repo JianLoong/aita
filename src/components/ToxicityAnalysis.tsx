@@ -1,41 +1,8 @@
-import * as toxicity from "@tensorflow-models/toxicity";
-import { KeyboardEvent, useEffect, useState } from "react";
-import useSWR from "swr";
+import { KeyboardEvent, useState } from "react";
+import workerpool from "workerpool";
 
 export default function ToxicityAnalysis() {
   const [selectedSearchQuery, setSearchQuery] = useState<string>("");
-
-  const modelFetcher = () =>
-    toxicity.load(0.08, []).then((res) => {
-      return res;
-    });
-
-  const useModel = () => {
-    const { data, error, isLoading } = useSWR("model", modelFetcher);
-
-    return {
-      model: data,
-      isModelLoading: isLoading,
-      isError: error,
-    };
-  };
-
-  const { model, isModelLoading } = useModel();
-
-  const toxicityFetcher = (sentences: string) =>
-    model.classify(sentences).then((results) => {
-      return results;
-    });
-
-  const useToxicity = (sentence: string) => {
-    const { data, error, isLoading } = useSWR(sentence, toxicityFetcher);
-
-    return {
-      data: data,
-      isResultError: error,
-      isResultLoading: isLoading,
-    };
-  };
 
   const [results, setResults] = useState<
     Array<{
@@ -47,23 +14,29 @@ export default function ToxicityAnalysis() {
     }>
   >([]);
 
-  // TODO add result loading implementation
-  const { data, isResultLoading } = useToxicity(selectedSearchQuery);
+  const [isModelLoading, setModelLoading] = useState<boolean>();
 
-  useEffect(() => {
-    if (
-      selectedSearchQuery === undefined ||
-      selectedSearchQuery.length == 0 ||
-      model === undefined ||
-      data == undefined
-    ) {
-      setResults([]);
+  const process = (selectedSearchQuery) => {
+    const pool = workerpool.pool("./workers/toxicity.js");
+
+    if (selectedSearchQuery == undefined || selectedSearchQuery.length == 0)
       return;
-    }
 
-    setResults(data);
+    setModelLoading(true);
 
-  }, [selectedSearchQuery, data, model]);
+    pool
+      .exec("toxicityAnalysis", [selectedSearchQuery])
+      .then(function (result) {
+        setResults(result);
+        setModelLoading(false);
+      })
+      .catch(function (err) {
+        console.error(err);
+      })
+      .then(function () {
+        pool.terminate(); // terminate all workers when done
+      });
+  };
 
   return (
     <div>
@@ -92,10 +65,11 @@ export default function ToxicityAnalysis() {
 
         <br />
       </div>
+
       {isModelLoading && (
-        <div className="p-2">
-          <p>Loading model</p>
-          <span className="loading loading-dots loading-lg"> </span>
+        <div>
+          <strong className="loading loading-dots loading-lg"></strong>
+          <p>Processing </p>
         </div>
       )}
 
@@ -117,6 +91,7 @@ export default function ToxicityAnalysis() {
               setResults([]);
               e.preventDefault();
               setSearchQuery(e.currentTarget.value);
+              process(e.currentTarget.value);
             }
           }}
           defaultValue={selectedSearchQuery}
@@ -126,14 +101,7 @@ export default function ToxicityAnalysis() {
       <br />
       <br />
 
-      {isResultLoading && (
-        <div className="p-2">
-          <p>Loading model</p>
-          <span className="loading loading-dots loading-lg"> </span>
-        </div>
-      )}
-
-      {results.length != 0  && (
+      {results.length != 0 && (
         <div className="overflow-x-auto">
           <h3>Toxicity Analysis</h3>
           <table className="table table-zebra table-lg">
@@ -151,17 +119,17 @@ export default function ToxicityAnalysis() {
 
             <tbody>
               <tr key={Math.random()}>
-                  {results.map((result) => {
-                    return !result.results[0].match ? (
-                      <td key={Math.random()} className="">
-                        {JSON.stringify(result.results[0].match)}
-                      </td>
-                    ) : (
-                      <td key={Math.random()} className="text-error">
-                        <strong>{JSON.stringify(result.results[0].match)}</strong>
-                      </td>
-                    );
-                  })}
+                {results.map((result) => {
+                  return !result.results[0].match ? (
+                    <td key={Math.random()} className="">
+                      {JSON.stringify(result.results[0].match)}
+                    </td>
+                  ) : (
+                    <td key={Math.random()} className="text-error">
+                      <strong>{JSON.stringify(result.results[0].match)}</strong>
+                    </td>
+                  );
+                })}
               </tr>
             </tbody>
           </table>
