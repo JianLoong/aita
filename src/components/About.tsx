@@ -3,7 +3,7 @@ export default function About() {
     <div className="p-2 prose max-w-none">
        <h3>General Flow</h3>
       <div className="flex w-full justify-center items-center">
-      <img className="" src="/about.png" title="Overview of project" alt="Overview of projet"></img>
+      <img className="" src="about.png" title="Overview of project" alt="Overview of projet"></img>
       </div>
       <div className="">
         <h1></h1>
