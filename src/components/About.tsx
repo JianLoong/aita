@@ -1,6 +1,10 @@
 export default function About() {
   return (
     <div className="p-2 prose max-w-none">
+       <h3>General Flow</h3>
+      <div className="flex w-full justify-center items-center">
+      <img className="" src="/about.png" title="Overview of project" alt="Overview of projet"></img>
+      </div>
       <div className="">
         <h1></h1>
         <p>Technologies used for this project</p>
@@ -37,13 +41,16 @@ export default function About() {
             React as well as TypeScript
           </li>
           <li>
-            <strong>d3 Word Cloud</strong> - is used to generate the word cloud
+            <strong>React Word Cloud</strong> - is used to generate the word cloud
           </li>
           <li>
             <strong>Daisy UI</strong> - Used to generate a responsive front end.
           </li>
           <li>
-            <strong>ChartJS</strong> - Used to generate a the various charts.
+            <strong>ChartJS</strong> - Used to generate the various charts.
+          </li>
+          <li>
+            <strong>Tensorflow JS</strong> - Used for toxicity analysis.
           </li>
         </ul>
 
@@ -72,6 +79,7 @@ export default function About() {
           projects page
         </p>
       </div>
+      
     </div>
   );
 }

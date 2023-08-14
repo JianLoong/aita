@@ -34,6 +34,9 @@ export default function Navbar() {
             <li>
               <NavLink to="/about">About</NavLink>
             </li>
+            <li>
+              <NavLink to="/about">Toxicity Analysis</NavLink>
+            </li>
           </ul>
         </div>
         <a className="btn btn-ghost normal-case text-xl" href="/aita/">
