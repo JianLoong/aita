@@ -35,7 +35,7 @@ export default function Navbar() {
               <NavLink to="/about">About</NavLink>
             </li>
             <li>
-              <NavLink to="/about">Toxicity Analysis</NavLink>
+              <NavLink to="/toxic">Toxicity Analysis</NavLink>
             </li>
           </ul>
         </div>

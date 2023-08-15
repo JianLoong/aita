@@ -39,8 +39,8 @@ export default function ToxicityAnalysis() {
   };
 
   return (
-    <div>
-      <div className="prose max-w-none break-all">
+    <div className="p-2">
+      <div className="prose max-w-none">
         <p>
           This tool is based on Tensorflow.js to allow the determination if a
           text is of toxic nature.
