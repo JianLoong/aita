@@ -6,7 +6,8 @@ import useSWR from "swr";
 import { convertDate, makeHTMLFromString } from "../utils/helpers";
 import ShowAlert from "./ShowAlert";
 import { Index } from "../types/index";
-import ViewToxicity from "./ViewToxicity";
+// import ViewToxicity from "./ViewToxicity";
+import { useState } from "react";
 
 interface Entry {
   value: string;
@@ -17,6 +18,7 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 function useSummary(id: number) {
   const summaryEndPoint = `https://jianliew.me/reddit-store/api/summary/${id}.json`;
+
 
   const { data, error, isLoading } = useSWR(summaryEndPoint, fetcher, {
     compare: (a, b) => {
@@ -68,8 +70,14 @@ export default function ViewSubmission({ id }: Index) {
 
   const { submission, isLoading, isError } = useSubmission(submissionId);
 
+  const [shown, setShown] = useState<boolean>(false);
+
   const { summary, wordFrequency, isSummaryLoading, isSummaryError } =
     useSummary(submissionId);
+
+  const handleShow = () => {
+    setShown(true);
+  }
 
   if (isLoading)
     return (
@@ -201,7 +209,7 @@ export default function ViewSubmission({ id }: Index) {
     );
   };
 
-  window.scrollTo(0, 0);
+  // window.scrollTo(0, 0);
 
   const isMainPage = location["pathname"].startsWith("/submission");
 
@@ -221,11 +229,13 @@ export default function ViewSubmission({ id }: Index) {
             <a href={"https://reddit.com" + submission?.permalink}>here</a>
           </p>
 
+          <button className={shown? "hidden" : "btn btn-info"} onClick={handleShow}>Show results</button>
+
           <p>
             Number of replies: <strong>{submission?.replies.length}</strong>
-          </p>
+          </p>          
 
-          <div className="grid grid-cols-1 md:grid-cols-3">
+          <div className={shown? "grid grid-cols-1 md:grid-cols-3": "hidden" }>
             <div>
               <h3 className="text-center">
                 <strong>Generated Word Cloud</strong>
@@ -247,16 +257,16 @@ export default function ViewSubmission({ id }: Index) {
             </div>
           </div>
 
-      
+
           {!isMainPage ? (
             <NavLink className="link" to={"/submission/" + submission?.id} key={submission?.id}>
               View in detail
             </NavLink>
           ) : (
             <div className="break-all">
-              <ViewToxicity sentences={submission?.selftext} />
+              {/* <ViewToxicity sentences={submission?.selftext} /> */}
               <br />
-              {submission?.replies.map((e : string) => {
+              {submission?.replies.map((e: string) => {
                 return <li key={Math.random()}>{e}</li>;
               })}
             </div>

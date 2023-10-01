@@ -34,9 +34,6 @@ export default function Navbar() {
             <li>
               <NavLink to="/about">About</NavLink>
             </li>
-            <li>
-              <NavLink to="/toxic">Toxicity Analysis</NavLink>
-            </li>
           </ul>
         </div>
         <a className="btn btn-ghost normal-case text-xl" href="/aita/">
@@ -125,7 +122,7 @@ export default function Navbar() {
               About
             </NavLink>
           </li>
-          <li className="pr-1">
+          {/* <li className="pr-1">
             <NavLink to="/toxic">
               {" "}
               <svg
@@ -144,7 +141,7 @@ export default function Navbar() {
               </svg>{" "}
               Toxicity Analysis
             </NavLink>
-          </li>
+          </li> */}
         </ul>
       </div>
     </div>

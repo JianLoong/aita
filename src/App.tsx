@@ -5,7 +5,6 @@ import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
 import Random from "./components/Random";
 import SearchSubmission from "./components/SearchSubmission";
-import ToxicityAnalysis from "./components/ToxicityAnalysis";
 import ViewSubmission from "./components/ViewSubmission";
 import ViewSubmissions from "./components/ViewSubmissions";
 import ViewTop from "./components/ViewTop";
@@ -23,7 +22,6 @@ function App() {
               <Route path="/top" element={<ViewTop />} />
               <Route path="/random" element={<Random />} />
               <Route path="/about" element={<About />} />
-              <Route path="/toxic" element={<ToxicityAnalysis />} />
               <Route path="/submission/:id" element={<ViewSubmission id={0} created_utc={0} score={0} />} />
               <Route path="/*" element={<Navigate to="/" />} />
             </Routes>
