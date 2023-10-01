@@ -12,6 +12,7 @@ export default {
     require("daisyui")
   ],
   daisyui: {
-    themes: ["cmyk", "dracula"],
+    darkTheme: "dracula",
+    themes: ["dracula", "light"],
   },
 }

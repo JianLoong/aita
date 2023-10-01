@@ -99,12 +99,16 @@ export default function ViewSubmission({ id }: Index) {
 
   const selfText = makeHTMLFromString(submission?.selftext);
 
-  const options = {
-    luminosity: "dark",
-    hue: "blue",
-  };
 
   const SimpleCloud = () => {
+
+    const darkMode =  document.querySelector('html').getAttribute('data-theme') == "dark"? true: false;
+
+    const options = {
+      luminosity: darkMode? "light" : "dark",
+      hue: darkMode? "blue" : "blue",
+    };
+  
     return (
       <TagCloud
         minSize={30}
@@ -125,14 +129,12 @@ export default function ViewSubmission({ id }: Index) {
       ["No assholes here", summary?.counts?.nah_count],
     ];
 
-    // const darkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-
-    // console.log(darkMode);
+    const darkMode =  document.querySelector('html').getAttribute('data-theme') == "dark"? true: false;
 
     const options = {
-      legend: { position: "bottom" },
+      legend: { position: "none" },
       is3D: true,
-      // backgroundColor: darkMode? "rgb(166, 173, 186)" : '',
+      backgroundColor: darkMode?  "#262935"  : '',
       colors: [
         "green",
         "red",
@@ -140,6 +142,7 @@ export default function ViewSubmission({ id }: Index) {
         "rgb(201, 203, 207)",
         "rgb(54, 162, 235)",
       ],
+      fontcolor: 'green',
       // pieSliceText: "label"
     };
 
@@ -235,24 +238,27 @@ export default function ViewSubmission({ id }: Index) {
             Number of replies: <strong>{submission?.replies.length}</strong>
           </p>          
 
-          <div className={shown? "grid grid-cols-1 md:grid-cols-3": "hidden" }>
-            <div>
+          <div className={shown? "grid grid-cols-1 md:grid-cols-3": "hidden" } data-theme="wireframe">
+            <div className="m-1">
               <h3 className="text-center">
                 <strong>Generated Word Cloud</strong>
               </h3>
+              <br />
               {<SimpleCloud />}
             </div>
-            <div className="">
+            <div className="m-1">
               <h3 className="text-center">
                 <strong>Results of NRC Emotion Lexicon Analysis</strong>
               </h3>
+              <br />
               <EmotionTable {...summary} />
             </div>
 
-            <div className="">
+            <div className="m-2">
               <h3 className="text-center">
                 <strong>Breakdown of Replies</strong>
               </h3>
+              <br />
               <PieChart className="p-2" {...summary} />
             </div>
           </div>
