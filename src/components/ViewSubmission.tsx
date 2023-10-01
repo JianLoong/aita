@@ -132,9 +132,9 @@ export default function ViewSubmission({ id }: Index) {
     const darkMode =  document.querySelector('html').getAttribute('data-theme') == "dark"? true: false;
 
     const options = {
-      legend: { position: "none" },
+      legend: { position: "bottom" },
       is3D: true,
-      backgroundColor: darkMode?  "#262935"  : '',
+      backgroundColor: darkMode?  "#f9f1f1"  : '#f9f1f1',
       colors: [
         "green",
         "red",
@@ -214,7 +214,9 @@ export default function ViewSubmission({ id }: Index) {
 
   // window.scrollTo(0, 0);
 
-  const isMainPage = location["pathname"].startsWith("/submission");
+  const isDirectPage = location["pathname"].startsWith("/submission");
+
+  isDirectPage? window.scrollTo(0, 0) : "";
 
   return (
     <div key={submission?.id}>
@@ -264,7 +266,7 @@ export default function ViewSubmission({ id }: Index) {
           </div>
 
 
-          {!isMainPage ? (
+          {!isDirectPage ? (
             <NavLink className="link" to={"/submission/" + submission?.id} key={submission?.id}>
               View in detail
             </NavLink>
