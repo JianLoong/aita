@@ -15,7 +15,7 @@ function App() {
       <div className="">
         <HashRouter>
           <Navbar />
-          <div className="container h-screen mx-auto">
+          <div className="container mx-auto">
             <Routes>
               <Route path="/" element={<ViewSubmissions />} />
               <Route path="/search" element={<SearchSubmission />} />

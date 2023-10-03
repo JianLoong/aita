@@ -1,13 +1,14 @@
 import parse from "html-react-parser";
-import { Chart } from "react-google-charts";
 import { NavLink, useLocation } from "react-router-dom";
-import { TagCloud } from "react-tagcloud";
 import useSWR from "swr";
 import { convertDate, makeHTMLFromString } from "../utils/helpers";
 import ShowAlert from "./ShowAlert";
 import { Index } from "../types/index";
 // import ViewToxicity from "./ViewToxicity";
 import { useState } from "react";
+import { EmotionTable } from "./EmotionTable";
+import { PieChart } from "./PieChart";
+import { SimpleCloud } from "./SimpleCloud";
 
 interface Entry {
   value: string;
@@ -99,124 +100,9 @@ export default function ViewSubmission({ id }: Index) {
 
   const selfText = makeHTMLFromString(submission?.selftext);
 
-
-  const SimpleCloud = () => {
-
-    const darkMode =  document.querySelector('html').getAttribute('data-theme') == "dark"? true: false;
-
-    const options = {
-      luminosity: darkMode? "light" : "dark",
-      hue: darkMode? "blue" : "blue",
-    };
-  
-    return (
-      <TagCloud
-        minSize={30}
-        maxSize={60}
-        tags={wordFrequency}
-        colorOptions={options}
-      />
-    );
-  };
-
-  const PieChart = (summary) => {
-    const data = [
-      ["Category", "Counts"],
-      ["Not the asshole", summary?.counts?.nta_count],
-      ["You are the asshole", summary?.counts?.yta_count],
-      ["Everyone Sucks Here", summary?.counts?.esh_count],
-      ["Not Enough Information", summary?.counts?.info_count],
-      ["No assholes here", summary?.counts?.nah_count],
-    ];
-
-    const darkMode =  document.querySelector('html').getAttribute('data-theme') == "dark"? true: false;
-
-    const options = {
-      legend: { position: "bottom" },
-      is3D: true,
-      backgroundColor: darkMode?  "#f9f1f1"  : '#f9f1f1',
-      colors: [
-        "green",
-        "red",
-        "rgb(255, 205, 86)",
-        "rgb(201, 203, 207)",
-        "rgb(54, 162, 235)",
-      ],
-      fontcolor: 'green',
-      // pieSliceText: "label"
-    };
-
-    return (
-      <Chart
-        chartType="PieChart"
-        data={data}
-        options={options}
-        width={"100%"}
-        height={"500px"}
-      />
-    );
-  };
-
-  const EmotionTable = (summary) => {
-    return (
-      <table className="table table-zebra text-center">
-        <thead>
-          <tr>
-            <th className="text-center">Emotion</th>
-            <th className="text-center">Raw Emotion Score</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Positive</td>
-            <td>{summary?.emotion.positive}</td>
-          </tr>
-          <tr>
-            <td>Trust</td>
-            <td>{summary?.emotion.trust}</td>
-          </tr>
-          <tr>
-            <td>Anger</td>
-            <td>{summary?.emotion.anger}</td>
-          </tr>
-          <tr>
-            <td>Disgust</td>
-            <td>{summary?.emotion.disgust}</td>
-          </tr>
-          <tr>
-            <td>Negative</td>
-            <td>{summary?.emotion.negative}</td>
-          </tr>
-          <tr>
-            <td>Joy</td>
-            <td>{summary?.emotion.joy}</td>
-          </tr>
-          <tr>
-            <td>Anticipation</td>
-            <td>{summary?.emotion.anticipation}</td>
-          </tr>
-          <tr>
-            <td>Sadness</td>
-            <td>{summary?.emotion.sadness}</td>
-          </tr>
-          <tr>
-            <td>Surprise</td>
-            <td>{summary?.emotion.surprise}</td>
-          </tr>
-          <tr>
-            <td>Fear</td>
-            <td>{summary?.emotion.fear}</td>
-          </tr>
-        </tbody>
-      </table>
-    );
-  };
-
-  // window.scrollTo(0, 0);
-
   const isDirectPage = location["pathname"].startsWith("/submission");
 
-  isDirectPage? window.scrollTo(0, 0) : "";
+  isDirectPage ? window.scrollTo(0, 0) : "";
 
   return (
     <div key={submission?.id}>
@@ -228,25 +114,25 @@ export default function ViewSubmission({ id }: Index) {
           </h2>
           <small>{convertDate(submission?.created_utc)}</small>
 
-          <article className="prose max-w-none break-all">{parse(selfText)}</article>
+          <article className="prose max-w-none">{parse(selfText)}</article>
           <p>
             View original post{" "}
             <a href={"https://reddit.com" + submission?.permalink}>here</a>
           </p>
 
-          <button className={shown? "hidden" : "btn btn-info"} onClick={handleShow}>Show results</button>
+          <button className={shown ? "hidden" : "btn btn-info"} onClick={handleShow}>Show results</button>
 
           <p>
             Number of replies: <strong>{submission?.replies.length}</strong>
-          </p>          
+          </p>
 
-          <div className={shown? "grid grid-cols-1 md:grid-cols-3": "hidden" } data-theme="wireframe">
+          <div className={shown ? "grid grid-cols-1 md:grid-cols-3" : "hidden"} data-theme="wireframe">
             <div className="m-1">
               <h3 className="text-center">
                 <strong>Generated Word Cloud</strong>
               </h3>
               <br />
-              {<SimpleCloud />}
+              <SimpleCloud {...wordFrequency} />
             </div>
             <div className="m-1">
               <h3 className="text-center">
