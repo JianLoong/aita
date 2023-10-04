@@ -117,7 +117,7 @@ export default function ViewSubmission({ id }: Index) {
           <article className="prose max-w-none">{parse(selfText)}</article>
           <p>
             View original post{" "}
-            <a href={"https://reddit.com" + submission?.permalink}>here</a>
+            <a className="text-blue-600 dark:text-blue:500 hover:underline" href={"https://reddit.com" + submission?.permalink}>here</a>
           </p>
 
           <button className={shown ? "hidden" : "btn btn-info"} onClick={handleShow}>Show results</button>
