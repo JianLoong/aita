@@ -116,6 +116,55 @@ export default function ViewSubmission({ id }: Index) {
 
   // isDirectPage ? window.scrollTo(0, 0) : "";
 
+  const DownChevron = (props) => {
+    const text = props.value;
+
+    return (
+      <>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="currentColor"
+          className="w-6 h-6"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+          />
+        </svg>
+        {text}
+      </>
+    );
+  };
+
+  const UpChevron = (props) => {
+
+    const text = props.value;
+
+    return (
+      <>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="currentColor"
+          className="w-6 h-6"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M4.5 15.75l7.5-7.5 7.5 7.5"
+          />
+        </svg>
+        {text}
+      </>
+    );
+  };
+
   return (
     <div key={submission?.id}>
       <div id={"section" + submission?.id} className=""></div>
@@ -137,11 +186,23 @@ export default function ViewSubmission({ id }: Index) {
             </a>
           </p>
 
-          <button
-            className={"btn btn-info"}
-            onClick={handleShow}
-          >
-            {shown? "Hide Results" : "Show Results"}
+          <button className={"btn btn-info"} onClick={handleShow}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="w-6 h-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"
+              />
+            </svg>
+
+            {shown ? "Hide Results" : "See what the others think.."}
           </button>
 
           <p>
@@ -191,8 +252,11 @@ export default function ViewSubmission({ id }: Index) {
                 name="repliesShown"
                 onClick={handleShowReplies}
               >
-                {" "}
-                {repliesShown ? "Hide replies" : "Show replies"}
+                {repliesShown ? (
+                  <UpChevron value="Hide Replies" />
+                ) : (
+                  <DownChevron value="Show Replies" />
+                )}
               </button>
 
               <div className={repliesShown ? "break-all" : "hidden"}>
