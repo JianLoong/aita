@@ -11,9 +11,6 @@ export const SimpleCloud = (wordFrequency) => {
 
     const words = Object.keys(wordFrequency).map((key) => wordFrequency[key]);
 
-    console.log(words);
-    
-
     return (
       <TagCloud
         minSize={30}
