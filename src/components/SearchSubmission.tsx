@@ -14,7 +14,7 @@ interface Result {
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 function useSearch() {
-  const summaryEndPoint = `https://jianliew.me/reddit-store/api/search/search.json`;
+  const summaryEndPoint = `https://jian.sh/reddit-store/api/search/search.json`;
 
   const { data, error, isLoading } = useSWR(summaryEndPoint, fetcher);
 

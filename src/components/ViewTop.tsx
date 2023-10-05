@@ -90,7 +90,7 @@ function processSubmissions(tops: Top[]): Index[] {
 }
 
 function useIndexes() {
-  const indexesEndPoint = "https://jianliew.me/reddit-store/api/top/top.json";
+  const indexesEndPoint = "https://jian.sh/reddit-store/api/top/top.json";
 
   const { data, error, isLoading } = useSWR(indexesEndPoint, fetcher);
 

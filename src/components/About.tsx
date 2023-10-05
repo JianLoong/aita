@@ -59,7 +59,7 @@ export default function About() {
         </p>
         <p>
           The original idea of this project used live data. The old idea can be
-          found <a href="https://jianliew.me/posts/2019/amitheasshole/">here</a>
+          found <a href="https://jian.sh/posts/2019/amitheasshole/">here</a>
         </p>
         <p>
           It is possible to obtain live data for this current project but it was
@@ -75,7 +75,7 @@ export default function About() {
           <a href="http://github.com/JianLoong/reddit-store">here</a>
         </p>
         <p>
-          Click <a href="https://jianliew.me/projects">here</a> to return to
+          Click <a href="https://jian.sh/projects">here</a> to return to
           projects page
         </p>
       </div>

@@ -18,7 +18,7 @@ interface Entry {
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 function useSummary(id: number) {
-  const summaryEndPoint = `https://jianliew.me/reddit-store/api/summary/${id}.json`;
+  const summaryEndPoint = `https://jian.sh/reddit-store/api/summary/${id}.json`;
 
 
   const { data, error, isLoading } = useSWR(summaryEndPoint, fetcher, {
@@ -53,7 +53,7 @@ function useSummary(id: number) {
 }
 
 function useSubmission(id: number) {
-  const submissionEndPoint = `https://jianliew.me/reddit-store/api/submissions/${id}.json`;
+  const submissionEndPoint = `https://jian.sh/reddit-store/api/submissions/${id}.json`;
 
   const { data, error, isLoading } = useSWR(submissionEndPoint, fetcher);
 

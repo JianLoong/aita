@@ -8,7 +8,7 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 function useIndexes() {
   const indexesEndPoint =
-    "https://jianliew.me/reddit-store/api/indexes/indexes.json";
+    "https://jian.sh/reddit-store/api/indexes/indexes.json";
 
   const { data, error, isLoading } = useSWR(indexesEndPoint, fetcher);
 
