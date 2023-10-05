@@ -20,7 +20,6 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 function useSummary(id: number) {
   const summaryEndPoint = `https://jian.sh/reddit-store/api/summary/${id}.json`;
 
-
   const { data, error, isLoading } = useSWR(summaryEndPoint, fetcher, {
     compare: (a, b) => {
       return a?.id === b?.id;
@@ -73,12 +72,18 @@ export default function ViewSubmission({ id }: Index) {
 
   const [shown, setShown] = useState<boolean>(false);
 
+  const [repliesShown, setShowReplies] = useState<boolean>(false);
+
   const { summary, wordFrequency, isSummaryLoading, isSummaryError } =
     useSummary(submissionId);
 
   const handleShow = () => {
-    setShown(true);
-  }
+    setShown(!shown);
+  };
+
+  const handleShowReplies = () => {
+    setShowReplies(!repliesShown);
+  };
 
   if (isLoading)
     return (
@@ -88,13 +93,20 @@ export default function ViewSubmission({ id }: Index) {
     );
 
   if (isError || isSummaryError) {
-    return <ShowAlert payload={"Please try again later, there has been an error"} type={"error"} />
+    return (
+      <ShowAlert
+        payload={"Please try again later, there has been an error"}
+        type={"error"}
+      />
+    );
   }
 
   if (isSummaryLoading)
     return (
       <div>
-        <span className="loading loading-dots loading-lg">Loading submission</span>
+        <span className="loading loading-dots loading-lg">
+          Loading submission
+        </span>
       </div>
     );
 
@@ -102,7 +114,7 @@ export default function ViewSubmission({ id }: Index) {
 
   const isDirectPage = location["pathname"].startsWith("/submission");
 
-  isDirectPage ? window.scrollTo(0, 0) : "";
+  // isDirectPage ? window.scrollTo(0, 0) : "";
 
   return (
     <div key={submission?.id}>
@@ -117,16 +129,29 @@ export default function ViewSubmission({ id }: Index) {
           <article className="prose max-w-none">{parse(selfText)}</article>
           <p>
             View original post{" "}
-            <a className="text-blue-600 dark:text-blue:500 hover:underline" href={"https://reddit.com" + submission?.permalink}>here</a>
+            <a
+              className="text-blue-600 dark:text-blue:500 hover:underline"
+              href={"https://reddit.com" + submission?.permalink}
+            >
+              here
+            </a>
           </p>
 
-          <button className={shown ? "hidden" : "btn btn-info"} onClick={handleShow}>Show results</button>
+          <button
+            className={"btn btn-info"}
+            onClick={handleShow}
+          >
+            {shown? "Hide Results" : "Show Results"}
+          </button>
 
           <p>
             Number of replies: <strong>{submission?.replies.length}</strong>
           </p>
 
-          <div className={shown ? "grid grid-cols-1 md:grid-cols-3" : "hidden"} data-theme="wireframe">
+          <div
+            className={shown ? "grid grid-cols-1 md:grid-cols-3" : "hidden"}
+            data-theme="wireframe"
+          >
             <div className="m-1">
               <h3 className="text-center">
                 <strong>Generated Word Cloud</strong>
@@ -151,18 +176,32 @@ export default function ViewSubmission({ id }: Index) {
             </div>
           </div>
 
-
           {!isDirectPage ? (
-            <NavLink className="link" to={"/submission/" + submission?.id} key={submission?.id}>
+            <NavLink
+              className="link"
+              to={"/submission/" + submission?.id}
+              key={submission?.id}
+            >
               View in detail
             </NavLink>
           ) : (
-            <div className="break-all">
-              {/* <ViewToxicity sentences={submission?.selftext} /> */}
-              <br />
-              {submission?.replies.map((e: string) => {
-                return <li key={Math.random()}>{e}</li>;
-              })}
+            <div>
+              <button
+                className="btn btn-info"
+                name="repliesShown"
+                onClick={handleShowReplies}
+              >
+                {" "}
+                {repliesShown ? "Hide replies" : "Show replies"}
+              </button>
+
+              <div className={repliesShown ? "break-all" : "hidden"}>
+                {/* <ViewToxicity sentences={submission?.selftext} /> */}
+                <br />
+                {submission?.replies.map((e: string) => {
+                  return <li key={Math.random()}>{e}</li>;
+                })}
+              </div>
             </div>
           )}
         </div>
