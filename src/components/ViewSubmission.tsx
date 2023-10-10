@@ -2,10 +2,10 @@ import parse from "html-react-parser";
 import { NavLink, useLocation } from "react-router-dom";
 import useSWR from "swr";
 import { convertDate, makeHTMLFromString } from "../utils/helpers";
-import ShowAlert from "./ShowAlert";
+import { ShowAlert } from "./ShowAlert";
 import { Index } from "../types/index";
 // import ViewToxicity from "./ViewToxicity";
-import { useState } from "react";
+import { memo, useState } from "react";
 import { EmotionTable } from "./EmotionTable";
 import { PieChart } from "./PieChart";
 import { SimpleCloud } from "./SimpleCloud";
@@ -63,7 +63,7 @@ function useSubmission(id: number) {
   };
 }
 
-export default function ViewSubmission({ id }: Index) {
+export const ViewSubmission = memo(({ id }: Index) => {
   const location = useLocation();
 
   const submissionId = Number(location["pathname"].split("/")[2]) || id;
@@ -141,7 +141,6 @@ export default function ViewSubmission({ id }: Index) {
   };
 
   const UpChevron = (props) => {
-
     const text = props.value;
 
     return (
@@ -272,4 +271,4 @@ export default function ViewSubmission({ id }: Index) {
       </div>
     </div>
   );
-}
+});

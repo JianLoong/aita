@@ -4,12 +4,11 @@ import DatePicker from "react-datepicker";
 import { useSearchParams, useLocation } from "react-router-dom";
 import useSWR from "swr";
 import { sortIndexes } from "../utils/helpers";
-import ViewSubmission from "./ViewSubmission";
-
+import { ViewSubmission } from "./ViewSubmission";
 
 import "react-datepicker/dist/react-datepicker.css";
 import Introduction from "./Introduction";
-import ShowAlert from "./ShowAlert";
+import { ShowAlert } from "./ShowAlert";
 import { Index } from "../types";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
@@ -60,24 +59,22 @@ export default function ViewSubmissions() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   // Scroll into view
-  
-  const location = useLocation();
-  
-  if (location["hash"] !== undefined) {
 
+  const location = useLocation();
+
+  if (location["hash"] !== undefined) {
     const scrollTo = location["hash"].toString().slice(1);
 
     const element = document.getElementById(scrollTo);
 
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+      element.scrollIntoView({ behavior: "smooth" });
     }
   }
 
   const noOfPost = searchParams.get("noOfPost") || 5;
   const sortOrder = searchParams.get("sortOrder") || "hot";
   const queryDate = searchParams.get("date") || new Date().getTime().toString();
-
 
   const { indexes, isLoading, isError } = useIndexes();
 
@@ -93,8 +90,6 @@ export default function ViewSubmissions() {
   const startUTC = startOfDay.getTime() / 1000;
   const endUTC = endOfDay.getTime() / 1000;
 
-
-
   const { submissions } = useSubmission(
     indexes,
     startUTC,
@@ -104,13 +99,18 @@ export default function ViewSubmissions() {
   );
 
   if (isError) {
-    return <ShowAlert payload={"Please try again later, there has been an error"} type={"error"} />
+    return (
+      <ShowAlert
+        payload={"Please try again later, there has been an error"}
+        type={"error"}
+      />
+    );
   }
 
   if (isLoading)
     return (
       <div className="p-2">
-         <span className="loading loading-dots loading-lg"></span>
+        <span className="loading loading-dots loading-lg"></span>
       </div>
     );
 
@@ -118,7 +118,7 @@ export default function ViewSubmissions() {
     <div className="pt-6 p-2" key={1}>
       <article className="mx-auto">
         <Introduction />
-      </article>       
+      </article>
       <form method="GET">
         <div className="pb-6 grid grid-cols-1 md:grid-cols-3">
           <div className="p-2">
@@ -209,11 +209,15 @@ export default function ViewSubmissions() {
             </div>
           </div>
         </div>
-      </form>      
-      {
-        submissions.length === 0? <ShowAlert payload={"There are no submissions for this criteria."} type={"warning"} /> : submissions
-      }
-     
+      </form>
+      {submissions.length === 0 ? (
+        <ShowAlert
+          payload={"There are no submissions for this criteria."}
+          type={"warning"}
+        />
+      ) : (
+        submissions
+      )}
     </div>
   );
 }

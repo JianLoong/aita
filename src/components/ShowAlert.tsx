@@ -1,6 +1,7 @@
+import { memo } from "react";
 import { Message } from "../types/message";
 
-export default function ShowAlert({ type, payload }: Message) {
+export const ShowAlert = memo(({ type, payload }: Message) => {
   const info = (
     <div className="alert alert-info">
       <svg
@@ -94,7 +95,7 @@ export default function ShowAlert({ type, payload }: Message) {
       </svg>
       <span>Highest Number of ESH</span>
     </div>
-  )
+  );
 
   switch (type) {
     case "info":
@@ -108,4 +109,4 @@ export default function ShowAlert({ type, payload }: Message) {
     case "base":
       return base;
   }
-}
+});

@@ -3,7 +3,7 @@ import { useState, KeyboardEvent } from "react";
 import useSWR from "swr";
 import { NavLink } from "react-router-dom";
 import { useSearchParams } from "react-router-dom";
-import ShowAlert from "./ShowAlert";
+import { ShowAlert } from "./ShowAlert";
 
 interface Result {
   id: string;
@@ -28,7 +28,6 @@ function useSearch() {
 function useSearchResult(searchIndexes: Result[], searchQuery: string) {
   const results: Result[] = [];
 
-  
   if (searchIndexes === undefined || searchQuery === undefined)
     return {
       results: [],
@@ -55,7 +54,6 @@ function useSearchResult(searchIndexes: Result[], searchQuery: string) {
 
     results.push(result);
   });
-
 
   return {
     results: results,
@@ -132,9 +130,9 @@ export default function SearchSubmission() {
             id="search"
             placeholder="Type anything and hit enter to begin search..."
             aria-label="search"
-            onKeyDown={(e : KeyboardEvent<HTMLInputElement>) => {
+            onKeyDown={(e: KeyboardEvent<HTMLInputElement>) => {
               if (e.key === "Enter") {
-                e.preventDefault();                
+                e.preventDefault();
                 setSearchQuery(e.currentTarget.value);
                 setSearchParams("query=" + e.currentTarget.value);
               }

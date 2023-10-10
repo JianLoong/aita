@@ -1,6 +1,6 @@
 import useSWR from "swr";
 import { Index } from "../types/index";
-import ShowAlert from "./ShowAlert";
+import { ShowAlert } from "./ShowAlert";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 

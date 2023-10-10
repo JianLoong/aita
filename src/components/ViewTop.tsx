@@ -3,11 +3,11 @@ import { useState } from "react";
 import { useSearchParams, useLocation } from "react-router-dom";
 import useSWR from "swr";
 import { normaliseDate } from "../utils/helpers";
-import ViewSubmission from "./ViewSubmission";
+import { ViewSubmission } from "./ViewSubmission";
 import { Top } from "../types/top";
 import { Index } from "../types/index";
 
-import ShowAlert from "./ShowAlert";
+import { ShowAlert } from "./ShowAlert";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
