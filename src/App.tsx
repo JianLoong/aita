@@ -1,10 +1,10 @@
 import { HashRouter, Navigate, Route, Routes } from "react-router-dom";
 import "./App.css";
-import About from "./components/About";
+import About from "./pages/About";
 import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
 import Random from "./components/Random";
-import SearchSubmission from "./components/SearchSubmission";
+import SearchSubmission from "./pages/SearchSubmission";
 import { ViewSubmission } from "./components/ViewSubmission";
 import ViewSubmissions from "./components/ViewSubmissions";
 import ViewTop from "./components/ViewTop";

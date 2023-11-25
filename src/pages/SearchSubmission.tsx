@@ -3,7 +3,7 @@ import { useState, KeyboardEvent } from "react";
 import useSWR from "swr";
 import { NavLink } from "react-router-dom";
 import { useSearchParams } from "react-router-dom";
-import { ShowAlert } from "./ShowAlert";
+import { ShowAlert } from "../components/ShowAlert";
 
 interface Result {
   id: string;
