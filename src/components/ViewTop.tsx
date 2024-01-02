@@ -90,8 +90,8 @@ function processSubmissions(tops: Top[]): Index[] {
 }
 
 function useIndexes() {
-  const indexesEndPoint = "https://jian.sh/reddit-store/api/top/top.json";
-
+  // const indexesEndPoint = "https://jian.sh/reddit-store/api/top/top.json";
+  const indexesEndPoint = "http://localhost:8000/top";
   const { data, error, isLoading } = useSWR(indexesEndPoint, fetcher);
 
   return {
@@ -142,7 +142,7 @@ function useSubmission(
       <ShowAlert payload={"Highest number of YTA"} type={"error"}></ShowAlert>
     </strong>
   );
-  submissions.push(<ViewSubmission {...results[0]} key={results[0]?.id} />);
+  submissions.push(<ViewSubmission {...results[0]} key={JSON.stringify(results[0])} />);
 
   submissions.push(
     <strong key={Math.random()}>
@@ -294,6 +294,7 @@ export default function ViewTop() {
             >
               <option value="2022">2022</option>
               <option value="2023">2023</option>
+              <option value="2024">2024</option>
             </select>
           </div>
         </div>

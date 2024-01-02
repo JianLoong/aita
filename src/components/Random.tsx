@@ -10,6 +10,8 @@ function useIndexes() {
   const indexesEndPoint =
     "https://jian.sh/reddit-store/api/indexes/indexes.json";
 
+  // const indexesEndPoint = "http://localhost:8000/indexes";
+
   const { data, error, isLoading } = useSWR(indexesEndPoint, fetcher);
 
   return {

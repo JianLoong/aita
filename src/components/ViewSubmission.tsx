@@ -18,7 +18,8 @@ interface Entry {
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 function useSummary(id: number) {
-  const summaryEndPoint = `https://jian.sh/reddit-store/api/summary/${id}.json`;
+  // const summaryEndPoint = `https://jian.sh/reddit-store/api/summary/${id}.json`;
+  const summaryEndPoint = `http://localhost:8000/summary/${id}`;
 
   const { data, error, isLoading } = useSWR(summaryEndPoint, fetcher, {
     compare: (a, b) => {
@@ -52,8 +53,8 @@ function useSummary(id: number) {
 }
 
 function useSubmission(id: number) {
-  const submissionEndPoint = `https://jian.sh/reddit-store/api/submissions/${id}.json`;
-
+  // const submissionEndPoint = `https://jian.sh/reddit-store/api/submissions/${id}.json`;
+  const submissionEndPoint = `http://localhost:8000/submission/${id}`;
   const { data, error, isLoading } = useSWR(submissionEndPoint, fetcher);
 
   return {
@@ -204,9 +205,9 @@ export const ViewSubmission = memo(({ id }: Index) => {
             {shown ? "Hide Results" : "See what the others think.."}
           </button>
 
-          <p>
+          {/* <p>
             Number of replies: <strong>{submission?.replies.length}</strong>
-          </p>
+          </p> */}
 
           <div
             className={shown ? "grid grid-cols-1 md:grid-cols-3" : "hidden"}
@@ -237,13 +238,14 @@ export const ViewSubmission = memo(({ id }: Index) => {
           </div>
 
           {!isDirectPage ? (
-            <NavLink
-              className="link"
-              to={"/submission/" + submission?.id}
-              key={submission?.id}
-            >
-              View in detail
-            </NavLink>
+            // <NavLink
+            //   className="link"
+            //   to={"/submission/" + submission?.id}
+            //   key={submission?.id}
+            // >
+            //   View in detail
+            // </NavLink>
+            <></>
           ) : (
             <div>
               <button

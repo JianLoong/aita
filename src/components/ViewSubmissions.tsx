@@ -13,21 +13,21 @@ import { Index } from "../types";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-function useIndexes() {
-  const indexesEndPoint =
-    "https://jian.sh/reddit-store/api/indexes/indexes.json";
+function defaultSubmissions(startUTC, endUTC, noOfPost) {
+
+  const indexesEndPoint = `http://localhost:8000/search_submission?start_utc=${startUTC}&end_utc=${endUTC}&offset=0&limit=${noOfPost}`;
 
   const { data, error, isLoading } = useSWR(indexesEndPoint, fetcher);
 
   return {
-    indexes: data,
+    data: data,
     isLoading,
     isError: error,
   };
+
 }
 
 function useSubmission(
-  indexes: Index[],
   startUTC: number,
   endUTC: number,
   selectedNoOfPost: number,
@@ -35,17 +35,43 @@ function useSubmission(
 ) {
   const submissions = [];
 
-  const sorted: Index[] = sortIndexes(
-    indexes,
-    startUTC,
-    endUTC,
-    selectedNoOfPost,
-    selectedSortOrder
-  );
+  // const sorted: Index[] = sortIndexes(
+  //   indexes,
+  //   startUTC,
+  //   endUTC,
+  //   selectedNoOfPost,
+  //   selectedSortOrder
+  // );
 
-  for (const index of sorted) {
-    submissions.push(<ViewSubmission {...index} key={index?.id} />);
+  const {data, isLoading, isError } = defaultSubmissions(startUTC, endUTC, selectedNoOfPost);
+
+  // const subs = defaultSubmissions(startUTC, endUTC, selectedNoOfPost);
+  
+  console.log(data);
+
+  const values = [];
+
+
+  if (data != undefined) {
+
+    for (const s of data) {
+      const index: Index = {
+        id: s.id,
+        created_utc: s.created_utc,
+        score: s.score
+      };
+
+      values.push(index);
+    }
+
+    for (const index of values) {
+      submissions.push(<ViewSubmission {...index} key={index?.id} />);
+    }
   }
+
+  // for (const index of sorted) {
+  //   submissions.push(<ViewSubmission {...index} key={index?.id} />);
+  // }
 
   return {
     submissions: submissions,
@@ -76,8 +102,6 @@ export default function ViewSubmissions() {
   const sortOrder = searchParams.get("sortOrder") || "hot";
   const queryDate = searchParams.get("date") || new Date().getTime().toString();
 
-  const { indexes, isLoading, isError } = useIndexes();
-
   const [selectedNoOfPost, setNoOfPost] = useState<number>(Number(noOfPost));
   const [selectedSortOrder, setSortOrder] = useState<string>(sortOrder);
   const [selectedDate, setDate] = useState<Date>(new Date(Number(queryDate)));
@@ -90,29 +114,29 @@ export default function ViewSubmissions() {
   const startUTC = startOfDay.getTime() / 1000;
   const endUTC = endOfDay.getTime() / 1000;
 
+  
   const { submissions } = useSubmission(
-    indexes,
     startUTC,
     endUTC,
     selectedNoOfPost,
     selectedSortOrder
   );
 
-  if (isError) {
-    return (
-      <ShowAlert
-        payload={"Please try again later, there has been an error"}
-        type={"error"}
-      />
-    );
-  }
+  // if (isError) {
+  //   return (
+  //     <ShowAlert
+  //       payload={"Please try again later, there has been an error"}
+  //       type={"error"}
+  //     />
+  //   );
+  // }
 
-  if (isLoading)
-    return (
-      <div className="p-2">
-        <span className="loading loading-dots loading-lg"></span>
-      </div>
-    );
+  // if (isLoading)
+  //   return (
+  //     <div className="p-2">
+  //       <span className="loading loading-dots loading-lg"></span>
+  //     </div>
+  //   );
 
   return (
     <div className="pt-6 p-2" key={1}>
