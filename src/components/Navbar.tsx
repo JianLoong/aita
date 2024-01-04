@@ -89,7 +89,7 @@ export default function Navbar() {
             </NavLink>
           </li>
           <li className="pr-1">
-            <NavLink to="/random">
+            <NavLink reloadDocument to="/random" key={Date.now()}>
               {" "}
               <svg
                 xmlns="http://www.w3.org/2000/svg"

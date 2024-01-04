@@ -1,16 +1,15 @@
 import useSWR from "swr";
 import { ViewSubmission } from "./ViewSubmission";
 
-import { useLocation } from "react-router-dom";
+import { useLocation  } from "react-router-dom";
 import { ShowAlert } from "./ShowAlert";
+import React from "react";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 function useIndexes() {
-  const indexesEndPoint =
-    "https://jian.sh/reddit-store/api/indexes/indexes.json";
 
-  // const indexesEndPoint = "http://localhost:8000/indexes";
+  const indexesEndPoint = "http://localhost:8000/api/v2/random";
 
   const { data, error, isLoading } = useSWR(indexesEndPoint, fetcher);
 
@@ -19,18 +18,6 @@ function useIndexes() {
     isLoading: isLoading,
     isError: error,
   };
-
-  // const submissions = [];
-
-  // const randomSubmission = data[Math.floor(Math.random() * data.length)];
-
-  // submissions.push(<ViewSubmission {...randomSubmission} key={randomSubmission?.id} />);
-
-  // return {
-  //   submissions: submissions,
-  //   isLoading,
-  //   isError: error,
-  // };
 }
 
 function useSubmissions(indexes) {
@@ -41,10 +28,8 @@ function useSubmissions(indexes) {
       submissions: submissions,
     };
 
-  const randomSubmission = indexes[Math.floor(Math.random() * indexes.length)];
-
   submissions.push(
-    <ViewSubmission {...randomSubmission} key={randomSubmission?.id} />
+    <ViewSubmission {...indexes} key={Date.now()} />
   );
 
   return {
@@ -53,11 +38,14 @@ function useSubmissions(indexes) {
 }
 
 export default function Random() {
-  const { indexes, isLoading, isError } = useIndexes();
-
-  const { submissions } = useSubmissions(indexes);
 
   const location = useLocation();
+
+ 
+
+  const { indexes, isLoading, isError } = useIndexes();
+
+  let { submissions } = useSubmissions(indexes);
 
   if (isError) {
     return (
@@ -75,8 +63,17 @@ export default function Random() {
       </div>
     );
 
+  function handleRefresh(event: React.MouseEvent<HTMLInputElement>): void {
+    event.preventDefault();
+    
+    window.location.reload(); 
+
+  }
+
   //https://github.com/remix-run/react-router/issues/7416
   return (
+    <>
+    <p onClick={handleRefresh} className="flex flex-col items-center btn btn-primary">Get another random submission</p>
     <div className="pt-6 p-2" key={location.key}>
       {submissions.length === 0 ? (
         <ShowAlert
@@ -87,5 +84,6 @@ export default function Random() {
         submissions
       )}
     </div>
+    </>
   );
 }
