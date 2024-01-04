@@ -1,98 +1,47 @@
 import queryString from "query-string";
 import { useState } from "react";
-import { useSearchParams, useLocation } from "react-router-dom";
-import useSWR from "swr";
-import { ViewSubmission } from "./ViewSubmission";
+import { useLocation, useSearchParams } from "react-router-dom";
+import useSWRInfinite from 'swr/infinite';
 import { ShowAlert } from "./ShowAlert";
+import { ViewSubmission } from "./ViewSubmission";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-function getYTA(
+function getCounts(
   selectedMonth: string,
   selectedYear: number) {
 
-  const submissionEndPoint = `http://localhost:8000/api/v2/top?year=${selectedYear}&month=${selectedMonth}&type=yta`;
-
-  let { data } = useSWR(submissionEndPoint, fetcher);
-
-  return {
-    yta: data,
-  }
-
-}
-
-function getINFO(
-  selectedMonth: string,
-  selectedYear: number) {
-
-  const submissionEndPoint = `http://localhost:8000/api/v2/top?year=${selectedYear}&month=${selectedMonth}&type=info`;
-
-  let { data } = useSWR(submissionEndPoint, fetcher);
+  const keys: string[] = ["yta", "nta", "nah", "info", "esh"];
+  const { data, isLoading, error } = useSWRInfinite((index) => `http://localhost:8000/api/v2/top?year=${selectedYear}&month=${selectedMonth}&type=${keys[index]}`, fetcher, {
+    initialSize: keys.length,
+    parallel: true,
+  });
 
   return {
-    info: data,
-  }
-
-}
-
-
-function getNAH(
-  selectedMonth: string,
-  selectedYear: number) {
-
-  const submissionEndPoint = `http://localhost:8000/api/v2/top?year=${selectedYear}&month=${selectedMonth}&type=nah`;
-
-  let { data } = useSWR(submissionEndPoint, fetcher);
-
-  return {
-    nah: data,
-  }
-
-}
-
-function getNTA(
-  selectedMonth: string,
-  selectedYear: number) {
-
-  const submissionEndPoint = `http://localhost:8000/api/v2/top?year=${selectedYear}&month=${selectedMonth}&type=nta`;
-
-  let { data } = useSWR(submissionEndPoint, fetcher);
-
-  return {
-    nta: data,
+    data: data,
+    isLoading: isLoading,
+    isError: error
   }
 
 }
 
 function useSubmission(
-  yta,
-  nta,
-  nah,
-  info
+  counts
 ) {
-  if (yta === undefined || nta === undefined || nah === undefined || info === undefined)
+  if (counts === undefined)
     return {
       submissions: [],
     };
 
-  if (yta.length == 0 || nta.length == 0 || nah.length == 0 || info.length == 0)
+  if (counts.length == 0)
     return {
       submissions: []
     }
 
   let values = [];
-  for (const s of yta) {
-    values.push(s);
+  for (const s of counts) {
+    values.push(s[0]);
   }
-
-  for (const s of nta) {
-    values.push(s);
-  }
-
-  for (const s of nah) {
-    values.push(s);
-  }
-
 
   const submissions = [];
 
@@ -101,8 +50,6 @@ function useSubmission(
       <ShowAlert payload={"Highest number of YTA"} type={"error"}></ShowAlert>
     </strong>
   );
-
-
 
   submissions.push(<ViewSubmission {...values[0]} key={Math.random()} />);
 
@@ -120,20 +67,20 @@ function useSubmission(
   );
   submissions.push(<ViewSubmission {...values[2]} key={values[2]?.id} />);
 
-  // submissions.push(
-  //   <strong key={Math.random()}>
-  //     <ShowAlert payload={"Highest number of INFO"} type={"info"}></ShowAlert>
-  //   </strong>
-  // );
-  // submissions.push(<ViewSubmission {...results[3]} key={results[3]?.id} />);
+  submissions.push(
+    <strong key={Math.random()}>
+      <ShowAlert payload={"Highest number of INFO"} type={"info"}></ShowAlert>
+    </strong>
+  );
+  submissions.push(<ViewSubmission {...values[3]} key={values[3]?.id} />);
 
-  // submissions.push(
-  //   <strong key={Math.random()}>
-  //     <ShowAlert payload={"Highest Number of ESH"} type={"base"}></ShowAlert>
-  //   </strong>
-  // );
+  submissions.push(
+    <strong key={Math.random()}>
+      <ShowAlert payload={"Highest Number of ESH"} type={"base"}></ShowAlert>
+    </strong>
+  );
 
-  // submissions.push(<ViewSubmission {...results[4]} key={results[4]?.id} />);
+  submissions.push(<ViewSubmission {...values[4]} key={values[4]?.id} />);
 
   return {
     submissions: submissions,
@@ -166,28 +113,26 @@ export default function ViewTop() {
   const [selectedYear, setYear] = useState<number>(Number(year));
 
 
-  const { yta } = getYTA(selectedMonth, selectedYear);
-  const { nta } = getNTA(selectedMonth, selectedYear);
-  const { nah } = getNAH(selectedMonth, selectedYear);
-  const { info } = getINFO(selectedMonth, selectedYear);
+  const { data, isLoading, isError } = getCounts(selectedMonth, selectedYear);
 
-  const { submissions } = useSubmission(yta, nta, nah, info);
 
-  // if (isLoading)
-  //   return (
-  //     <div className="p-2">
-  //       <span className="loading loading-dots loading-lg"></span>
-  //     </div>
-  //   );
+  const { submissions } = useSubmission(data);
 
-  // if (isError) {
-  //   return (
-  //     <ShowAlert
-  //       payload={"Please try again later, there has been an error"}
-  //       type={"error"}
-  //     />
-  //   );
-  // }
+  if (isLoading)
+    return (
+      <div className="p-2">
+        <span className="loading loading-dots loading-lg"></span>
+      </div>
+    );
+
+  if (isError) {
+    return (
+      <ShowAlert
+        payload={"Please try again later, there has been an error"}
+        type={"error"}
+      />
+    );
+  }
 
   return (
     <div className="pt-6 p-2" key={Math.random()}>

@@ -1,9 +1,8 @@
-import useSWR from "swr";
-import { ViewSubmission } from "./ViewSubmission";
-
-import { useLocation  } from "react-router-dom";
-import { ShowAlert } from "./ShowAlert";
 import React from "react";
+import { useLocation } from "react-router-dom";
+import useSWR from "swr";
+import { ShowAlert } from "./ShowAlert";
+import { ViewSubmission } from "./ViewSubmission";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 

@@ -1,15 +1,12 @@
 import parse from "html-react-parser";
-import { NavLink, useLocation } from "react-router-dom";
-import useSWR from "swr";
-import { convertDate, makeHTMLFromString } from "../utils/helpers";
-import { ShowAlert } from "./ShowAlert";
-import { Index } from "../types/index";
-// import ViewToxicity from "./ViewToxicity";
 import { memo, useState } from "react";
+import { useLocation } from "react-router-dom";
+import useSWR from "swr";
+import { Submission } from "../types/submission";
+import { convertDate, makeHTMLFromString } from "../utils/helpers";
 import { EmotionTable } from "./EmotionTable";
 import { PieChart } from "./PieChart";
 import { SimpleCloud } from "./SimpleCloud";
-import { Submission } from "../types/submission";
 
 interface Entry {
   value: string;
@@ -19,7 +16,7 @@ interface Entry {
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 function useSummary(id: number) {
-  // const summaryEndPoint = `https://jian.sh/reddit-store/api/summary/${id}.json`;
+
   const summaryEndPoint = `http://localhost:8000/api/v2/summary/${id}`;
 
   const { data, error, isLoading } = useSWR(summaryEndPoint, fetcher, {
@@ -52,18 +49,6 @@ function useSummary(id: number) {
     isSummaryError: error,
   };
 }
-
-// function useSubmission(id: number) {
-//   // const submissionEndPoint = `https://jian.sh/reddit-store/api/submissions/${id}.json`;
-//   const submissionEndPoint = `http://localhost:8000/api/v2/submission/${id}`;
-//   const { data, error, isLoading } = useSWR(submissionEndPoint, fetcher);
-
-//   return {
-//     submission: data,
-//     isLoading,
-//     isError: error,
-//   };
-// }
 
 export const ViewSubmission = memo((submission: Submission) => {
   const location = useLocation();

@@ -6,7 +6,7 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export default function ViewSummary({ id }: Index) {
   function useSummary(id: number) {
-    // const summaryEndPoint = `https://jian.sh/reddit-store/api/summary/${id}.json`;
+
     const summaryEndPoint = `http://localhost:8000/summary/${id}`;
 
     const { data, error, isLoading } = useSWR(summaryEndPoint, fetcher);

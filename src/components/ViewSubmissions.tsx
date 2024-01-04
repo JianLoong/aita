@@ -3,27 +3,23 @@ import { useState } from "react";
 import DatePicker from "react-datepicker";
 import { useSearchParams, useLocation } from "react-router-dom";
 import useSWR from "swr";
-import { sortIndexes } from "../utils/helpers";
 import { ViewSubmission } from "./ViewSubmission";
 
 import "react-datepicker/dist/react-datepicker.css";
 import Introduction from "./Introduction";
 import { ShowAlert } from "./ShowAlert";
-import { Index } from "../types";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-function defaultSubmissions(startUTC, endUTC, noOfPost) {
+function defaultSubmissions(startUTC: number, endUTC: number, noOfPost: number, selectedSortOrder: string) {
 
-  // const indexesEndPoint = `http://localhost:8000/api/v2/submission/search?startUTC=${startUTC}&endUTC=${endUTC}&offset=0&limit=${noOfPost}`;
-
-  const indexesEndPoint = `http://localhost:8000/api/v2/submisssion/search?startUTC=${startUTC}&endUTC=${endUTC}&offset=0&limit=${noOfPost}`
+  const indexesEndPoint = `http://localhost:8000/api/v2/submisssion/search?startUTC=${startUTC}&endUTC=${endUTC}&offset=0&limit=${noOfPost}&sortBy=${selectedSortOrder}&orderBy=desc`
 
   const { data, error, isLoading } = useSWR(indexesEndPoint, fetcher);
 
   return {
     data: data,
-    isLoading,
+    isLoading: isLoading,
     isError: error,
   };
 
@@ -37,27 +33,13 @@ function useSubmission(
 ) {
   const submissions = [];
 
-  // const sorted: Index[] = sortIndexes(
-  //   indexes,
-  //   startUTC,
-  //   endUTC,
-  //   selectedNoOfPost,
-  //   selectedSortOrder
-  // );
-
-  const {data, isLoading, isError } = defaultSubmissions(startUTC, endUTC, selectedNoOfPost);
-
-  // const subs = defaultSubmissions(startUTC, endUTC, selectedNoOfPost);
+  const {data, isLoading, isError } = defaultSubmissions(startUTC, endUTC, selectedNoOfPost, selectedSortOrder);
   
-  console.log(data);
-
   const values = [];
-
 
   if (data != undefined) {
 
     for (const s of data) {
-
       values.push(s);
     }
 
@@ -65,10 +47,6 @@ function useSubmission(
       submissions.push(<ViewSubmission {...index} key={index?.id} />);
     }
   }
-
-  // for (const index of sorted) {
-  //   submissions.push(<ViewSubmission {...index} key={index?.id} />);
-  // }
 
   return {
     submissions: submissions,
@@ -98,7 +76,7 @@ export default function ViewSubmissions() {
   }
 
   const noOfPost = searchParams.get("noOfPost") || 5;
-  const sortOrder = searchParams.get("sortOrder") || "hot";
+  const sortOrder = searchParams.get("sortOrder") || "score";
   const queryDate = searchParams.get("date") || new Date().getTime().toString();
 
   const [selectedNoOfPost, setNoOfPost] = useState<number>(Number(noOfPost));
@@ -200,8 +178,8 @@ export default function ViewSubmissions() {
                 e.stopPropagation();
               }}
             >
-              <option value="hot">hot</option>
-              <option value="newest">newest</option>
+              <option value="new">new</option>
+              <option value="score">score</option>
             </select>
           </div>
 
