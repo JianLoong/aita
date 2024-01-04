@@ -19,7 +19,7 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 function useSummary(id: number) {
   // const summaryEndPoint = `https://jian.sh/reddit-store/api/summary/${id}.json`;
-  const summaryEndPoint = `http://localhost:8000/summary/${id}`;
+  const summaryEndPoint = `http://localhost:8000/api/v2/summary/${id}`;
 
   const { data, error, isLoading } = useSWR(summaryEndPoint, fetcher, {
     compare: (a, b) => {
@@ -54,7 +54,7 @@ function useSummary(id: number) {
 
 function useSubmission(id: number) {
   // const submissionEndPoint = `https://jian.sh/reddit-store/api/submissions/${id}.json`;
-  const submissionEndPoint = `http://localhost:8000/submission/${id}`;
+  const submissionEndPoint = `http://localhost:8000/api/v2/submission/${id}`;
   const { data, error, isLoading } = useSWR(submissionEndPoint, fetcher);
 
   return {

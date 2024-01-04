@@ -2,138 +2,91 @@ import queryString from "query-string";
 import { useState } from "react";
 import { useSearchParams, useLocation } from "react-router-dom";
 import useSWR from "swr";
-import { normaliseDate } from "../utils/helpers";
 import { ViewSubmission } from "./ViewSubmission";
-import { Top } from "../types/top";
-import { Index } from "../types/index";
+
 
 import { ShowAlert } from "./ShowAlert";
+import { Index } from "../types";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-function processSubmissions(tops: Top[]): Index[] {
-  let maxNTA = tops[0]?.nta;
-  let maxYTA = tops[0]?.yta;
 
-  let maxINFO = tops[0]?.info;
-  let maxNAH = tops[0]?.nah;
 
-  let maxESH = tops[0]?.esh;
 
-  let maxNTAId = tops[0]?.id;
-  let maxYTAId = tops[0]?.id;
 
-  let maxINFOId = tops[0]?.id;
-  let maxNAHId = tops[0]?.id;
-  let maxESHId = tops[0]?.id;
+function getYTA(  
+  selectedMonth: string,
+  selectedYear: number){
 
-  const sorted: Index[] = [];
+  const submissionEndPoint = `http://localhost:8000/api/v2/top?year=${selectedYear}&month=${selectedMonth}&type=yta`;
 
-  for (const top of tops) {
-    if (top.nta > maxNTA) {
-      maxNTA = top.nta;
-      maxNTAId = top.id;
-    }
-
-    if (top.yta > maxYTA) {
-      maxYTA = top.yta;
-      maxYTAId = top.id;
-    }
-
-    if (top.nah > maxNAH) {
-      maxNAH = top.nah;
-      maxNAHId = top.id;
-    }
-
-    if (top.info > maxINFO) {
-      maxINFO = top.info;
-      maxINFOId = top.id;
-    }
-
-    if (top.esh > maxESH) {
-      maxESH = top.esh;
-      maxESHId = top.id;
-    }
-  }
-
-  sorted.push({
-    id: maxYTAId,
-    created_utc: 0,
-    score: 0,
-  });
-
-  sorted.push({
-    id: maxNTAId,
-    created_utc: 0,
-    score: 0,
-  });
-
-  sorted.push({
-    id: maxNAHId,
-    created_utc: 0,
-    score: 0,
-  });
-
-  sorted.push({
-    id: maxINFOId,
-    created_utc: 0,
-    score: 0,
-  });
-
-  sorted.push({
-    id: maxESHId,
-    created_utc: 0,
-    score: 0,
-  });
-
-  return sorted;
-}
-
-function useIndexes() {
-  // const indexesEndPoint = "https://jian.sh/reddit-store/api/top/top.json";
-  const indexesEndPoint = "http://localhost:8000/top";
-  const { data, error, isLoading } = useSWR(indexesEndPoint, fetcher);
+  let { data } = useSWR(submissionEndPoint, fetcher);
 
   return {
-    tops: data as Top[],
-    isLoading,
-    isError: error,
-  };
+    yta: data,
+  }
+
+}
+
+function getNTA(  
+  selectedMonth: string,
+  selectedYear: number){
+
+  const submissionEndPoint = `http://localhost:8000/api/v2/top?year=${selectedYear}&month=${selectedMonth}&type=nta`;
+
+  let { data } = useSWR(submissionEndPoint, fetcher);
+
+  return {
+    nta: data,
+  }
+
 }
 
 function useSubmission(
-  tops: Top[],
-  selectedMonth: number,
-  selectedYear: number
+  yta,
+  nta
 ) {
-  if (tops === undefined)
+  if (yta === undefined || nta === undefined)
     return {
       submissions: [],
     };
 
-  const selectedSubmissions = [];
-
-  for (const top of tops) {
-    const normalisedDate = normaliseDate(top?.created_utc);
-    top["year"] = Number(normalisedDate[0]);
-    top["month"] = Number(normalisedDate[1]);
-
-    if (selectedMonth == top["month"] && selectedYear == top["year"])
-      selectedSubmissions.push(top);
-
-    if (selectedMonth == 12) {
-      selectedSubmissions.push(top);
-    }
-  }
-
-  // Get top post here
-  if (selectedSubmissions.length == 0) {
+  if (yta.length == 0 || nta.length == 0)
     return {
-      submissions: [],
-    };
+      submissions: []
   }
 
-  const results = processSubmissions(selectedSubmissions);
+  // const selectedSubmissions = [];
+
+  // // Get top post here
+  // if (selectedSubmissions.length == 0) {
+  //   return {
+  //     submissions: [],
+  //   };
+  // }
+
+  let values = [];
+  
+  for (const s of yta) {
+    const index: Index = {
+      id: s.id,
+      created_utc: s.created_utc,
+      score: s.score
+    };
+
+    values.push(index);
+  }
+
+  for (const s of nta) {
+    const index: Index = {
+      id: s.id,
+      created_utc: s.created_utc,
+      score: s.score
+    };
+
+    values.push(index);
+  }
+
 
   const submissions = [];
 
@@ -142,36 +95,39 @@ function useSubmission(
       <ShowAlert payload={"Highest number of YTA"} type={"error"}></ShowAlert>
     </strong>
   );
-  submissions.push(<ViewSubmission {...results[0]} key={JSON.stringify(results[0])} />);
+
+
+
+  submissions.push(<ViewSubmission {...values[0]} key={Math.random()} />);
 
   submissions.push(
     <strong key={Math.random()}>
       <ShowAlert payload={"Highest number of NTA"} type={"success"}></ShowAlert>
     </strong>
   );
-  submissions.push(<ViewSubmission {...results[1]} key={results[1]?.id} />);
+  submissions.push(<ViewSubmission {...values[1]} key={Math.random()} />);
 
-  submissions.push(
-    <strong key={Math.random()}>
-      <ShowAlert payload={"Highest number of NAH"} type={"warning"}></ShowAlert>
-    </strong>
-  );
-  submissions.push(<ViewSubmission {...results[2]} key={results[2]?.id} />);
+  // submissions.push(
+  //   <strong key={Math.random()}>
+  //     <ShowAlert payload={"Highest number of NAH"} type={"warning"}></ShowAlert>
+  //   </strong>
+  // );
+  // submissions.push(<ViewSubmission {...results[2]} key={results[2]?.id} />);
 
-  submissions.push(
-    <strong key={Math.random()}>
-      <ShowAlert payload={"Highest number of INFO"} type={"info"}></ShowAlert>
-    </strong>
-  );
-  submissions.push(<ViewSubmission {...results[3]} key={results[3]?.id} />);
+  // submissions.push(
+  //   <strong key={Math.random()}>
+  //     <ShowAlert payload={"Highest number of INFO"} type={"info"}></ShowAlert>
+  //   </strong>
+  // );
+  // submissions.push(<ViewSubmission {...results[3]} key={results[3]?.id} />);
 
-  submissions.push(
-    <strong key={Math.random()}>
-      <ShowAlert payload={"Highest Number of ESH"} type={"base"}></ShowAlert>
-    </strong>
-  );
+  // submissions.push(
+  //   <strong key={Math.random()}>
+  //     <ShowAlert payload={"Highest Number of ESH"} type={"base"}></ShowAlert>
+  //   </strong>
+  // );
 
-  submissions.push(<ViewSubmission {...results[4]} key={results[4]?.id} />);
+  // submissions.push(<ViewSubmission {...results[4]} key={results[4]?.id} />);
 
   return {
     submissions: submissions,
@@ -196,31 +152,34 @@ export default function ViewTop() {
     }
   }
 
-  const month = searchParams.get("month") || new Date().getMonth();
+  const month = searchParams.get("month") || new Date().toLocaleString('default', { month: 'long' });
   const year = searchParams.get("year") || new Date().getFullYear();
 
-  const { tops, isLoading, isError } = useIndexes();
 
-  const [selectedMonth, setMonth] = useState<number>(Number(month));
+  const [selectedMonth, setMonth] = useState<string>(month);
   const [selectedYear, setYear] = useState<number>(Number(year));
 
-  const { submissions } = useSubmission(tops, selectedMonth, selectedYear);
+  
+  const { yta } = getYTA(selectedMonth, selectedYear);
+  const { nta } = getNTA(selectedMonth, selectedYear);
+  
+  const { submissions } = useSubmission(yta, nta);
 
-  if (isLoading)
-    return (
-      <div className="p-2">
-        <span className="loading loading-dots loading-lg"></span>
-      </div>
-    );
+  // if (isLoading)
+  //   return (
+  //     <div className="p-2">
+  //       <span className="loading loading-dots loading-lg"></span>
+  //     </div>
+  //   );
 
-  if (isError) {
-    return (
-      <ShowAlert
-        payload={"Please try again later, there has been an error"}
-        type={"error"}
-      />
-    );
-  }
+  // if (isError) {
+  //   return (
+  //     <ShowAlert
+  //       payload={"Please try again later, there has been an error"}
+  //       type={"error"}
+  //     />
+  //   );
+  // }
 
   return (
     <div className="pt-6 p-2" key={Math.random()}>
@@ -241,7 +200,7 @@ export default function ViewTop() {
               onChange={(e) => {
                 e.preventDefault();
 
-                const month: number = parseInt(e.target.value);
+                const month: string = e.target.value;
                 setMonth(month);
 
                 const currentQuery = {
@@ -254,19 +213,19 @@ export default function ViewTop() {
                 e.stopPropagation();
               }}
             >
-              <option value="0">Jan</option>
-              <option value="1">Feb</option>
-              <option value="2">March</option>
-              <option value="3">April</option>
-              <option value="4">May</option>
-              <option value="5">Jun</option>
-              <option value="6">July</option>
-              <option value="7">August</option>
-              <option value="8">Sep</option>
-              <option value="9">October</option>
-              <option value="10">November</option>
-              <option value="11">December</option>
-              <option value="12">All time</option>
+              <option value="January">Jan</option>
+              <option value="February">Feb</option>
+              <option value="March">March</option>
+              <option value="April">April</option>
+              <option value="May">May</option>
+              <option value="Jun">Jun</option>
+              <option value="July">July</option>
+              <option value="August">August</option>
+              <option value="September">Sep</option>
+              <option value="October">October</option>
+              <option value="November">November</option>
+              <option value="December">December</option>
+              <option value="13">All time</option>
             </select>
           </div>
 

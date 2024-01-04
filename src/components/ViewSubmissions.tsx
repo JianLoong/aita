@@ -15,7 +15,9 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 function defaultSubmissions(startUTC, endUTC, noOfPost) {
 
-  const indexesEndPoint = `http://localhost:8000/search_submission?start_utc=${startUTC}&end_utc=${endUTC}&offset=0&limit=${noOfPost}`;
+  // const indexesEndPoint = `http://localhost:8000/api/v2/submission/search?startUTC=${startUTC}&endUTC=${endUTC}&offset=0&limit=${noOfPost}`;
+
+  const indexesEndPoint = `http://localhost:8000/api/v2/submisssion/search?startUTC=${startUTC}&endUTC=${endUTC}`
 
   const { data, error, isLoading } = useSWR(indexesEndPoint, fetcher);
 
