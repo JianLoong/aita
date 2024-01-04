@@ -24,7 +24,7 @@ function App() {
               <Route path="/about" element={<About />} />
               <Route
                 path="/submission/:id"
-                element={<ViewSubmission id={0} created_utc={0} score={0} />}
+                element={<ViewSubmission id={0} submission_id={""} title={""} selftext={""} created_utc={0} permalink={""} score={0} replies={[]} />}
               />
               <Route path="/*" element={<Navigate to="/" />} />
             </Routes>

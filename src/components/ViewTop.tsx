@@ -3,20 +3,13 @@ import { useState } from "react";
 import { useSearchParams, useLocation } from "react-router-dom";
 import useSWR from "swr";
 import { ViewSubmission } from "./ViewSubmission";
-
-
 import { ShowAlert } from "./ShowAlert";
-import { Index } from "../types";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-
-
-
-
-function getYTA(  
+function getYTA(
   selectedMonth: string,
-  selectedYear: number){
+  selectedYear: number) {
 
   const submissionEndPoint = `http://localhost:8000/api/v2/top?year=${selectedYear}&month=${selectedMonth}&type=yta`;
 
@@ -28,9 +21,38 @@ function getYTA(
 
 }
 
-function getNTA(  
+function getINFO(
   selectedMonth: string,
-  selectedYear: number){
+  selectedYear: number) {
+
+  const submissionEndPoint = `http://localhost:8000/api/v2/top?year=${selectedYear}&month=${selectedMonth}&type=info`;
+
+  let { data } = useSWR(submissionEndPoint, fetcher);
+
+  return {
+    info: data,
+  }
+
+}
+
+
+function getNAH(
+  selectedMonth: string,
+  selectedYear: number) {
+
+  const submissionEndPoint = `http://localhost:8000/api/v2/top?year=${selectedYear}&month=${selectedMonth}&type=nah`;
+
+  let { data } = useSWR(submissionEndPoint, fetcher);
+
+  return {
+    nah: data,
+  }
+
+}
+
+function getNTA(
+  selectedMonth: string,
+  selectedYear: number) {
 
   const submissionEndPoint = `http://localhost:8000/api/v2/top?year=${selectedYear}&month=${selectedMonth}&type=nta`;
 
@@ -44,47 +66,31 @@ function getNTA(
 
 function useSubmission(
   yta,
-  nta
+  nta,
+  nah,
+  info
 ) {
-  if (yta === undefined || nta === undefined)
+  if (yta === undefined || nta === undefined || nah === undefined || info === undefined)
     return {
       submissions: [],
     };
 
-  if (yta.length == 0 || nta.length == 0)
+  if (yta.length == 0 || nta.length == 0 || nah.length == 0 || info.length == 0)
     return {
       submissions: []
-  }
-
-  // const selectedSubmissions = [];
-
-  // // Get top post here
-  // if (selectedSubmissions.length == 0) {
-  //   return {
-  //     submissions: [],
-  //   };
-  // }
+    }
 
   let values = [];
-  
   for (const s of yta) {
-    const index: Index = {
-      id: s.id,
-      created_utc: s.created_utc,
-      score: s.score
-    };
-
-    values.push(index);
+    values.push(s);
   }
 
   for (const s of nta) {
-    const index: Index = {
-      id: s.id,
-      created_utc: s.created_utc,
-      score: s.score
-    };
+    values.push(s);
+  }
 
-    values.push(index);
+  for (const s of nah) {
+    values.push(s);
   }
 
 
@@ -107,12 +113,12 @@ function useSubmission(
   );
   submissions.push(<ViewSubmission {...values[1]} key={Math.random()} />);
 
-  // submissions.push(
-  //   <strong key={Math.random()}>
-  //     <ShowAlert payload={"Highest number of NAH"} type={"warning"}></ShowAlert>
-  //   </strong>
-  // );
-  // submissions.push(<ViewSubmission {...results[2]} key={results[2]?.id} />);
+  submissions.push(
+    <strong key={Math.random()}>
+      <ShowAlert payload={"Highest number of NAH"} type={"warning"}></ShowAlert>
+    </strong>
+  );
+  submissions.push(<ViewSubmission {...values[2]} key={values[2]?.id} />);
 
   // submissions.push(
   //   <strong key={Math.random()}>
@@ -159,11 +165,13 @@ export default function ViewTop() {
   const [selectedMonth, setMonth] = useState<string>(month);
   const [selectedYear, setYear] = useState<number>(Number(year));
 
-  
+
   const { yta } = getYTA(selectedMonth, selectedYear);
   const { nta } = getNTA(selectedMonth, selectedYear);
-  
-  const { submissions } = useSubmission(yta, nta);
+  const { nah } = getNAH(selectedMonth, selectedYear);
+  const { info } = getINFO(selectedMonth, selectedYear);
+
+  const { submissions } = useSubmission(yta, nta, nah, info);
 
   // if (isLoading)
   //   return (
@@ -225,7 +233,7 @@ export default function ViewTop() {
               <option value="October">October</option>
               <option value="November">November</option>
               <option value="December">December</option>
-              <option value="13">All time</option>
+              <option value="allMonths">All time</option>
             </select>
           </div>
 

@@ -17,7 +17,7 @@ function defaultSubmissions(startUTC, endUTC, noOfPost) {
 
   // const indexesEndPoint = `http://localhost:8000/api/v2/submission/search?startUTC=${startUTC}&endUTC=${endUTC}&offset=0&limit=${noOfPost}`;
 
-  const indexesEndPoint = `http://localhost:8000/api/v2/submisssion/search?startUTC=${startUTC}&endUTC=${endUTC}`
+  const indexesEndPoint = `http://localhost:8000/api/v2/submisssion/search?startUTC=${startUTC}&endUTC=${endUTC}&offset=0&limit=${noOfPost}`
 
   const { data, error, isLoading } = useSWR(indexesEndPoint, fetcher);
 
@@ -57,13 +57,8 @@ function useSubmission(
   if (data != undefined) {
 
     for (const s of data) {
-      const index: Index = {
-        id: s.id,
-        created_utc: s.created_utc,
-        score: s.score
-      };
 
-      values.push(index);
+      values.push(s);
     }
 
     for (const index of values) {
@@ -77,6 +72,8 @@ function useSubmission(
 
   return {
     submissions: submissions,
+    isLoading: isLoading,
+    isError: isError
   };
 }
 
@@ -117,28 +114,28 @@ export default function ViewSubmissions() {
   const endUTC = endOfDay.getTime() / 1000;
 
   
-  const { submissions } = useSubmission(
+  const { submissions, isLoading, isError } = useSubmission(
     startUTC,
     endUTC,
     selectedNoOfPost,
     selectedSortOrder
   );
 
-  // if (isError) {
-  //   return (
-  //     <ShowAlert
-  //       payload={"Please try again later, there has been an error"}
-  //       type={"error"}
-  //     />
-  //   );
-  // }
+  if (isError) {
+    return (
+      <ShowAlert
+        payload={"Please try again later, there has been an error"}
+        type={"error"}
+      />
+    );
+  }
 
-  // if (isLoading)
-  //   return (
-  //     <div className="p-2">
-  //       <span className="loading loading-dots loading-lg"></span>
-  //     </div>
-  //   );
+  if (isLoading)
+    return (
+      <div className="p-2">
+        <span className="loading loading-dots loading-lg"></span>
+      </div>
+    );
 
   return (
     <div className="pt-6 p-2" key={1}>

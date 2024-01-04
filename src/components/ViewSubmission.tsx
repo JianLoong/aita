@@ -9,6 +9,7 @@ import { memo, useState } from "react";
 import { EmotionTable } from "./EmotionTable";
 import { PieChart } from "./PieChart";
 import { SimpleCloud } from "./SimpleCloud";
+import { Submission } from "../types/submission";
 
 interface Entry {
   value: string;
@@ -52,31 +53,31 @@ function useSummary(id: number) {
   };
 }
 
-function useSubmission(id: number) {
-  // const submissionEndPoint = `https://jian.sh/reddit-store/api/submissions/${id}.json`;
-  const submissionEndPoint = `http://localhost:8000/api/v2/submission/${id}`;
-  const { data, error, isLoading } = useSWR(submissionEndPoint, fetcher);
+// function useSubmission(id: number) {
+//   // const submissionEndPoint = `https://jian.sh/reddit-store/api/submissions/${id}.json`;
+//   const submissionEndPoint = `http://localhost:8000/api/v2/submission/${id}`;
+//   const { data, error, isLoading } = useSWR(submissionEndPoint, fetcher);
 
-  return {
-    submission: data,
-    isLoading,
-    isError: error,
-  };
-}
+//   return {
+//     submission: data,
+//     isLoading,
+//     isError: error,
+//   };
+// }
 
-export const ViewSubmission = memo(({ id }: Index) => {
+export const ViewSubmission = memo((submission: Submission) => {
   const location = useLocation();
 
-  const submissionId = Number(location["pathname"].split("/")[2]) || id;
+  // const submissionId = Number(location["pathname"].split("/")[2]) || id;
 
-  const { submission, isLoading, isError } = useSubmission(submissionId);
+  // const { submission, isLoading, isError } = useSubmission(submissionId);
 
   const [shown, setShown] = useState<boolean>(false);
 
   const [repliesShown, setShowReplies] = useState<boolean>(false);
 
   const { summary, wordFrequency, isSummaryLoading, isSummaryError } =
-    useSummary(submissionId);
+    useSummary(submission.id);
 
   const handleShow = () => {
     setShown(!shown);
@@ -86,21 +87,21 @@ export const ViewSubmission = memo(({ id }: Index) => {
     setShowReplies(!repliesShown);
   };
 
-  if (isLoading)
-    return (
-      <div>
-        <span className="loading loading-dots loading-lg"></span>
-      </div>
-    );
+  // if (isLoading)
+  //   return (
+  //     <div>
+  //       <span className="loading loading-dots loading-lg"></span>
+  //     </div>
+  //   );
 
-  if (isError || isSummaryError) {
-    return (
-      <ShowAlert
-        payload={"Please try again later, there has been an error"}
-        type={"error"}
-      />
-    );
-  }
+  // if (isError || isSummaryError) {
+  //   return (
+  //     <ShowAlert
+  //       payload={"Please try again later, there has been an error"}
+  //       type={"error"}
+  //     />
+  //   );
+  // }
 
   if (isSummaryLoading)
     return (
