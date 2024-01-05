@@ -7,6 +7,7 @@ import { convertDate, makeHTMLFromString } from "../utils/helpers";
 import { EmotionTable } from "./EmotionTable";
 import { PieChart } from "./PieChart";
 import { SimpleCloud } from "./SimpleCloud";
+import { ShowAlert } from "./ShowAlert";
 
 interface Entry {
   value: string;
@@ -14,6 +15,18 @@ interface Entry {
 }
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
+
+function useSubmission(id: Number){
+  const summaryEndPoint = `http://localhost:8000/api/v2/submission/${id}`;
+
+  const {data, error, isLoading} = useSWR(summaryEndPoint, fetcher);
+
+  return {
+    submission: data,
+    isError: error,
+    isLoading: isLoading
+  }
+}
 
 function useSummary(id: number) {
 
@@ -50,19 +63,21 @@ function useSummary(id: number) {
   };
 }
 
-export const ViewSubmission = memo((submission: Submission) => {
+export const ViewSubmission = memo((currentSubmission: Submission) => {
   const location = useLocation();
 
-  // const submissionId = Number(location["pathname"].split("/")[2]) || id;
+  const submissionId = Number(location["pathname"].split("/")[2]) || currentSubmission.id;
 
-  // const { submission, isLoading, isError } = useSubmission(submissionId);
+
+  const { submission, isLoading, isError } = useSubmission(submissionId);
+  
 
   const [shown, setShown] = useState<boolean>(false);
 
   const [repliesShown, setShowReplies] = useState<boolean>(false);
 
   const { summary, wordFrequency, isSummaryLoading, isSummaryError } =
-    useSummary(submission.id);
+    useSummary(submissionId);
 
   const handleShow = () => {
     setShown(!shown);
@@ -72,21 +87,21 @@ export const ViewSubmission = memo((submission: Submission) => {
     setShowReplies(!repliesShown);
   };
 
-  // if (isLoading)
-  //   return (
-  //     <div>
-  //       <span className="loading loading-dots loading-lg"></span>
-  //     </div>
-  //   );
+  if (isLoading)
+    return (
+      <div>
+        <span className="loading loading-dots loading-lg"></span>
+      </div>
+    );
 
-  // if (isError || isSummaryError) {
-  //   return (
-  //     <ShowAlert
-  //       payload={"Please try again later, there has been an error"}
-  //       type={"error"}
-  //     />
-  //   );
-  // }
+  if (isError) {
+    return (
+      <ShowAlert
+        payload={"Please try again later, there has been an error"}
+        type={"error"}
+      />
+    );
+  }
 
   if (isSummaryLoading)
     return (
@@ -152,6 +167,10 @@ export const ViewSubmission = memo((submission: Submission) => {
   };
 
   return (
+    <>
+    {
+      
+    }
     <div key={submission?.id}>
       <div id={"section" + submission?.id} className=""></div>
       <div className="card mb-2 bg-base-100 shadow-xl p-3">
@@ -234,7 +253,7 @@ export const ViewSubmission = memo((submission: Submission) => {
             <></>
           ) : (
             <div>
-              <button
+              {/* <button
                 className="btn btn-info"
                 name="repliesShown"
                 onClick={handleShowReplies}
@@ -247,16 +266,16 @@ export const ViewSubmission = memo((submission: Submission) => {
               </button>
 
               <div className={repliesShown ? "break-all" : "hidden"}>
-                {/* <ViewToxicity sentences={submission?.selftext} /> */}
                 <br />
                 {submission?.replies.map((e: string) => {
                   return <li key={Math.random()}>{e}</li>;
                 })}
-              </div>
+              </div> */}
             </div>
           )}
         </div>
       </div>
     </div>
+    </>
   );
 });

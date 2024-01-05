@@ -17,6 +17,7 @@ function getCounts(
     parallel: true,
   });
 
+
   return {
     data: data,
     isLoading: isLoading,
@@ -40,8 +41,16 @@ function useSubmission(
 
   let values = [];
   for (const s of counts) {
-    values.push(s[0]);
+      if (s[0] != undefined)
+        values.push(s[0]);
   }
+
+  if (values.length == 0) {
+    return {
+      submissions: []
+    }
+  }
+
 
   const submissions = [];
 
