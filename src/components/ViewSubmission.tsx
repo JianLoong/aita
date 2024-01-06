@@ -8,6 +8,7 @@ import { EmotionTable } from "./EmotionTable";
 import { PieChart } from "./PieChart";
 import { SimpleCloud } from "./SimpleCloud";
 import { ShowAlert } from "./ShowAlert";
+import { ViewAIInference } from "./ViewAIInference";
 
 interface Entry {
   value: string;
@@ -68,23 +69,15 @@ export const ViewSubmission = memo((currentSubmission: Submission) => {
 
   const submissionId = Number(location["pathname"].split("/")[2]) || currentSubmission.id;
 
-
   const { submission, isLoading, isError } = useSubmission(submissionId);
   
-
   const [shown, setShown] = useState<boolean>(false);
 
-  const [repliesShown, setShowReplies] = useState<boolean>(false);
-
-  const { summary, wordFrequency, isSummaryLoading, isSummaryError } =
+  const { summary, wordFrequency, isSummaryLoading } =
     useSummary(submissionId);
 
   const handleShow = () => {
     setShown(!shown);
-  };
-
-  const handleShowReplies = () => {
-    setShowReplies(!repliesShown);
   };
 
   if (isLoading)
@@ -114,63 +107,8 @@ export const ViewSubmission = memo((currentSubmission: Submission) => {
 
   const selfText = makeHTMLFromString(submission?.selftext);
 
-  const isDirectPage = location["pathname"].startsWith("/submission");
-
-  // isDirectPage ? window.scrollTo(0, 0) : "";
-
-  const DownChevron = (props) => {
-    const text = props.value;
-
-    return (
-      <>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={1.5}
-          stroke="currentColor"
-          className="w-6 h-6"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M19.5 8.25l-7.5 7.5-7.5-7.5"
-          />
-        </svg>
-        {text}
-      </>
-    );
-  };
-
-  const UpChevron = (props) => {
-    const text = props.value;
-
-    return (
-      <>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={1.5}
-          stroke="currentColor"
-          className="w-6 h-6"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M4.5 15.75l7.5-7.5 7.5 7.5"
-          />
-        </svg>
-        {text}
-      </>
-    );
-  };
-
   return (
     <>
-    {
-      
-    }
     <div key={submission?.id}>
       <div id={"section" + submission?.id} className=""></div>
       <div className="card mb-2 bg-base-100 shadow-xl p-3">
@@ -240,39 +178,16 @@ export const ViewSubmission = memo((currentSubmission: Submission) => {
               <br />
               <PieChart className="p-2" {...summary} />
             </div>
+
+           
           </div>
-
-          {!isDirectPage ? (
-            // <NavLink
-            //   className="link"
-            //   to={"/submission/" + submission?.id}
-            //   key={submission?.id}
-            // >
-            //   View in detail
-            // </NavLink>
-            <></>
-          ) : (
-            <div>
-              {/* <button
-                className="btn btn-info"
-                name="repliesShown"
-                onClick={handleShowReplies}
-              >
-                {repliesShown ? (
-                  <UpChevron value="Hide Replies" />
-                ) : (
-                  <DownChevron value="Show Replies" />
-                )}
-              </button>
-
-              <div className={repliesShown ? "break-all" : "hidden"}>
-                <br />
-                {submission?.replies.map((e: string) => {
-                  return <li key={Math.random()}>{e}</li>;
-                })}
-              </div> */}
-            </div>
-          )}
+          <div
+            className={shown ? "grid" : "hidden"}
+            data-theme="wireframe"
+          >
+          
+          { submission?.id &&<ViewAIInference id={submission?.id} />}
+          </div>
         </div>
       </div>
     </div>
