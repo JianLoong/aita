@@ -69,11 +69,11 @@ export const ViewSubmission = memo((currentSubmission: Submission) => {
 
   const submissionId = Number(location["pathname"].split("/")[2]) || currentSubmission.id;
 
-  const { submission, isLoading, isError } = useSubmission(submissionId);
+  const { submission, isLoading, isError} = useSubmission(submissionId);
   
   const [shown, setShown] = useState<boolean>(false);
 
-  const { summary, wordFrequency, isSummaryLoading } =
+  const { summary, wordFrequency, isSummaryLoading, isSummaryError } =
     useSummary(submissionId);
 
   const handleShow = () => {
@@ -87,7 +87,7 @@ export const ViewSubmission = memo((currentSubmission: Submission) => {
       </div>
     );
 
-  if (isError) {
+  if (isError || isSummaryError) {
     return (
       <ShowAlert
         payload={"Please try again later, there has been an error"}
@@ -128,6 +128,7 @@ export const ViewSubmission = memo((currentSubmission: Submission) => {
               here
             </a>
           </p>
+          {
 
           <button className={"btn btn-info"} onClick={handleShow}>
             <svg
@@ -147,6 +148,7 @@ export const ViewSubmission = memo((currentSubmission: Submission) => {
 
             {shown ? "Hide Results" : "See what the others think.."}
           </button>
+          }
 
           {/* <p>
             Number of replies: <strong>{submission?.replies.length}</strong>

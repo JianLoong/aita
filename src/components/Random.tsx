@@ -6,47 +6,15 @@ import { ViewSubmission } from "./ViewSubmission";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-function useIndexes() {
-
-  const indexesEndPoint = "http://localhost:8000/api/v2/random";
-
-  const { data, error, isLoading } = useSWR(indexesEndPoint, fetcher);
-
-  return {
-    indexes: data,
-    isLoading: isLoading,
-    isError: error,
-  };
-}
-
-function useSubmissions(indexes) {
-  const submissions = [];
-
-  if (indexes === undefined)
-    return {
-      submissions: submissions,
-    };
-
-  submissions.push(
-    <ViewSubmission {...indexes} key={Date.now()} />
-  );
-
-  return {
-    submissions: submissions,
-  };
-}
-
 export default function Random() {
 
   const location = useLocation();
 
- 
+  const randomEndPoint = "http://localhost:8000/api/v2/submissions/random";
 
-  const { indexes, isLoading, isError } = useIndexes();
+  let { data, error, mutate, isLoading } = useSWR(randomEndPoint, fetcher);
 
-  let { submissions } = useSubmissions(indexes);
-
-  if (isError) {
+  if (error) {
     return (
       <ShowAlert
         payload={"Please try again later, there has been an error"}
@@ -64,9 +32,7 @@ export default function Random() {
 
   function handleRefresh(event: React.MouseEvent<HTMLInputElement>): void {
     event.preventDefault();
-    
-    window.location.reload(); 
-
+    mutate()
   }
 
   //https://github.com/remix-run/react-router/issues/7416
@@ -74,13 +40,13 @@ export default function Random() {
     <>
     <p onClick={handleRefresh} className="flex flex-col items-center btn btn-primary">Get another random submission</p>
     <div className="pt-6 p-2" key={location.key}>
-      {submissions.length === 0 ? (
+      {data.length === 0 ? (
         <ShowAlert
           payload={"There are no submissions for this criteria."}
           type={"warning"}
         />
       ) : (
-        submissions
+        <ViewSubmission {...data} key={Date.now()} />
       )}
     </div>
     </>

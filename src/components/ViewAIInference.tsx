@@ -6,7 +6,7 @@ import { ShowAlert } from "./ShowAlert";
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 function useInference(id: Number){
-  const summaryEndPoint = `http://localhost:8000/api/v2/openai_analysis/${id}`;
+  const summaryEndPoint = `http://localhost:8000/api/v2/openai-analysis/${id}`;
 
   const {data, error, isLoading} = useSWR(summaryEndPoint, fetcher);
 
