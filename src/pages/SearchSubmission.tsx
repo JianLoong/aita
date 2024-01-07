@@ -1,8 +1,6 @@
-import Fuse from "fuse.js";
 import { useState, KeyboardEvent } from "react";
 import useSWR from "swr";
 import { NavLink } from "react-router-dom";
-import { useSearchParams } from "react-router-dom";
 import { ShowAlert } from "../components/ShowAlert";
 
 interface Result {
@@ -12,53 +10,6 @@ interface Result {
 }
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
-
-function useSearch() {
-  const summaryEndPoint = `https://jian.sh/reddit-store/api/search/search.json`;
-
-  const { data, error, isLoading } = useSWR(summaryEndPoint, fetcher);
-
-  return {
-    searchIndexes: data,
-    isLoading: isLoading,
-    isError: error,
-  };
-}
-
-function useSearchResult(searchIndexes: Result[], searchQuery: string) {
-  const results: Result[] = [];
-
-  if (searchIndexes === undefined || searchQuery === undefined)
-    return {
-      results: [],
-    };
-  const options = {
-    includeScore: true,
-    keys: ["id", "title"],
-  };
-
-  // setDisabled(true);
-
-  const fuse = new Fuse(searchIndexes, options);
-
-  const fuseResults = fuse.search(searchQuery, {
-    limit: 20,
-  });
-
-  fuseResults.forEach((e) => {
-    const result = {
-      id: e.item.id,
-      score: e.score,
-      title: e.item.title,
-    } as Result;
-
-    results.push(result);
-  });
-
-  return {
-    results: results,
-  };
-}
 
 function createResultTable(results: Result[]) {
   if (results.length == 0) {
@@ -97,19 +48,29 @@ function createResultTable(results: Result[]) {
 
 export default function SearchSubmission() {
   // Search params to be used for input
-  const [searchParams, setSearchParams] = useSearchParams();
+  // const [searchParams, setSearchParams] = useSearchParams();
 
-  const queryString = searchParams.get("query") || "";
+  // const queryString = searchParams.get("query") || "";
 
-  const { searchIndexes, isLoading } = useSearch();
+  const [selectedSearchQuery, setSearchQuery] = useState<string>("");
 
-  const [selectedSearchQuery, setSearchQuery] = useState<string>(queryString);
+  const [shouldFetch, setShouldFetch] = useState<boolean>(false)
+  const fuzzySearchEndPoint = `http://localhost:8000/api/v2/submissions/fuzzy-search?query=${selectedSearchQuery}`
 
-  const { results } = useSearchResult(searchIndexes, selectedSearchQuery);
+  const { data, error, isLoading } = useSWR(shouldFetch ? fuzzySearchEndPoint : null, fetcher);
+
+  if (error) {
+    return (
+      <ShowAlert
+        payload={"Please try again later, there has been an error"}
+        type={"error"}
+      />
+    );
+  }
 
   if (isLoading)
     return (
-      <div>
+      <div className="p-2">
         <span className="loading loading-dots loading-lg"></span>
       </div>
     );
@@ -131,17 +92,21 @@ export default function SearchSubmission() {
             placeholder="Type anything and hit enter to begin search..."
             aria-label="search"
             onKeyDown={(e: KeyboardEvent<HTMLInputElement>) => {
+              
               if (e.key === "Enter") {
                 e.preventDefault();
                 setSearchQuery(e.currentTarget.value);
-                setSearchParams("query=" + e.currentTarget.value);
+                setShouldFetch(true);
               }
+              
             }}
             aria-describedby="search"
           />
         </form>
+        <br />
+
         <div className="pt-2">
-          {results.length != 0 ? (
+          {data  && data.length != 0 ? (
             <ShowAlert
               payload={"Search results are as follows"}
               type={"success"}
@@ -155,9 +120,10 @@ export default function SearchSubmission() {
             ""
           )}
         </div>
+
       </div>
 
-      <div className="pt-5">{createResultTable(results)}</div>
+      <div className="pt-5">{data && createResultTable(data)}</div>
     </div>
   );
 }
