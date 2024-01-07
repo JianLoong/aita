@@ -18,6 +18,7 @@ interface Entry {
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 function useSubmission(id: Number){
+
   const summaryEndPoint = `http://localhost:8000/api/v2/submission/${id}`;
 
   const {data, error, isLoading} = useSWR(summaryEndPoint, fetcher);
@@ -64,30 +65,29 @@ function useSummary(id: number) {
   };
 }
 
-export const ViewSubmission = memo((currentSubmission: Submission) => {
+export const ViewSubmission = memo((submission: Submission) => {
   const location = useLocation();
 
-  const submissionId = Number(location["pathname"].split("/")[2]) || currentSubmission.id;
+  if (location.state != undefined)
+    submission = location.state;
 
-  const { submission, isLoading, isError} = useSubmission(submissionId);
-  
   const [shown, setShown] = useState<boolean>(false);
 
   const { summary, wordFrequency, isSummaryLoading, isSummaryError } =
-    useSummary(submissionId);
+    useSummary(submission.id);
 
   const handleShow = () => {
     setShown(!shown);
   };
 
-  if (isLoading)
+  if (isSummaryLoading)
     return (
       <div>
         <span className="loading loading-dots loading-lg"></span>
       </div>
     );
 
-  if (isError || isSummaryError) {
+  if (isSummaryError) {
     return (
       <ShowAlert
         payload={"Please try again later, there has been an error"}

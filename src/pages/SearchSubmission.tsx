@@ -2,17 +2,13 @@ import { useState, KeyboardEvent } from "react";
 import useSWR from "swr";
 import { NavLink } from "react-router-dom";
 import { ShowAlert } from "../components/ShowAlert";
+import { Submission } from "../types/submission";
 
-interface Result {
-  id: string;
-  title: string;
-  score: number;
-}
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-function createResultTable(results: Result[]) {
-  if (results.length == 0) {
+function createResultTable(submission: Submission[]) {
+  if (submission.length == 0) {
     return "";
   }
 
@@ -28,12 +24,13 @@ function createResultTable(results: Result[]) {
           </tr>
         </thead>
         <tbody>
-          {results.map((result) => {
+          {submission.map((result) => {
             return (
               <tr key={result.id}>
                 <td>{result.id}</td>
                 <td className="">
-                  <NavLink className="link" to={"/submission/" + result.id}>
+                  <NavLink 
+                  className="link" to={"/submission/" + result.id} state={result}>
                     {result.title}
                   </NavLink>
                 </td>
