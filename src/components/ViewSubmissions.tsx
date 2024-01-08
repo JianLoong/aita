@@ -76,7 +76,7 @@ export default function ViewSubmissions() {
   }
 
   const noOfPost = searchParams.get("noOfPost") || 5;
-  const sortOrder = searchParams.get("sortOrder") || "score";
+  const sortOrder = searchParams.get("sortOrder") || "id";
   const queryDate = searchParams.get("date") || new Date().getTime().toString();
 
   const [selectedNoOfPost, setNoOfPost] = useState<number>(Number(noOfPost));
@@ -178,8 +178,10 @@ export default function ViewSubmissions() {
                 e.stopPropagation();
               }}
             >
+              <option value="id">id</option>
               <option value="new">new</option>
               <option value="score">score</option>
+
             </select>
           </div>
 
