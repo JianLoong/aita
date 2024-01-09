@@ -130,6 +130,7 @@ export const ViewSubmission = memo((submission: Submission) => {
           </p>
           {
 
+          summary &&
           <button className={"btn btn-info"} onClick={handleShow}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -145,19 +146,25 @@ export const ViewSubmission = memo((submission: Submission) => {
                 d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"
               />
             </svg>
+            
 
-            {shown ? "Hide Results" : "See what the others think.."}
+            {shown  ? "Hide Results" : "See what the others think.."}
           </button>
           }
 
           {/* <p>
             Number of replies: <strong>{submission?.replies.length}</strong>
           </p> */}
-
+          <div className={shown? "" : "hidden"}>
+          { submission?.id &&<ViewAIInference id={submission?.id} />}
+          </div>
+          { summary && <>
           <div
             className={shown ? "grid grid-cols-1 md:grid-cols-3" : "hidden"}
             data-theme="wireframe"
           >
+
+          
             <div className="m-1">
               <h3 className="text-center">
                 <strong>Generated Word Cloud</strong>
@@ -181,14 +188,17 @@ export const ViewSubmission = memo((submission: Submission) => {
               <PieChart className="p-2" {...summary} />
             </div>
 
-           
-          </div>
+  
+            </div>
+          </>
+          }
+        
           <div
             className={shown ? "grid" : "hidden"}
             data-theme="wireframe"
           >
           
-          { submission?.id &&<ViewAIInference id={submission?.id} />}
+          
           </div>
         </div>
       </div>

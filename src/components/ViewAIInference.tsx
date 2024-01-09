@@ -51,7 +51,7 @@ export const ViewAIInference = (inf) => {
    
     <div key={inference?.id}>
       <div id={"section" + inference?.id} className=""></div>
-      <div className="card mb-2 bg-base-100 shadow-xl p-3">
+      <div className="card mb-2 bg-base-100 shadow-xl">
         <div className="card-body">
           <h2 className="card-title">
             <strong>OpenAI Analytics</strong>

@@ -33,8 +33,8 @@ function useSubmission(
 ) {
   const submissions = [];
 
-  const {data, isLoading, isError } = defaultSubmissions(startUTC, endUTC, selectedNoOfPost, selectedSortOrder);
-  
+  const { data, isLoading, isError } = defaultSubmissions(startUTC, endUTC, selectedNoOfPost, selectedSortOrder);
+
   const values = [];
 
   if (data != undefined) {
@@ -91,7 +91,7 @@ export default function ViewSubmissions() {
   const startUTC = startOfDay.getTime() / 1000;
   const endUTC = endOfDay.getTime() / 1000;
 
-  
+
   const { submissions, isLoading, isError } = useSubmission(
     startUTC,
     endUTC,
@@ -108,12 +108,12 @@ export default function ViewSubmissions() {
     );
   }
 
-  if (isLoading)
-    return (
-      <div className="p-2">
-        <span className="loading loading-dots loading-lg"></span>
-      </div>
-    );
+  // if (isLoading)
+  //   return (
+  //     <div className="p-2">
+  //       <span className="loading loading-dots loading-lg"></span>
+  //     </div>
+  //   );
 
   return (
     <div className="pt-6 p-2" key={1}>
@@ -213,7 +213,18 @@ export default function ViewSubmissions() {
           </div>
         </div>
       </form>
-      {submissions.length === 0 ? (
+      {
+        isLoading && 
+        <div className="card skeleton w-auto rounded-full h-screen items-center">
+          <span className="loading loading-dots loading-lg items-center">
+            Loading submission
+          </span>
+        </div>
+      }
+
+
+
+      {!isLoading && submissions.length === 0 ? ( 
         <ShowAlert
           payload={"There are no submissions for this criteria."}
           type={"warning"}
