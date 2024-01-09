@@ -86,7 +86,7 @@ devDependencies:
     specifier: ^10.4.14
     version: 10.4.16(postcss@8.4.31)
   daisyui:
-    specifier: ^3.1.7
+    specifier: ^3.8.2
     version: 3.8.2
   eslint:
     specifier: ^8.38.0

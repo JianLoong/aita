@@ -7,7 +7,7 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 export default function ViewSummary({ id }: Index) {
   function useSummary(id: number) {
 
-    const summaryEndPoint = `http://localhost:8000/summary/${id}`;
+    const summaryEndPoint = `https://vmi1592589.contaboserver.net/api/v2/summary/${id}`;
 
     const { data, error, isLoading } = useSWR(summaryEndPoint, fetcher);
 

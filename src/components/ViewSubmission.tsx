@@ -19,7 +19,7 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 function useSubmission(id: Number){
 
-  const summaryEndPoint = `http://localhost:8000/api/v2/submission/${id}`;
+  const summaryEndPoint = `https://vmi1592589.contaboserver.net/api/v2/submission/${id}`;
 
   const {data, error, isLoading} = useSWR(summaryEndPoint, fetcher);
 
@@ -32,7 +32,7 @@ function useSubmission(id: Number){
 
 function useSummary(id: number) {
 
-  const summaryEndPoint = `http://localhost:8000/api/v2/summary/${id}`;
+  const summaryEndPoint = `https://vmi1592589.contaboserver.net/api/v2/summary/${id}`;
 
   const { data, error, isLoading } = useSWR(summaryEndPoint, fetcher, {
     compare: (a, b) => {

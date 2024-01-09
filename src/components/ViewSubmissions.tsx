@@ -13,7 +13,7 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 function defaultSubmissions(startUTC: number, endUTC: number, noOfPost: number, selectedSortOrder: string) {
 
-  const indexesEndPoint = `http://localhost:8000/api/v2/submisssions/search?startUTC=${startUTC}&endUTC=${endUTC}&offset=0&limit=${noOfPost}&sortBy=${selectedSortOrder}&orderBy=desc`
+  const indexesEndPoint = `https://vmi1592589.contaboserver.net/api/v2/submisssions/search?startUTC=${startUTC}&endUTC=${endUTC}&offset=0&limit=${noOfPost}&sortBy=${selectedSortOrder}&orderBy=desc`
 
   const { data, error, isLoading } = useSWR(indexesEndPoint, fetcher);
 
@@ -214,12 +214,16 @@ export default function ViewSubmissions() {
         </div>
       </form>
       {
-        isLoading && 
-        <div className="card skeleton w-auto rounded-full h-screen items-center">
-          <span className="loading loading-dots loading-lg items-center">
+        isLoading && [...Array(selectedNoOfPost)].map(() => 
+        <>
+        <div className="card-body skeleton w-auto rounded-full h-32 items-center">
+          <span className="loading loading-dots loading-lg">
             Loading submission
           </span>
         </div>
+        <br />
+        </>
+        )
       }
 
 

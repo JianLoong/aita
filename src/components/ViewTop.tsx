@@ -12,7 +12,7 @@ function getCounts(
   selectedYear: number) {
 
   const keys: string[] = ["yta", "nta", "nah", "info", "esh"];
-  const { data, isLoading, error } = useSWRInfinite((index) => `http://localhost:8000/api/v2/submissions/top?year=${selectedYear}&month=${selectedMonth}&type=${keys[index]}`, fetcher, {
+  const { data, isLoading, error } = useSWRInfinite((index) => `https://vmi1592589.contaboserver.net/api/v2/submissions/top?year=${selectedYear}&month=${selectedMonth}&type=${keys[index]}`, fetcher, {
     initialSize: keys.length,
     parallel: true,
   });
