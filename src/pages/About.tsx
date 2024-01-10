@@ -3,7 +3,6 @@ export default function About() {
     <div className="p-2 prose max-w-none">
        <h3>General Flow</h3>
       <div className="flex w-full justify-center items-center">
-      {/* <img className="" src="about.png" title="Overview of project" alt="Overview of projet"></img> */}
       </div>
       <div className="">
         <h1></h1>
@@ -11,27 +10,27 @@ export default function About() {
         <p>Back End</p>
         <ul>
           <li>
-            <strong>SQLite3</strong> - Currently with over 16,000 submissions
-            and over 5 million comments (1.9 GB SQLite3 file size) with earliest
+            <strong>SQLite3</strong> - Currently with nearing 35,000 submissions
+            and nearing 10 million comments (3.8 GB SQLite3 file size) with earliest
             data on November 1st 2022
           </li>
           <li>
             <strong>Python Scripts</strong> - Used to data crawl Reddit API,
-            Data Analysis and Sentiment Analysis via libraries. (Done by
-            initially creating a simple data warehouse)
+            Data Analysis done using various libraries including OpenAI libraries.
           </li>
           <li>
-            <strong>End Points</strong> - The Python scripts will also create
-            summary end points will be consumed by the front end.
-          </li>
-          <li>
-            <strong>Bash</strong> - Bash Scripts and cron jobs are used to
-            automate the running of these processes. (These scripts are deployed
-            on my RaspberryPi) and run every 2 hours
+            <strong>FastAPI</strong> - FastAPI used for RESTful API backend. 
+            Link can be found <a href="https://vmi1592589.contaboserver.net/docs">here</a>
           </li>
           <li>
             <strong>GH Pages</strong> - GH Pages are used to host these pages
-            and cached with CloudFlare - (So, this is actually a static site)
+            and cached with CloudFlare.
+          </li>
+          <li>
+            <strong>New Relic</strong> New Relic is also added to provide APM and analytics.
+          </li>
+          <li>
+            <strong>CI/CD pipeline</strong> Using GH actions to automate deploying is also done.
           </li>
         </ul>
         <p>Front End</p>
@@ -48,9 +47,6 @@ export default function About() {
           </li>
           <li>
             <strong>ChartJS</strong> - Used to generate the various charts.
-          </li>
-          <li>
-            <strong>Tensorflow JS</strong> - Used for toxicity analysis.
           </li>
         </ul>
 
