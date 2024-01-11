@@ -52,7 +52,7 @@ export default function SearchSubmission() {
   const [selectedSearchQuery, setSearchQuery] = useState<string>("");
 
   const [shouldFetch, setShouldFetch] = useState<boolean>(false)
-  const fuzzySearchEndPoint = `https://vmi1592589.contaboserver.net/api/v2/submissions/fuzzy-search?query=${selectedSearchQuery}`
+  const fuzzySearchEndPoint = `https://vmi1592589.contaboserver.net/aita/api/v2/submissions/fuzzy-search?query=${selectedSearchQuery}`
 
   const { data, error, isLoading } = useSWR(shouldFetch ? fuzzySearchEndPoint : null, fetcher);
 

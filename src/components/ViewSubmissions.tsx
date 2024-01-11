@@ -13,7 +13,7 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 function defaultSubmissions(startUTC: number, endUTC: number, noOfPost: number, selectedSortOrder: string) {
 
-  const indexesEndPoint = `https://vmi1592589.contaboserver.net/api/v2/submisssions/search?startUTC=${startUTC}&endUTC=${endUTC}&offset=0&limit=${noOfPost}&sortBy=${selectedSortOrder}&orderBy=desc`
+  const indexesEndPoint = `https://vmi1592589.contaboserver.net/aita/api/v2/submisssions/search?startUTC=${startUTC}&endUTC=${endUTC}&offset=0&limit=${noOfPost}&sortBy=${selectedSortOrder}&orderBy=desc`
 
   const { data, error, isLoading } = useSWR(indexesEndPoint, fetcher);
 

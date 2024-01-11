@@ -20,7 +20,7 @@ export default function About() {
           </li>
           <li>
             <strong>FastAPI</strong> - FastAPI used for RESTful API backend. 
-            Link can be found <a href="https://vmi1592589.contaboserver.net/docs">here</a>
+            Link can be found <a href="https://vmi1592589.contaboserver.net/aita/docs">here</a>
           </li>
           <li>
             <strong>GH Pages</strong> - GH Pages are used to host these pages

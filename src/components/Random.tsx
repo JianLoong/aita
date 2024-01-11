@@ -10,7 +10,7 @@ export default function Random() {
 
   const location = useLocation();
 
-  const randomEndPoint = "https://vmi1592589.contaboserver.net/api/v2/submissions/random";
+  const randomEndPoint = "https://vmi1592589.contaboserver.net/aita/api/v2/submissions/random";
 
   let { data, error, mutate, isLoading } = useSWR(randomEndPoint, fetcher);
 

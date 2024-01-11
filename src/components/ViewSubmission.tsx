@@ -19,7 +19,7 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 function useSummary(id: number) {
 
-  const summaryEndPoint = `https://vmi1592589.contaboserver.net/api/v2/summary/${id}`;
+  const summaryEndPoint = `https://vmi1592589.contaboserver.net/aita/api/v2/summary/${id}`;
 
   const { data, error, isLoading } = useSWR(summaryEndPoint, fetcher, {
     compare: (a, b) => {
