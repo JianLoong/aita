@@ -18,7 +18,6 @@ function createResultTable(submission: Submission[]) {
       <table className="table table-zebra table-x">
         <thead>
           <tr>
-            {/* <th>Id</th> */}
             <th className="">ID</th>
             <th className="">Post Title</th>
           </tr>

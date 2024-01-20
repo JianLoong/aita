@@ -61,10 +61,6 @@ export const ViewSubmission = memo((submission: Submission) => {
   const { summary, isSummaryLoading, isSummaryError } =
     useSummary(submission.id);
 
-  // const handleShow = () => {
-  //   setShown(!shown);
-  // };
-
   if (isSummaryLoading)
     return (
       <div>
@@ -115,10 +111,7 @@ export const ViewSubmission = memo((submission: Submission) => {
                     here
                   </a>
                 </p>
-
               </article>
-
-
               <div className="lg:col-span-1">
                 <h3 className="text-center">
                   <strong>Breakdown of Replies</strong>
@@ -128,57 +121,11 @@ export const ViewSubmission = memo((submission: Submission) => {
               </div>
 
             </div>
-
             {submission?.id && <ViewAIInference id={submission?.id} />}
-
-
-
-
-            {/* <p>
-            Number of replies: <strong>{submission?.replies.length}</strong>
-          </p> */}
-
-            {/* { summary && <>
-          <div
-            className={shown ? "grid grid-cols-1 md:grid-cols-3" : "hidden"}
-            data-theme="wireframe"
-          >
-
-          
-            <div className="m-1">
-              <h3 className="text-center">
-                <strong>Generated Word Cloud</strong>
-              </h3>
-              <br />
-              <SimpleCloud {...wordFrequency} />
-            </div>
-            <div className="m-1">
-              <h3 className="text-center">
-                <strong>Results of NRC Emotion Lexicon Analysis</strong>
-              </h3>
-              <br />
-              <EmotionTable {...summary} />
-            </div>
-
-            <div className="m-2">
-              <h3 className="text-center">
-                <strong>Breakdown of Replies</strong>
-              </h3>
-              <br />
-              <PieChart className="p-2" {...summary} />
-            </div>
-
-  
-            </div>
-          </>
-          } */}
-
             <div
               className={shown ? "grid" : "hidden"}
               data-theme="wireframe"
             >
-
-
             </div>
           </div>
         </div>
