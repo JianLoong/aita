@@ -96,56 +96,51 @@ export const ViewSubmission = memo((submission: Submission) => {
 
   return (
     <>
-    <div key={submission?.id}>
-      <div id={"section" + submission?.id} className=""></div>
-      <div className="card mb-2 bg-base-100 shadow-xl p-3">
-        <div className="card-body">
-          <h2 className="card-title">
-            <strong>{submission?.title}</strong>
-          </h2>
-          <small>{convertDate(submission?.created_utc)}</small>
+      <div key={submission?.id}>
+        <div id={"section" + submission?.id} className=""></div>
+        <div className="card mb-2 bg-base-100 shadow-xl p-3">
+          <div className="card-body">
+            <h2 className="card-title">
+              <strong>{submission?.title}</strong>
+            </h2>
+            <small>{convertDate(submission?.created_utc)}</small>
 
-          <article className="prose max-w-none">{parse(selfText)}</article>
-          <p>
-            View original post{" "}
-            <a
-              className="text-blue-600 dark:text-blue:500 hover:underline"
-              href={"https://reddit.com" + submission?.permalink}
-            >
-              here
-            </a>
-          </p>
-          {
+            <div className="grid grid-flow-row-dense lg:grid-cols-3">
 
-          summary &&
-          <button className={"btn btn-info"} onClick={handleShow}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="w-6 h-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"
-              />
-            </svg>
-            
+              <article className="prose max-w-none lg:col-span-2 p-2">{parse(selfText)}
+                <p>
+                  View original post{" "}
+                  <a
+                    className="text-blue-600 dark:text-blue:500 hover:underline"
+                    href={"https://reddit.com" + submission?.permalink}
+                  >
+                    here
+                  </a>
+                </p>
 
-            {shown  ? "Hide Results" : "See what the others think.."}
-          </button>
-          }
+              </article>
 
-          {/* <p>
+
+              <div className="lg:col-span-1">
+                <h3 className="text-center">
+                  <strong>Breakdown of Replies</strong>
+                </h3>
+                <br />
+                <PieChart className="p-2" {...summary} />
+              </div>
+
+            </div>
+
+            {submission?.id && <ViewAIInference id={submission?.id} />}
+
+
+
+
+            {/* <p>
             Number of replies: <strong>{submission?.replies.length}</strong>
           </p> */}
-          <div className={shown? "" : "hidden"}>
-          { submission?.id &&<ViewAIInference id={submission?.id} />}
-          </div>
-          { summary && <>
+
+            {/* { summary && <>
           <div
             className={shown ? "grid grid-cols-1 md:grid-cols-3" : "hidden"}
             data-theme="wireframe"
@@ -178,18 +173,18 @@ export const ViewSubmission = memo((submission: Submission) => {
   
             </div>
           </>
-          }
-        
-          <div
-            className={shown ? "grid" : "hidden"}
-            data-theme="wireframe"
-          >
-          
-          
+          } */}
+
+            <div
+              className={shown ? "grid" : "hidden"}
+              data-theme="wireframe"
+            >
+
+
+            </div>
           </div>
         </div>
       </div>
-    </div>
     </>
   );
 });

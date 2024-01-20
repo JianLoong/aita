@@ -53,12 +53,12 @@ export const ViewAIInference = (inf) => {
       <div id={"section" + inference?.id} className=""></div>
       <div className="card mb-2 bg-base-100 shadow-xl">
         <div className="card-body">
-          <h2 className="card-title">
-            <strong>OpenAI Analytics</strong>
+          <h2 className="chat-header">
+            <strong>OpenAI</strong>
           </h2>
           <p></p>
 
-          <article className="max-w-none" style={{whiteSpace: "pre-line"}}>{parse(inference?.text)}</article>
+          <article className="max-w-none chat-bubble" style={{whiteSpace: "pre-line"}}>{parse(inference?.text)}</article>
 
 
         </div>
