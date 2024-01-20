@@ -10,12 +10,10 @@ export const PieChart = (summary) => {
       ["No assholes here", summary?.counts?.nah_count],
     ];
 
-    const darkMode = document.querySelector('html').getAttribute('data-theme') == "dark" ? true : false;
 
     const options = {
       legend: { position: "bottom" },
-      is3D: true,
-      backgroundColor: darkMode ? "#f9f1f1" : '#f9f1f1',
+      is3D: false,
       colors: [
         "green",
         "red",
