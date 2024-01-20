@@ -4,9 +4,7 @@ import { useLocation } from "react-router-dom";
 import useSWR from "swr";
 import { Submission } from "../types/submission";
 import { convertDate, makeHTMLFromString } from "../utils/helpers";
-import { EmotionTable } from "./EmotionTable";
 import { PieChart } from "./PieChart";
-import { SimpleCloud } from "./SimpleCloud";
 import { ShowAlert } from "./ShowAlert";
 import { ViewAIInference } from "./ViewAIInference";
 
@@ -58,14 +56,14 @@ export const ViewSubmission = memo((submission: Submission) => {
   if (location.state != undefined)
     submission = location.state;
 
-  const [shown, setShown] = useState<boolean>(false);
+  const [shown ] = useState<boolean>(false);
 
-  const { summary, wordFrequency, isSummaryLoading, isSummaryError } =
+  const { summary, isSummaryLoading, isSummaryError } =
     useSummary(submission.id);
 
-  const handleShow = () => {
-    setShown(!shown);
-  };
+  // const handleShow = () => {
+  //   setShown(!shown);
+  // };
 
   if (isSummaryLoading)
     return (
