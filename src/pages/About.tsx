@@ -32,6 +32,9 @@ export default function About() {
           <li>
             <strong>CI/CD pipeline</strong> Using GH actions to automate deploying is also done.
           </li>
+          <li>
+            <strong>Cron</strong> Cron job is set to run every hour to crawl Reddit and do data analytics
+          </li>
         </ul>
         <p>Front End</p>
         <ul>
