@@ -114,8 +114,12 @@ export default function ViewTop() {
     }
   }
 
-  const month = searchParams.get("month") || new Date().toLocaleString('default', { month: 'long' });
+  let month = searchParams.get("month") || new Date().toLocaleString('default', { month: 'long' });
   const year = searchParams.get("year") || new Date().getFullYear();
+
+  // Hack for bad API call
+  if (month == "June")
+    month = "Jun" 
 
 
   const [selectedMonth, setMonth] = useState<string>(month);
@@ -180,7 +184,7 @@ export default function ViewTop() {
               <option value="March">March</option>
               <option value="April">April</option>
               <option value="May">May</option>
-              <option value="Jun">Jun</option>
+              <option value="June">June</option>
               <option value="July">July</option>
               <option value="August">August</option>
               <option value="September">Sep</option>
