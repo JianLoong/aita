@@ -30,11 +30,13 @@ export const SimpleCloud = ({ wordFrequency }) => {
       return null; // Don't render if no word frequency data
     }
 
+    const filteredWordFrequency = wordFrequency.filter(word => word.value !== 'https' && word.value !== 'www' && word.value !== 'r');
+
     return (
       <TagCloud
         minSize={30}
         maxSize={60}
-        tags={wordFrequency}
+        tags={filteredWordFrequency}
         colorOptions={options}
       />
     );
