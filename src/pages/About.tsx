@@ -26,9 +26,7 @@ export default function About() {
             <strong>GH Pages</strong> - GH Pages are used to host these pages
             and cached with CloudFlare.
           </li>
-          <li>
-            <strong>New Relic</strong> New Relic is also added to provide APM and analytics.
-          </li>
+          
           <li>
             <strong>CI/CD pipeline</strong> Using GH actions to automate deploying is also done.
           </li>
