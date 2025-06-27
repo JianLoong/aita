@@ -51,7 +51,7 @@ export default function SearchSubmission() {
   const [selectedSearchQuery, setSearchQuery] = useState<string>("");
 
   const [shouldFetch, setShouldFetch] = useState<boolean>(false)
-  const fuzzySearchEndPoint = `https://api.jian.sh/aita/api/v2/submissions/fuzzy-search?query=${selectedSearchQuery}`
+  const fuzzySearchEndPoint = `${import.meta.env.VITE_API_BASE_URL}/submissions/fuzzy-search?query=${selectedSearchQuery}`
 
   const { data, error, isLoading } = useSWR(shouldFetch ? fuzzySearchEndPoint : null, fetcher);
 

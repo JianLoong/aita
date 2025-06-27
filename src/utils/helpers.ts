@@ -1,4 +1,5 @@
 import { Index } from "../types/index";
+import DOMPurify from "dompurify";
 
 export const sortIndexes = (
   data: Index[],
@@ -36,13 +37,7 @@ export const sortIndexes = (
   return indexes;
 };
 
-export const makeHTMLFromString = (str: string) => {
-  const text = str;
-  let parsed = "<p>" + text + "</p>";
-  parsed = parsed.replace(/\r\n\r\n/g, "</p><p>").replace(/\n\n/g, "</p><p>");
-  parsed = parsed.replace(/\r\n/g, "<br />").replace(/\n/g, "<br />");
-  return parsed;
-};
+export const makeHTMLFromString = (str: string) => {  const text = str;  let parsed = "<p>" + text + "</p>";  parsed = parsed.replace(/\r\n\r\n/g, "</p><p>").replace(/\n\n/g, "</p><p>");  parsed = parsed.replace(/\r\n/g, "<br />").replace(/\n/g, "<br />");  return DOMPurify.sanitize(parsed);};
 
 export const convertDate = (dateInUTC: number) => {
   const event = new Date(dateInUTC * 1000);

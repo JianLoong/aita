@@ -7,12 +7,12 @@ import { ViewSubmission } from "./ViewSubmission";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-function getCounts(
+function useGetCounts(
   selectedMonth: string,
   selectedYear: number) {
 
   const keys: string[] = ["yta", "nta", "nah", "info", "esh"];
-  const { data, isLoading, error } = useSWRInfinite((index) => `https://api.jian.sh/aita/api/v2/submissions/top?year=${selectedYear}&month=${selectedMonth}&type=${keys[index]}`, fetcher, {
+  const { data, isLoading, error } = useSWRInfinite((index) => `${import.meta.env.VITE_API_BASE_URL}/submissions/top?year=${selectedYear}&month=${selectedMonth}&type=${keys[index]}`, fetcher, {
     initialSize: keys.length,
     parallel: true,
   });
@@ -39,7 +39,7 @@ function useSubmission(
       submissions: []
     }
 
-  let values = [];
+  const values = [];
   for (const s of counts) {
       if (s[0] != undefined)
         values.push(s[0]);
@@ -60,31 +60,31 @@ function useSubmission(
     </strong>
   );
 
-  submissions.push(<ViewSubmission {...values[0]} key={Math.random()} />);
+  submissions.push(<ViewSubmission {...values[0]} key={values[0]?.id} />);
 
   submissions.push(
-    <strong key={Math.random()}>
+    <strong key="nta-alert">
       <ShowAlert payload={"Highest number of NTA"} type={"success"}></ShowAlert>
     </strong>
   );
-  submissions.push(<ViewSubmission {...values[1]} key={Math.random()} />);
+  submissions.push(<ViewSubmission {...values[1]} key={values[1]?.id} />);
 
   submissions.push(
-    <strong key={Math.random()}>
+    <strong key="nah-alert">
       <ShowAlert payload={"Highest number of NAH"} type={"warning"}></ShowAlert>
     </strong>
   );
   submissions.push(<ViewSubmission {...values[2]} key={values[2]?.id} />);
 
   submissions.push(
-    <strong key={Math.random()}>
+    <strong key="info-alert">
       <ShowAlert payload={"Highest number of INFO"} type={"info"}></ShowAlert>
     </strong>
   );
   submissions.push(<ViewSubmission {...values[3]} key={values[3]?.id} />);
 
   submissions.push(
-    <strong key={Math.random()}>
+    <strong key="esh-alert">
       <ShowAlert payload={"Highest Number of ESH"} type={"base"}></ShowAlert>
     </strong>
   );
@@ -126,7 +126,7 @@ export default function ViewTop() {
   const [selectedYear, setYear] = useState<number>(Number(year));
 
 
-  const { data, isLoading, isError } = getCounts(selectedMonth, selectedYear);
+  const { data, isLoading, isError } = useGetCounts(selectedMonth, selectedYear);
 
 
   const { submissions } = useSubmission(data);
@@ -148,7 +148,7 @@ export default function ViewTop() {
   }
 
   return (
-    <div className="pt-6 p-2" key={Math.random()}>
+    <div className="pt-6 p-2" key="view-top-container">
       <article className="mx-auto">
         The following are the highest rated submission for each month.
       </article>

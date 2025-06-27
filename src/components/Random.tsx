@@ -10,9 +10,9 @@ export default function Random() {
 
   const location = useLocation();
 
-  const randomEndPoint = "https://api.jian.sh/aita/api/v2/submissions/random";
+  const randomEndPoint = `${import.meta.env.VITE_API_BASE_URL}/submissions/random`;
 
-  let { data, error, mutate, isLoading } = useSWR(randomEndPoint, fetcher);
+  const { data, error, mutate, isLoading } = useSWR(randomEndPoint, fetcher, {});
 
   if (error) {
     return (

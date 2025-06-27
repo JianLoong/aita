@@ -11,9 +11,9 @@ import { ShowAlert } from "./ShowAlert";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-function defaultSubmissions(startUTC: number, endUTC: number, noOfPost: number, selectedSortOrder: string) {
+function useDefaultSubmissions(startUTC: number, endUTC: number, noOfPost: number, selectedSortOrder: string) {
 
-  const indexesEndPoint = `https://api.jian.sh/aita/api/v2/submisssions/search?startUTC=${startUTC}&endUTC=${endUTC}&offset=0&limit=${noOfPost}&sortBy=${selectedSortOrder}&orderBy=desc`
+  const indexesEndPoint = `${import.meta.env.VITE_API_BASE_URL}/submisssions/search?startUTC=${startUTC}&endUTC=${endUTC}&offset=0&limit=${noOfPost}&sortBy=${selectedSortOrder}&orderBy=desc`
 
   const { data, error, isLoading } = useSWR(indexesEndPoint, fetcher);
 
@@ -33,7 +33,7 @@ function useSubmission(
 ) {
   const submissions = [];
 
-  const { data, isLoading, isError } = defaultSubmissions(startUTC, endUTC, selectedNoOfPost, selectedSortOrder);
+  const { data, isLoading, isError } = useDefaultSubmissions(startUTC, endUTC, selectedNoOfPost, selectedSortOrder);
 
   const values = [];
 

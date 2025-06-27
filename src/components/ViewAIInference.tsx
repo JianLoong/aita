@@ -5,8 +5,8 @@ import { ShowAlert } from "./ShowAlert";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-function useInference(id: Number){
-  const summaryEndPoint = `https://api.jian.sh/aita/api/v2/openai-analysis/${id}`;
+function useInference(id: number){
+  const summaryEndPoint = `${import.meta.env.VITE_API_BASE_URL}/openai-analysis/${id}`;
 
   const {data, error, isLoading} = useSWR(summaryEndPoint, fetcher);
 
