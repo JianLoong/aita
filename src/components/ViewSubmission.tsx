@@ -5,6 +5,8 @@ import useSWR from "swr";
 import { Submission } from "../types/submission";
 import { convertDate, makeHTMLFromString } from "../utils/helpers";
 import { PieChart } from "./PieChart";
+import { SimpleCloud } from "./SimpleCloud";
+import { EmotionTable } from "./EmotionTable";
 import { ShowAlert } from "./ShowAlert";
 import { ViewAIInference } from "./ViewAIInference";
 
@@ -58,7 +60,7 @@ export const ViewSubmission = memo((submission: Submission) => {
 
   const [shown ] = useState<boolean>(false);
 
-  const { summary, isSummaryLoading, isSummaryError } =
+  const { summary, wordFrequency, isSummaryLoading, isSummaryError } =
     useSummary(submission.id);
 
   if (isSummaryLoading)
@@ -121,7 +123,25 @@ export const ViewSubmission = memo((submission: Submission) => {
               </div>
 
             </div>
-            {submission?.id && <ViewAIInference id={submission?.id} />}
+            <div className="grid lg:grid-cols-3 gap-4 mt-4">
+              <div>
+                <h3 className="text-center">
+                  <strong>Word Cloud</strong>
+                </h3>
+                <SimpleCloud wordFrequency={wordFrequency} />
+              </div>
+              <div>
+                <h3 className="text-center">
+                  <strong>Emotion Results</strong>
+                </h3>
+                <EmotionTable {...summary} />
+              </div>
+              {submission?.id && (
+                <div>
+                  <ViewAIInference id={submission?.id} />
+                </div>
+              )}
+            </div>
             <div
               className={shown ? "grid" : "hidden"}
               data-theme="wireframe"
