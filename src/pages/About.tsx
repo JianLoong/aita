@@ -20,7 +20,7 @@ export default function About() {
           </li>
           <li>
             <strong>FastAPI</strong> - FastAPI used for RESTful API backend. 
-            Link can be found <a href={`${import.meta.env.VITE_API_BASE_URL}/docs`}>here</a>
+            Link can be found <a href="https://api.pangrammer.dev/aita/docs">here</a>
           </li>
           <li>
             <strong>GH Pages</strong> - GH Pages are used to host these pages
